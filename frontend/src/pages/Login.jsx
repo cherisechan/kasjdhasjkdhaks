@@ -26,16 +26,13 @@ function Login() {
         }
 
         setShowError(false);
-        console.log({
-            email: email,
-            password: password
-        })
         axios.post('http://localhost:5005/admin/auth/login', {
             email: email,
             password: password
         })
         .then(res => {
-            console.log(res);
+            localStorage.setItem('token', res.data.token);
+            navigate('/dashboard');
         })
         .catch(err => {
             console.log(err);
@@ -56,11 +53,11 @@ function Login() {
                     <div className="w-min text-lg">
                         <div className="flex justify-between w-full mb-3">
                             <p className="w-min mr-3 self-center">Email</p>
-                            <input id="login-email" type="email" className="bg-violet-50 px-2 py-1 shadow-sm pr-6" placeholder="Enter your email" onChange={e => setEmail(e.target.value)}/>
+                            <input id="login-email" type="email" className="bg-violet-50 px-2 py-1 rounded border-solid border-2 border-gray-200 pr-6" placeholder="Enter your email" onChange={e => setEmail(e.target.value)}/>
                         </div>
                         <div className="flex justify-between w-full mb-3">
                             <p className="w-min mr-3 self-center">Password</p>
-                            <input id="login-password" type="password" className="bg-violet-50 px-2 py-1 shadow-sm pr-6" name="password" placeholder="Enter your password" onChange={e => setPassword(e.target.value)}/>
+                            <input id="login-password" type="password" className="bg-violet-50 px-2 py-1 rounded border-solid border-2 border-gray-200 pr-6" name="password" placeholder="Enter your password" onChange={e => setPassword(e.target.value)}/>
                         </div>
                     </div>
                     <button className="bg-violet-700 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded my-2" onClick={submitLogin}>LOGIN</button>
