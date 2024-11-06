@@ -1,6 +1,10 @@
 import "./index.css"
 import { BrowserRouter, Routes, Route} from 'react-router-dom'
-import { Landing, Register, Login, Dashboard } from "./pages";
+import Landing from './pages/Landing';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import Dashboard from "./pages/Dashboard";
+
 function App() {  
   return (
     <BrowserRouter>
