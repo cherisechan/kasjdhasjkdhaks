@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import axios from "axios";
 
 function Login() {
     const navigate = useNavigate();
     if (localStorage.getItem("token")) {
-        navigate("/dashboard");
+        navigate("/");
     }
 
     const [email, setEmail] = useState("");
@@ -24,8 +24,6 @@ function Login() {
             setError("Password cannot be empty");
             return;
         }
-
-        setShowError(false);
         axios.post('http://localhost:5005/admin/auth/login', {
             email: email,
             password: password
@@ -35,7 +33,7 @@ function Login() {
             navigate('/dashboard');
         })
         .catch(err => {
-            console.log(err);
+            setError('Invaid login details');
         })
     }
 
@@ -47,6 +45,7 @@ function Login() {
     return (
         <>
             <div id="login" className="flex w-screen h-screen justify-center items-center bg-violet-200">
+                <button className="absolute top-10 left-14 text-xl bg-violet-700 hover:bg-violet-500 text-white py-2 px-5 rounded my-2" onClick={() => navigate("/")}>Back</button>
                 <form id="login-form" className="flex flex-col p-9 bg-white rounded-lg shadow-lg text-center">
                     <h1 className="text-4xl font-bold pb-3">Welcome back!</h1>
                     <p className="text-2xl pb-4 text-gray-700">Login to your account</p>
