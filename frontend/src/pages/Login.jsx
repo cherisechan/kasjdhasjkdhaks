@@ -41,6 +41,12 @@ function Login() {
             console.log(err);
         })
     }
+
+    const goToRegister = (e) => {
+        e.preventDefault();
+        navigate('/register');
+    }
+
     return (
         <>
             <div id="login" className="flex w-screen h-screen justify-center items-center bg-violet-200">
@@ -58,7 +64,7 @@ function Login() {
                         </div>
                     </div>
                     <button className="bg-violet-700 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded my-2" onClick={submitLogin}>LOGIN</button>
-                    <button className="bg-violet-700 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded my-2" onClick={() => navigate("/register")}>SIGN UP</button>
+                    <button className="bg-violet-700 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded my-2" onClick={goToRegister}>SIGN UP</button>
                     {showError ? (<p className="text-red-600">{error}</p>) : (<></>)}
                 </form>
             </div>
