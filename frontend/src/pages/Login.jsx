@@ -5,7 +5,7 @@ import axios from "axios";
 function Login() {
     const navigate = useNavigate();
     if (localStorage.getItem("token")) {
-        navigate("/");
+        navigate("/dashboard");
     }
 
     const [email, setEmail] = useState("");
