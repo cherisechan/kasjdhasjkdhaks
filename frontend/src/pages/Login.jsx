@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"
 import axios from "axios";
 
-function Login() {
+const Login = () => {
     const navigate = useNavigate();
     useEffect(() => {
         if (localStorage.getItem("token")) {

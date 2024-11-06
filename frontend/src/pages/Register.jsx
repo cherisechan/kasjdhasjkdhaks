@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
-function Register() {
+const Register = () => {
     const navigate = useNavigate();
     useEffect(() => {
         if (localStorage.getItem("token")) {
