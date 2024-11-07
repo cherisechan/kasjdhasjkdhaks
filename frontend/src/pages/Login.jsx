@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"
 import axios from "axios";
 
-const Login = () => {
+const Login = ({ onLogin }) => {
     const navigate = useNavigate();
     useEffect(() => {
         if (localStorage.getItem("token")) {
@@ -32,6 +32,7 @@ const Login = () => {
         })
         .then(res => {
             localStorage.setItem('token', res.data.token);
+            onLogin();
             navigate('/dashboard');
         })
         .catch(err => {
