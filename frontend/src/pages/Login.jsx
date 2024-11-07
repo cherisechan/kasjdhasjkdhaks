@@ -61,8 +61,8 @@ const Login = ({ onLogin }) => {
                             <input id="login-password" type="password" className="bg-violet-50 px-2 py-1 rounded border-solid border-2 border-gray-200 pr-6" name="password" placeholder="Enter your password" onChange={e => setPassword(e.target.value)}/>
                         </div>
                     </div>
-                    <button className="bg-violet-700 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded my-2" onClick={submitLogin}>LOGIN</button>
-                    <button className="bg-violet-700 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded my-2" onClick={goToRegister}>SIGN UP</button>
+                    <button className="bg-violet-700 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded my-2" onClick={submitLogin}>Log in</button>
+                    <button className="py-2 px-4 rounded my-2" onClick={goToRegister}>Don't have an account? <span className="text-violet-700 hover:underline">Sign up</span></button>
                     {showError ? (<p className="text-red-600">{error}</p>) : (<></>)}
                 </form>
             </div>

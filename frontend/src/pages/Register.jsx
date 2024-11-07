@@ -77,7 +77,7 @@ const Register = ({ onRegister }) => {
                         </div>
                     </div>
                     <button className="bg-violet-700 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded my-2" onClick={submitRegister}>REGISTER</button>
-                    <button className="bg-violet-700 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded my-2" onClick={goToLogin}>LOGIN</button>
+                    <button className="py-2 px-4 rounded my-2" onClick={goToLogin}>Already have an account? <span className="text-violet-700 hover:underline">Log in</span></button>
                     {showError ? (<p className="text-red-600">{error}</p>) : (<></>)}
                 </form>
             </div>
