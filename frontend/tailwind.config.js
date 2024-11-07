@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        "warps": '953px',
+      }
     },
   },
   plugins: [require('@tailwindcss/line-clamp'),],
