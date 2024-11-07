@@ -12,9 +12,19 @@ const Register = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirm, setConfirm] = useState("");
+    const [confirmed, setConfirmed] = useState(true);
     const [name, setName] = useState("");
     const [error, setError] = useState("");
     const [showError, setShowError] = useState(false);
+
+    useEffect(() => {
+        if (confirm !== "" && password !== confirm) {
+            setConfirmed(false);
+        } else {
+            setConfirmed(true);
+        }
+    }, [password, confirm])
 
     const submitRegister = (e) => {
         e.preventDefault();
@@ -69,7 +79,7 @@ const Register = () => {
                         </div>
                         <div className="flex justify-between w-full mb-3">
                             <p className="w-min mr-3 self-center whitespace-nowrap">Confirm password</p>
-                            <input id="register-confirm-password" type="password" className="bg-violet-50 px-2 py-1 pr-6 rounded border-solid border-2 border-gray-200" name="password" placeholder="Re-enter your password" onChange={e => setPassword(e.target.value)}/>
+                            <input id="register-confirm-password" type="password" className={`${confirmed ? "border-grey-200" : "border-red-500"} bg-violet-50 px-2 py-1 pr-6 rounded border-solid border-2`} name="password" placeholder="Re-enter your password" onChange={e => setConfirm(e.target.value)}/>
                         </div>
                         <div className="flex justify-between w-full mb-3">
                             <p className="w-min mr-3 self-center">Name</p>
