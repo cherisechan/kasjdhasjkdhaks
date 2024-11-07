@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
-const Register = () => {
+const Register = ({ onRegister }) => {
     const navigate = useNavigate();
     useEffect(() => {
         if (localStorage.getItem("token")) {
@@ -49,6 +49,7 @@ const Register = () => {
         })
         .then(res => {
             localStorage.setItem('token', res.data.token);
+            onRegister();
             navigate('/dashboard');
         })
         .catch(err => {
@@ -64,7 +65,6 @@ const Register = () => {
     return (
         <>
             <div id="register" className="flex w-screen h-screen justify-center items-center bg-violet-200">
-                <button className="absolute top-10 left-14 text-xl bg-violet-700 hover:bg-violet-500 text-white py-2 px-5 rounded my-2" onClick={() => navigate("/")}>Back</button>
                 <form id="register-form" className="flex flex-col p-9 bg-white rounded-lg shadow-lg text-center">
                     <h1 className="text-4xl font-bold pb-3">Welcome!</h1>
                     <p className="text-2xl pb-4 text-gray-700">Create a new account!</p>
@@ -87,7 +87,7 @@ const Register = () => {
                         </div>
                     </div>
                     <button className="bg-violet-700 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded my-2" onClick={submitRegister}>REGISTER</button>
-                    <button className="bg-violet-700 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded my-2" onClick={goToLogin}>LOGIN</button>
+                    <button className="py-2 px-4 rounded my-2" onClick={goToLogin}>Already have an account? <span className="text-violet-700 hover:underline">Log in</span></button>
                     {showError ? (<p className="text-red-600">{error}</p>) : (<></>)}
                 </form>
             </div>

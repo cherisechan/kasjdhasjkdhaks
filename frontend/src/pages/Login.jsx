@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"
 import axios from "axios";
 
-const Login = () => {
+const Login = ({ onLogin }) => {
     const navigate = useNavigate();
     useEffect(() => {
         if (localStorage.getItem("token")) {
@@ -32,6 +32,7 @@ const Login = () => {
         })
         .then(res => {
             localStorage.setItem('token', res.data.token);
+            onLogin();
             navigate('/dashboard');
         })
         .catch(err => {
@@ -47,7 +48,6 @@ const Login = () => {
     return (
         <>
             <div id="login" className="flex w-screen h-screen justify-center items-center bg-violet-200">
-                <button className="absolute top-10 left-14 text-xl bg-violet-700 hover:bg-violet-500 text-white py-2 px-5 rounded my-2" onClick={() => navigate("/")}>Back</button>
                 <form id="login-form" className="flex flex-col p-9 bg-white rounded-lg shadow-lg text-center">
                     <h1 className="text-4xl font-bold pb-3">Welcome back!</h1>
                     <p className="text-2xl pb-4 text-gray-700">Login to your account</p>
@@ -61,8 +61,8 @@ const Login = () => {
                             <input id="login-password" type="password" className="bg-violet-50 px-2 py-1 rounded border-solid border-2 border-gray-200 pr-6" name="password" placeholder="Enter your password" onChange={e => setPassword(e.target.value)}/>
                         </div>
                     </div>
-                    <button className="bg-violet-700 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded my-2" onClick={submitLogin}>LOGIN</button>
-                    <button className="bg-violet-700 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded my-2" onClick={goToRegister}>SIGN UP</button>
+                    <button className="bg-violet-700 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded my-2" onClick={submitLogin}>Log in</button>
+                    <button className="py-2 px-4 rounded my-2" onClick={goToRegister}>Don't have an account? <span className="text-violet-700 hover:underline">Sign up</span></button>
                     {showError ? (<p className="text-red-600">{error}</p>) : (<></>)}
                 </form>
             </div>
