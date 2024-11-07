@@ -68,6 +68,10 @@ const Register = () => {
                             <input id="register-password" type="password" className="bg-violet-50 px-2 py-1 pr-6 rounded border-solid border-2 border-gray-200" name="password" placeholder="Enter your password" onChange={e => setPassword(e.target.value)}/>
                         </div>
                         <div className="flex justify-between w-full mb-3">
+                            <p className="w-min mr-3 self-center whitespace-nowrap">Confirm password</p>
+                            <input id="register-confirm-password" type="password" className="bg-violet-50 px-2 py-1 pr-6 rounded border-solid border-2 border-gray-200" name="password" placeholder="Re-enter your password" onChange={e => setPassword(e.target.value)}/>
+                        </div>
+                        <div className="flex justify-between w-full mb-3">
                             <p className="w-min mr-3 self-center">Name</p>
                             <input id="register-name" type="text" className="bg-violet-50 px-2 py-1 pr-6 rounded border-solid border-2 border-gray-200" name="name" placeholder="Enter your name" onChange={e => setName(e.target.value)}/>
                         </div>
