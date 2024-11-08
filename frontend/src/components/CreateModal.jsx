@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
+import uniqid from "uniqid";
 
 const CreateModal = ({ setShowCreate }) => {
     const [name, setName] = useState('');
@@ -33,6 +34,7 @@ const CreateModal = ({ setShowCreate }) => {
         const store = await axios.get("http://localhost:5005/store", headers);
 
         const presObj = {
+            "id": uniqid(),
             "name": name,
             "description": desc,
             "thumbnail": null,

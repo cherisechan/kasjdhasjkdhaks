@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Presentation = ({ name, thumbnail, description, numSlides }) => (
-    <div className="bg-violet-100 w-[30vw] h-[15vw] min-h-[150px] min-w-[300px] rounded-lg flex flex-col flex-shrink-0 overflow-auto">
+const Presentation = ({ name, thumbnail, description, numSlides, id }) => (
+    <div id={id} className="bg-violet-100 w-[30vw] h-[15vw] min-h-[150px] min-w-[300px] rounded-lg flex flex-col flex-shrink-0 overflow-auto">
         <div id="row-1" className="h-2/4 flex items-center mb-1">
             <div className="px-2 py-2 h-full aspect-square">
                 {thumbnail ? (
