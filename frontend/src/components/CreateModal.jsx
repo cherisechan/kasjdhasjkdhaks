@@ -35,6 +35,7 @@ const CreateModal = ({ setShowCreate }) => {
         const presObj = {
             "name": name,
             "description": desc,
+            "thumbnail": null,
             "slides": [
                 {
                     "background": {
@@ -48,13 +49,17 @@ const CreateModal = ({ setShowCreate }) => {
         
         let requestBody;
         console.log(store);
-        if (Object.keys(store.data).length === 0) {
+        if (Object.keys(store.data.store).length === 0) {
             requestBody = {
-                "store" : [presObj]
+                "store" : {
+                    "presentations": [
+                        presObj
+                    ]
+                }
             };
         } else {
             requestBody = store.data;
-            requestBody.store.push(presObj);
+            requestBody.store.presentations.push(presObj);
         }
         await axios.put("http://localhost:5005/store", requestBody, headers);
         setShowCreate(false);
