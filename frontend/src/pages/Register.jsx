@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"
+import axios from "axios";
 
 const Register = ({ onRegister }) => {
     const navigate = useNavigate();
@@ -37,29 +37,33 @@ const Register = ({ onRegister }) => {
             setError("Password cannot be empty");
             return;
         }
+        if (confirm !== password) {
+            setError("Password is not confirmed");
+            return;
+        }
         if (name === "") {
             setError("Name cannot be empty");
             return;
         }
 
-        axios.post('http://localhost:5005/admin/auth/register', {
+        axios.post("http://localhost:5005/admin/auth/register", {
             email: email,
             password: password,
             name: name
         })
         .then(res => {
-            localStorage.setItem('token', res.data.token);
+            localStorage.setItem("token", res.data.token);
             onRegister();
-            navigate('/dashboard');
+            navigate("/dashboard");
         })
         .catch(err => {
-            setError('Registration failed. Please use another email.')
+            setError("Registration failed. Please use another email.")
         })
     }
 
     const goToLogin = (e) => {
         e.preventDefault();
-        navigate('/login');
+        navigate("/login");
     }
 
     return (

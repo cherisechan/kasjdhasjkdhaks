@@ -13,7 +13,7 @@ const Presentation = ({ name, thumbnail, description, numSlides }) => (
             <h2 className="text-5xl m-auto line-clamp-1 font-semibold ">{name}</h2>
         </div>
         <p className="text-gray-600 max-h-[30%] xl:line-clamp-3 line-clamp-2 text-lg px-2 leading-tight">{description}</p>
-        <p className="text-sm text-gray-500 px-1 mt-auto w-min pb-1">Slides: {numSlides}</p>
+        <p className="text-sm text-gray-500 px-1 mt-auto w-min pb-1 whitespace-nowrap">Slides: {numSlides}</p>
     </div>
 );
 
