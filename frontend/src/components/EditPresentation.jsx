@@ -67,11 +67,16 @@ const EditPresentation = () => {
       <h1>Need to fix navbar covering up everything lol</h1>
       <h1>Need to fix navbar covering up everything lol</h1>
       <h1>Need to fix navbar covering up everything lol</h1>
-      <h1>Need to fix navbar covering up everything lol</h1>
 
-
-      <button onClick={() => navigate("/dashboard")} className="bg-gray-500 text-white px-4 py-2 rounded">Back</button>
-      <button onClick={() => setShowDeletePopup(true)} className="bg-red-500 text-white px-4 py-2 rounded ml-2">Delete Presentation</button>
+      <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
+        <button onClick={() => navigate("/dashboard")} className="bg-gray-500 text-white px-4 py-2 rounded">Back</button>
+        <div className="flex">
+          <p>edit thumbnail</p>
+          <p>{presentation?.name || "Loading..."}</p>
+          <p>edit title</p>
+        </div>
+        <button onClick={() => setShowDeletePopup(true)} className="bg-red-500 text-white px-4 py-2 rounded ml-2">Delete Presentation</button>
+      </div>
       
       {showDeletePopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -86,8 +91,8 @@ const EditPresentation = () => {
       )}
 
       {presentation ? (
-        <div>
-          <h1>{presentation.name}</h1>
+        <div className="bg-gray-100 rounded-lg mx-auto mt-8 w-4/5 h-[60vh] flex items-center justify-center">
+          <p className="text-center text-gray-600">Slide content for "{presentation.name}" goes here</p>
         </div>
       ) : (
         <p>Loading presentation...</p>
