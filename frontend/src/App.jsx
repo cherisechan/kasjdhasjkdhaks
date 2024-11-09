@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Dashboard from "./pages/Dashboard";
 import Navbar from "./components/Navbar";
+import EditPresentation from "./components/EditPresentation";
 
 function App() {  
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
@@ -27,6 +28,7 @@ function App() {
         <Route path='/login' element={<Login onLogin={handleLogin} />} />
         <Route path='/register' element={<Register onRegister={handleLogin} />} />
         <Route path='/dashboard' element={<Dashboard />}/>
+        <Route path="/design/:id" element={<EditPresentation />} />
       </Routes>
     </BrowserRouter>
   )
