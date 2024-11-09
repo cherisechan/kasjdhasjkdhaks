@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 const EditPresentation = () => {
-  console.log("EditPresentation component is rendering");
-  const { id } = useParams();  // Get the ID from the URL
+  const { id } = useParams();
   const [presentation, setPresentation] = useState(null);
   const navigate = useNavigate();
   const [showDeletePopup, setShowDeletePopup] = useState(false);
+
+  const [showEditTitleModal, setShowEditTitleModal] = useState(false);
+  const [newTitle, setNewTitle] = useState("");
 
   useEffect(() => {
     const fetchPresentation = async () => {
@@ -17,9 +19,7 @@ const EditPresentation = () => {
       try {
         const headers = {
           headers: {
-            'accept': 'application/json',
             'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
           }
         };
 
@@ -30,7 +30,6 @@ const EditPresentation = () => {
         if (presentation) {
           console.log("presentation found")
           setPresentation(presentation);
-          // console.log(presentation.name)
           console.log("Presentation data:", presentation);
         } else {
           console.error("Presentation not found");
@@ -61,6 +60,31 @@ const EditPresentation = () => {
     }
   };
 
+  const handleTitleUpdate = async () => {
+    if (!newTitle) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      const headers = { headers: { Authorization: `Bearer ${token}` } };
+      const response = await axios.get("http://localhost:5005/store", headers);
+      const store = response.data.store;
+
+      // Update the title in the presentation
+      const updatedPresentations = store.presentations.map(pres => {
+        if (pres.id === id) return { ...pres, name: newTitle };
+        return pres;
+      });
+
+      store.presentations = updatedPresentations;
+      await axios.put("http://localhost:5005/store", { store }, headers);
+
+      setPresentation(prev => ({ ...prev, name: newTitle }));
+      setShowEditTitleModal(false);
+    } catch (error) {
+      console.error("Error updating title:", error);
+    }
+  };
+
   return (
     <div className="edit-presentation">
       <h1>Need to fix navbar covering up everything lol</h1>
@@ -70,10 +94,9 @@ const EditPresentation = () => {
 
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
         <button onClick={() => navigate("/dashboard")} className="bg-gray-500 text-white px-4 py-2 rounded">Back</button>
-        <div className="flex">
-          <p>edit thumbnail</p>
-          <p>{presentation?.name || "Loading..."}</p>
-          <p>edit title</p>
+        <div className="flex items-center space-x-2">
+          <h1 className="text-2xl font-bold">{presentation?.name}</h1>
+          <button onClick={() => setShowEditTitleModal(true)} className="text-blue-500 underline">Edit Title</button>
         </div>
         <button onClick={() => setShowDeletePopup(true)} className="bg-red-500 text-white px-4 py-2 rounded ml-2">Delete Presentation</button>
       </div>
@@ -85,6 +108,25 @@ const EditPresentation = () => {
             <div className="flex justify-end">
               <button onClick={() => setShowDeletePopup(false)} className="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2">No</button>
               <button onClick={handleDelete} className="bg-red-500 text-white px-4 py-2 rounded">Yes</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showEditTitleModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-md">
+            <h2 className="text-xl font-semibold mb-4">Edit Presentation Title</h2>
+            <input
+              type="text"
+              className="border rounded w-full px-3 py-2"
+              placeholder="Enter new title"
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+            />
+            <div className="flex justify-end mt-4">
+              <button onClick={() => setShowEditTitleModal(false)} className="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2">Cancel</button>
+              <button onClick={handleTitleUpdate} className="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
             </div>
           </div>
         </div>
