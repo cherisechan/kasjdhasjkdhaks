@@ -4,10 +4,10 @@ import axios from "axios";
 
 const EditPresentation = () => {
   const { id } = useParams();
-  const [presentation, setPresentation] = useState(null);
   const navigate = useNavigate();
-  const [showDeletePopup, setShowDeletePopup] = useState(false);
 
+  const [presentation, setPresentation] = useState(null);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showEditTitleModal, setShowEditTitleModal] = useState(false);
   const [newTitle, setNewTitle] = useState("");
 
@@ -28,9 +28,7 @@ const EditPresentation = () => {
         const presentation = presentations.find(pres => pres.id === id);
 
         if (presentation) {
-          console.log("presentation found")
           setPresentation(presentation);
-          console.log("Presentation data:", presentation);
         } else {
           console.error("Presentation not found");
         }
@@ -60,6 +58,7 @@ const EditPresentation = () => {
     }
   };
 
+  // Handle title update
   const handleTitleUpdate = async () => {
     if (!newTitle) return;
 
@@ -69,7 +68,6 @@ const EditPresentation = () => {
       const response = await axios.get("http://localhost:5005/store", headers);
       const store = response.data.store;
 
-      // Update the title in the presentation
       const updatedPresentations = store.presentations.map(pres => {
         if (pres.id === id) return { ...pres, name: newTitle };
         return pres;
@@ -96,7 +94,7 @@ const EditPresentation = () => {
         <button onClick={() => navigate("/dashboard")} className="bg-gray-500 text-white px-4 py-2 rounded">Back</button>
         <div className="flex items-center space-x-2">
           <h1 className="text-2xl font-bold">{presentation?.name}</h1>
-          <button onClick={() => setShowEditTitleModal(true)} className="text-blue-500 underline">Edit Title</button>
+          <button onClick={() => setShowEditTitleModal(true)}>EDIT TITLE</button>
         </div>
         <button onClick={() => setShowDeletePopup(true)} className="bg-red-500 text-white px-4 py-2 rounded ml-2">Delete Presentation</button>
       </div>
@@ -116,7 +114,7 @@ const EditPresentation = () => {
       {showEditTitleModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-md">
-            <h2 className="text-xl font-semibold mb-4">Edit Presentation Title</h2>
+            <h2 className="text-xl font-semibold mb-4">Edit presentation title</h2>
             <input
               type="text"
               className="border rounded w-full px-3 py-2"
