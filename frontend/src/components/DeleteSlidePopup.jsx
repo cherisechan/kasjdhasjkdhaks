@@ -2,7 +2,7 @@ import React from 'react';
 
 const DeleteSlidePopup = ({ onCancel, onConfirm }) => {
   return (
-    <div className="fixed z-50 inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+    <div className="fixed z-[999] inset-0 bg-black bg-opacity-30 flex items-center justify-center">
       <div className="bg-white rounded-lg p-6">
         <h2 className="text-xl font-semibold mb-4">Delete Slide</h2>
         <p>Are you sure you want to delete this slide?</p>

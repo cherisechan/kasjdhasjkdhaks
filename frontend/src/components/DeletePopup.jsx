@@ -1,7 +1,7 @@
 import React from 'react'
 
 const DeletePopup = ({ onCancel, onConfirm }) => (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div className="fixed z-[999] inset-0 flex items-center justify-center bg-black bg-opacity-50">
     <div className="bg-white p-6 rounded-lg shadow-lg">
       <p className="text-lg mb-4">Are you sure?</p>
       <div className="flex justify-end">

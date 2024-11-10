@@ -8,6 +8,7 @@ import DeleteSlidePopup from './DeleteSlidePopup';
 import CannotDeleteSlidePopup from './CannotDeleteSlidePopup';
 import { PencilIcon, PhotoIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Slide from "./Slide";
+import TextCreateModal from "./TextCreateModal";
 
 const EditPresentation = () => {
   const { id } = useParams();
@@ -265,8 +266,14 @@ const EditPresentation = () => {
     }
   };
 
+  const [showTextCreateModal, setShowTextCreateModal] = useState(false);
+  const [text, setText] = useState("");
+  const handleTextCreate = () => {
+
+  }
+
   return (
-    <div className="edit-presentation">
+    <div className="edit-presentation px-2">
       <div className="max-w-screen-xl flex items-center justify-between mx-auto py-4 mt-20">
         <button onClick={() => navigate("/dashboard")} className="bg-gray-500 text-white px-4 py-2 rounded">Back</button>
 
@@ -335,25 +342,34 @@ const EditPresentation = () => {
         />
       )}
 
+      {showTextCreateModal && (
+        <TextCreateModal
+          setShowTextCreateModal={setShowTextCreateModal}
+        />
+      )}
+
       {slides ? (
         <div className="max-w-screen-xl bg-gray-100 rounded-lg mx-auto h-[75vh] flex flex-col items-center justify-center">
+          <div className="flex w-[85%] justify-start items-center h-16">
+            <button onClick={() => {setShowTextCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Text</button>
+          </div>
           {/* Slide content */}
-          <Slide $bgColour={slides[currentSlideIndex].background.colour}>
+          <Slide slide={slides[currentSlideIndex]}>
             {/* Render the current slide's content here */}
-            <p className="text-center text-gray-600">
-              Slide {currentSlideIndex + 1} of {presentation.slides.length}
+            <p className="absolute text-center text-gray-600 bottom-2 left-3 text-[1em]">
+              {currentSlideIndex + 1}
             </p>
           </Slide>
 
           {/* Navigation controls */}
           {presentation.slides.length >= 1 && (
-            <div className="w-full flex items-end justify-between p-4">
-              <p className="w-10 h-10 rounded flex items-center justify-center text-bold">{currentSlideIndex + 1}</p>
-              <div className="flex justify-center space-x-2">
+            <div className="w-full flex relative h-14 mt-2">
+              <p className="absolute left-2 h-10 rounded flex items-center justify-center text-bold whitespace-nowrap text-gray-600">Slide {currentSlideIndex + 1} of {presentation.slides.length}</p>
+              <div className="absolute left-[50%] translate-x-[-50%] flex justify-center space-x-2">
                 <button onClick={goToPreviousSlide} disabled={currentSlideIndex === 0} className={`w-10 h-10 rounded ${currentSlideIndex === 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>&lt;</button>
                 <button onClick={goToNextSlide} disabled={currentSlideIndex === presentation.slides.length - 1} className={`w-10 h-10 rounded ${currentSlideIndex === presentation.slides.length - 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>&gt;</button>
               </div>
-              <div className="flex flex-col relative">
+              <div className="absolute right-2 flex justify-center items-center">
                 {/* <button className="bg-red-500 text-white w-10 h-10 rounded flex items-center justify-center"> */}
                 <button
                   onClick={() => {
@@ -367,7 +383,7 @@ const EditPresentation = () => {
                 >
                   <TrashIcon className="h-5 w-5" />
                 </button>
-                <button onClick={handleCreateSlide} className="bg-violet-500 text-white w-10 h-10 rounded mt-2">+</button>
+                <button onClick={handleCreateSlide} className="bg-violet-500 text-white w-10 h-10 rounded ml-2">+</button>
               </div>
             </div>
           )}          
