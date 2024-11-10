@@ -4,6 +4,8 @@ import axios from "axios";
 import DeletePopup from './DeletePopup';
 import EditTitleModal from './EditTitleModal';
 import EditThumbnailModal from './EditThumbnailModal';
+import DeleteSlidePopup from './DeleteSlidePopup';
+import CannotDeleteSlidePopup from './CannotDeleteSlidePopup';
 import { PencilIcon, PhotoIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 const EditPresentation = () => {
@@ -13,6 +15,8 @@ const EditPresentation = () => {
   const [presentation, setPresentation] = useState(null);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [showDeleteSlidePopup, setShowDeleteSlidePopup] = useState(false);
+  const [showCannotDeleteSlidePopup, setShowCannotDeleteSlidePopup] = useState(false);
   const [showEditTitleModal, setShowEditTitleModal] = useState(false);
   const [showEditThumbnailModal, setShowEditThumbnailModal] = useState(false);
   const [newTitle, setNewTitle] = useState("");
@@ -95,6 +99,32 @@ const EditPresentation = () => {
     setPresentation(updatedPresentation);
     setCurrentSlideIndex(updatedPresentation.slides.length - 1);
 
+    await savePresentation(updatedPresentation);
+  };
+
+  // Handle deleting the current slide
+  const handleDeleteSlide = async () => {
+    if (!presentation) return;
+
+    // Proceed to delete the current slide
+    const updatedSlides = presentation.slides.filter((_, index) => index !== currentSlideIndex);
+
+    const updatedPresentation = {
+      ...presentation,
+      slides: updatedSlides
+    };
+
+    // Adjust the currentSlideIndex
+    let newSlideIndex = currentSlideIndex;
+    if (currentSlideIndex >= updatedSlides.length) {
+      newSlideIndex = updatedSlides.length - 1;
+    }
+
+    setPresentation(updatedPresentation);
+    setCurrentSlideIndex(newSlideIndex);
+    setShowDeleteSlidePopup(false);
+
+    // Save the updated presentation to the server
     await savePresentation(updatedPresentation);
   };
 
@@ -283,6 +313,23 @@ const EditPresentation = () => {
         />
       )}
 
+      {showDeleteSlidePopup && (
+        <DeleteSlidePopup
+          onCancel={() => setShowDeleteSlidePopup(false)}
+          onConfirm={handleDeleteSlide}
+        />
+      )}
+
+      {showCannotDeleteSlidePopup && (
+        <CannotDeleteSlidePopup
+          onCancel={() => setShowCannotDeleteSlidePopup(false)}
+          onDeletePresentation={() => {
+            setShowCannotDeleteSlidePopup(false);
+            setShowDeletePopup(true);
+          }}
+        />
+      )}
+
       {presentation ? (
         <div className="max-w-screen-xl bg-gray-100 rounded-lg mx-auto h-[70vh] flex flex-col items-center justify-center">
           {/* Slide content */}
@@ -302,7 +349,17 @@ const EditPresentation = () => {
                 <button onClick={goToNextSlide} disabled={currentSlideIndex === presentation.slides.length - 1} className={`w-10 h-10 rounded ${currentSlideIndex === presentation.slides.length - 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>&gt;</button>
               </div>
               <div className="flex flex-col relative">
-                <button className="bg-red-500 text-white w-10 h-10 rounded flex items-center justify-center">
+                {/* <button className="bg-red-500 text-white w-10 h-10 rounded flex items-center justify-center"> */}
+                <button
+                  onClick={() => {
+                    if (presentation && presentation.slides.length === 1) {
+                      setShowCannotDeleteSlidePopup(true);
+                    } else {
+                      setShowDeleteSlidePopup(true);
+                    }
+                  }}
+                  className="bg-red-500 text-white w-10 h-10 rounded flex items-center justify-center"
+                >
                   <TrashIcon className="h-5 w-5" />
                 </button>
                 <button onClick={handleCreateSlide} className="bg-violet-500 text-white w-10 h-10 rounded mt-2">+</button>
