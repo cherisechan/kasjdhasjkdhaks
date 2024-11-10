@@ -304,6 +304,9 @@ const EditPresentation = () => {
             <p className="text-center text-gray-600">
               Slide {currentSlideIndex + 1} of {presentation.slides.length}
             </p>
+            <p className="absolute bottom-20 left-5 w-[50px] h-[50px] flex items-center justify-center text-[1em] text-gray-700 bg-white">
+              {currentSlideIndex + 1}
+            </p>
           </div>
 
           {/* Navigation controls */}
