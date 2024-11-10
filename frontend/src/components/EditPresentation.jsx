@@ -231,20 +231,18 @@ const EditPresentation = () => {
       <h1>Need to fix navbar covering up everything lol</h1>
       <h1>Need to fix navbar covering up everything lol</h1>
 
-      <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
+      <div className="max-w-screen-xl flex items-center justify-between mx-auto py-4">
         <button onClick={() => navigate("/dashboard")} className="bg-gray-500 text-white px-4 py-2 rounded">Back</button>
         <div className="flex items-center space-x-2">
+          <button onClick={() => setShowEditThumbnailModal(true)}>THUMBNAIL</button>
           {presentation?.thumbnail ? (
             <img src={presentation.thumbnail} alt="Thumbnail" className="w-12 h-12 object-cover"/>
           ) : (
-            <div className="w-12 h-12 bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-500 text-xs">No Thumbnail</span>
-            </div>
+            <div className="w-12 h-12 bg-gray-200 flex items-center justify-center"></div>
           )}
 
-          <button onClick={() => setShowEditThumbnailModal(true)} className="bg-blue-500 text-white px-4 py-2 rounded">Update Thumbnail</button>
+          <button onClick={() => setShowEditTitleModal(true)}>TITLE</button>
           <h1 className="text-2xl font-bold">{presentation?.name}</h1>
-          <button onClick={() => setShowEditTitleModal(true)}>EDIT TITLE</button>
         </div>
         <button onClick={() => setShowDeletePopup(true)} className="bg-red-500 text-white px-4 py-2 rounded ml-2">Delete Presentation</button>
       </div>
@@ -274,32 +272,26 @@ const EditPresentation = () => {
       )}
 
       {presentation ? (
-        <div className="bg-gray-100 rounded-lg mx-auto h-[70vh] flex flex-col items-center justify-center">
+        <div className="max-w-screen-xl bg-gray-100 rounded-lg mx-auto h-[70vh] flex flex-col items-center justify-center">
           {/* Slide content */}
           <div className="w-full h-full flex items-center justify-center">
             {/* Render the current slide's content here */}
             <p className="text-center text-gray-600">
               Slide {currentSlideIndex + 1} of {presentation.slides.length}
             </p>
-            <p className="absolute bottom-20 left-5 w-[50px] h-[50px] flex items-center justify-center text-[1em] text-gray-700 bg-white">
-              {currentSlideIndex + 1}
-            </p>
           </div>
 
           {/* Navigation controls */}
           {presentation.slides.length > 1 && (
-            <div className="flex justify-center mt-4">
-              <button onClick={goToPreviousSlide} disabled={currentSlideIndex === 0} className={`px-4 py-2 rounded-l ${currentSlideIndex === 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>
-                &lt; Previous
-              </button>
-              <button onClick={goToNextSlide} disabled={currentSlideIndex === presentation.slides.length - 1} className={`px-4 py-2 rounded-r ${currentSlideIndex === presentation.slides.length - 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>
-                Next &gt;
-              </button>
+            <div className="w-full flex justify-between">
+              <p className="px-4 py-2 rounded mt-4">{currentSlideIndex + 1}</p>
+              <div className="flex justify-center mt-4 space-x-2">
+                <button onClick={goToPreviousSlide} disabled={currentSlideIndex === 0} className={`px-4 py-2 rounded ${currentSlideIndex === 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>&lt;</button>
+                <button onClick={goToNextSlide} disabled={currentSlideIndex === presentation.slides.length - 1} className={`px-4 py-2 rounded ${currentSlideIndex === presentation.slides.length - 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>&gt;</button>
+              </div>
+              <button onClick={handleCreateSlide} className="bg-violet-500 text-white px-4 py-2 rounded mt-4">+</button>
             </div>
-          )}
-
-          {/* Create new slide button */}
-          <button onClick={handleCreateSlide} className="bg-violet-500 text-white px-4 py-2 rounded mt-4">+</button>
+          )}          
         </div>
       ) : (
         <p>Loading presentation...</p>
