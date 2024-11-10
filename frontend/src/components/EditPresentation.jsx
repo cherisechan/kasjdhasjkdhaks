@@ -331,9 +331,9 @@ const EditPresentation = () => {
       )}
 
       {presentation ? (
-        <div className="max-w-screen-xl bg-gray-100 rounded-lg mx-auto h-[70vh] flex flex-col items-center justify-center">
+        <div className="max-w-screen-xl bg-gray-100 rounded-lg mx-auto h-[75vh] flex flex-col items-center justify-center">
           {/* Slide content */}
-          <div className="w-full h-full flex items-center justify-center">
+          <div className="bg-white w-[65vw] h-full flex items-center justify-center mt-5 rounded">
             {/* Render the current slide's content here */}
             <p className="text-center text-gray-600">
               Slide {currentSlideIndex + 1} of {presentation.slides.length}
