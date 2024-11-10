@@ -338,7 +338,7 @@ const EditPresentation = () => {
       {slides ? (
         <div className="max-w-screen-xl bg-gray-100 rounded-lg mx-auto h-[75vh] flex flex-col items-center justify-center">
           {/* Slide content */}
-          <Slide bgcolour={slides[currentSlideIndex].background.colour}>
+          <Slide $bgColour={slides[currentSlideIndex].background.colour}>
             {/* Render the current slide's content here */}
             <p className="text-center text-gray-600">
               Slide {currentSlideIndex + 1} of {presentation.slides.length}
