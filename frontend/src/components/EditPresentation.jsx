@@ -233,18 +233,26 @@ const EditPresentation = () => {
 
       <div className="max-w-screen-xl flex items-center justify-between mx-auto py-4">
         <button onClick={() => navigate("/dashboard")} className="bg-gray-500 text-white px-4 py-2 rounded">Back</button>
+
         <div className="flex items-center space-x-2">
-          <button onClick={() => setShowEditThumbnailModal(true)}>THUMBNAIL</button>
-          {presentation?.thumbnail ? (
-            <img src={presentation.thumbnail} alt="Thumbnail" className="w-12 h-12 object-cover"/>
-          ) : (
-            <div className="w-12 h-12 bg-gray-200 flex items-center justify-center"></div>
-          )}
+          <div className="relative w-12 h-12">
+            {presentation?.thumbnail ? (
+              <img src={presentation.thumbnail} alt="Thumbnail" className="w-full h-full object-cover rounded" />
+            ) : (
+              <div className="w-full h-full bg-gray-200 flex items-center justify-center rounded" />
+            )}
+            <button
+              onClick={() => setShowEditThumbnailModal(true)}
+              className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 text-white text-xs rounded"
+            >
+              Image
+            </button>
+          </div>
 
           <button onClick={() => setShowEditTitleModal(true)}>TITLE</button>
           <h1 className="text-2xl font-bold">{presentation?.name}</h1>
         </div>
-        <button onClick={() => setShowDeletePopup(true)} className="bg-red-500 text-white px-4 py-2 rounded ml-2">Delete Presentation</button>
+        <button onClick={() => setShowDeletePopup(true)} className="bg-red-500 text-white px-4 py-2 rounded">Delete Presentation</button>
       </div>
       
       {showDeletePopup && (
@@ -283,7 +291,7 @@ const EditPresentation = () => {
 
           {/* Navigation controls */}
           {presentation.slides.length > 1 && (
-            <div className="w-full flex justify-between">
+            <div className="w-full flex justify-between p-4">
               <p className="px-4 py-2 rounded mt-4">{currentSlideIndex + 1}</p>
               <div className="flex justify-center mt-4 space-x-2">
                 <button onClick={goToPreviousSlide} disabled={currentSlideIndex === 0} className={`px-4 py-2 rounded ${currentSlideIndex === 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>&lt;</button>
