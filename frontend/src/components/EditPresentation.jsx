@@ -7,12 +7,21 @@ const EditPresentation = () => {
   const navigate = useNavigate();
 
   const [presentation, setPresentation] = useState(null);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showEditTitleModal, setShowEditTitleModal] = useState(false);
   const [showEditThumbnailModal, setShowEditThumbnailModal] = useState(false);
   const [newTitle, setNewTitle] = useState("");
-  // const [newThumbnail, setNewThumbnail] = useState(null);
-  const [firstSlide, setFirstSlide] = useState(null);
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const getToken = localStorage.getItem("token");
+    if (!getToken) {
+      navigate("/login");
+    } else {
+      setToken(getToken);
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const fetchPresentation = async () => {
@@ -32,9 +41,6 @@ const EditPresentation = () => {
 
         if (presentation) {
           setPresentation(presentation);
-          if (presentation.slides && presentation.slides.length > 0) {
-            setFirstSlide(presentation.slides[0]);
-          }
         } else {
           console.error("Presentation not found");
         }
@@ -45,6 +51,61 @@ const EditPresentation = () => {
     
     fetchPresentation();
   }, [id]);
+
+  // Function to save the updated presentation to the server
+  const savePresentation = async (updatedPresentation) => {
+    try {
+      const headers = { headers: { Authorization: `Bearer ${token}` } };
+      const response = await axios.get("http://localhost:5005/store", headers);
+      const store = response.data.store;
+
+      const updatedPresentations = store.presentations.map(pres => {
+        if (pres.id === id) return updatedPresentation;
+        return pres;
+      });
+
+      store.presentations = updatedPresentations;
+      await axios.put("http://localhost:5005/store", { store }, headers);
+    } catch (error) {
+      console.error("Error saving presentation:", error);
+    }
+  };
+
+  // Handle creating a new slide
+  const handleCreateSlide = async () => {
+    if (!presentation) return;
+
+    const newSlide = {
+      background: {
+        colour: "#FFFFFF",
+        img: null
+      },
+      elements: []
+    };
+
+    const updatedPresentation = {
+      ...presentation,
+      slides: [...presentation.slides, newSlide]
+    };
+
+    setPresentation(updatedPresentation);
+    setCurrentSlideIndex(updatedPresentation.slides.length - 1);
+
+    await savePresentation(updatedPresentation);
+  };
+
+  // Handle navigation between slides
+  const goToNextSlide = () => {
+    if (currentSlideIndex < presentation.slides.length - 1) {
+      setCurrentSlideIndex(currentSlideIndex + 1);
+    }
+  };
+
+  const goToPreviousSlide = () => {
+    if (currentSlideIndex > 0) {
+      setCurrentSlideIndex(currentSlideIndex - 1);
+    }
+  };
 
   // Handle delete confirmation
   const handleDelete = async () => {
@@ -218,13 +279,29 @@ const EditPresentation = () => {
       )}
 
       {presentation ? (
-        <div className="bg-gray-100 rounded-lg mx-auto h-[70vh] flex items-center justify-center">
-          {/* <p className="text-center text-gray-600">Slide content for "{presentation.name}" goes here</p> */}
-          {firstSlide ? (
-            <p className="text-center text-gray-600">First slide content: {firstSlide.content}</p>
-          ) : (
-            <p className="text-center text-gray-600">No slides available</p>
+        <div className="bg-gray-100 rounded-lg mx-auto h-[70vh] flex flex-col items-center justify-center">
+          {/* Slide content */}
+          <div className="w-full h-full flex items-center justify-center">
+            {/* Render the current slide's content here */}
+            <p className="text-center text-gray-600">
+              Slide {currentSlideIndex + 1} of {presentation.slides.length}
+            </p>
+          </div>
+
+          {/* Navigation controls */}
+          {presentation.slides.length > 1 && (
+            <div className="flex justify-center mt-4">
+              <button onClick={goToPreviousSlide} disabled={currentSlideIndex === 0} className={`px-4 py-2 rounded-l ${currentSlideIndex === 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>
+                &lt; Previous
+              </button>
+              <button onClick={goToNextSlide} disabled={currentSlideIndex === presentation.slides.length - 1} className={`px-4 py-2 rounded-r ${currentSlideIndex === presentation.slides.length - 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>
+                Next &gt;
+              </button>
+            </div>
           )}
+
+          {/* Create new slide button */}
+          <button onClick={handleCreateSlide} className="bg-violet-500 text-white px-4 py-2 rounded mt-4">+</button>
         </div>
       ) : (
         <p>Loading presentation...</p>
