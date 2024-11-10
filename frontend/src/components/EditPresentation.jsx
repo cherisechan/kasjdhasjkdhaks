@@ -7,6 +7,7 @@ import EditThumbnailModal from './EditThumbnailModal';
 import DeleteSlidePopup from './DeleteSlidePopup';
 import CannotDeleteSlidePopup from './CannotDeleteSlidePopup';
 import { PencilIcon, PhotoIcon, TrashIcon } from "@heroicons/react/24/outline";
+import Slide from "./Slide";
 
 const EditPresentation = () => {
   const { id } = useParams();
@@ -337,12 +338,12 @@ const EditPresentation = () => {
       {slides ? (
         <div className="max-w-screen-xl bg-gray-100 rounded-lg mx-auto h-[75vh] flex flex-col items-center justify-center">
           {/* Slide content */}
-          <div className={`bg-[${slides[currentSlideIndex].background.colour}] w-[65vw] h-full flex items-center justify-center mt-5 rounded`}>
+          <Slide bgcolour={slides[currentSlideIndex].background.colour}>
             {/* Render the current slide's content here */}
             <p className="text-center text-gray-600">
               Slide {currentSlideIndex + 1} of {presentation.slides.length}
             </p>
-          </div>
+          </Slide>
 
           {/* Navigation controls */}
           {presentation.slides.length >= 1 && (
