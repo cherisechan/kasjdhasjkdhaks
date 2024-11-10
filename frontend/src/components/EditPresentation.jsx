@@ -4,7 +4,7 @@ import axios from "axios";
 import DeletePopup from './DeletePopup';
 import EditTitleModal from './EditTitleModal';
 import EditThumbnailModal from './EditThumbnailModal';
-import { PencilIcon, PhotoIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, PhotoIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 const EditPresentation = () => {
   const { id } = useParams();
@@ -294,14 +294,19 @@ const EditPresentation = () => {
           </div>
 
           {/* Navigation controls */}
-          {presentation.slides.length > 1 && (
-            <div className="w-full flex justify-between p-4">
-              <p className="px-4 py-2 rounded mt-4">{currentSlideIndex + 1}</p>
-              <div className="flex justify-center mt-4 space-x-2">
-                <button onClick={goToPreviousSlide} disabled={currentSlideIndex === 0} className={`px-4 py-2 rounded ${currentSlideIndex === 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>&lt;</button>
-                <button onClick={goToNextSlide} disabled={currentSlideIndex === presentation.slides.length - 1} className={`px-4 py-2 rounded ${currentSlideIndex === presentation.slides.length - 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>&gt;</button>
+          {presentation.slides.length >= 1 && (
+            <div className="w-full flex items-end justify-between p-4">
+              <p className="w-10 h-10 rounded flex items-center justify-center text-bold">{currentSlideIndex + 1}</p>
+              <div className="flex justify-center space-x-2">
+                <button onClick={goToPreviousSlide} disabled={currentSlideIndex === 0} className={`w-10 h-10 rounded ${currentSlideIndex === 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>&lt;</button>
+                <button onClick={goToNextSlide} disabled={currentSlideIndex === presentation.slides.length - 1} className={`w-10 h-10 rounded ${currentSlideIndex === presentation.slides.length - 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>&gt;</button>
               </div>
-              <button onClick={handleCreateSlide} className="bg-violet-500 text-white px-4 py-2 rounded mt-4">+</button>
+              <div className="flex flex-col relative">
+                <button className="bg-red-500 text-white w-10 h-10 rounded flex items-center justify-center">
+                  <TrashIcon className="h-5 w-5" />
+                </button>
+                <button onClick={handleCreateSlide} className="bg-violet-500 text-white w-10 h-10 rounded mt-2">+</button>
+              </div>
             </div>
           )}          
         </div>
