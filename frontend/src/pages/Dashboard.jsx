@@ -53,15 +53,16 @@ const Dashboard = () => {
                 <button className="mt-28 mb-6 mx-14 self-start text-xl bg-violet-700 hover:bg-violet-300 text-white font-bold py-3 px-5  rounded my-2" onClick={() => setShowCreate(true)}>CREATE</button>
                 <div className="overflow-auto max-w-full grid grid-cols-3 max-warps:grid-cols-2  max-sm:grid-cols-1 max-h-[70%] gap-3 px-3 scrollbar scrollbar-w-2 scrollbar-thumb-violet-300 scrollbar-track-gray-3  00 scrollbar-thumb-rounded">
                 {/* {showList && [...presList.presentations].reverse().map((presentation, index) => ( */}
-                {showList && presList.map((presentation) => (
-                    <Presentation
-                        key={presentation.id}
-                        id={presentation.id}
-                        name={presentation.name}
-                        description={presentation.description}
-                        numSlides={presentation.slides.length}
-                    />
-                ))}
+                    {showList && presList.map((presentation) => (
+                        <Presentation
+                            key={presentation.id}
+                            id={presentation.id}
+                            name={presentation.name}
+                            description={presentation.description}
+                            numSlides={presentation.slides.length}
+                            thumbnail={presentation.thumbnail}
+                        />
+                    ))}
                 </div>
             </div>
         </>
