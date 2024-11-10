@@ -9,7 +9,7 @@ const EditPresentation = () => {
   const [presentation, setPresentation] = useState(null);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showEditTitleModal, setShowEditTitleModal] = useState(false);
-  // const [showEditThumbnailModal, setShowEditThumbnailModal] = useState(false);
+  const [showEditThumbnailModal, setShowEditThumbnailModal] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   // const [newThumbnail, setNewThumbnail] = useState(null);
   const [firstSlide, setFirstSlide] = useState(null);
@@ -104,7 +104,6 @@ const EditPresentation = () => {
         const response = await axios.get("http://localhost:5005/store", headers);
         const store = response.data.store;
 
-        // Update the thumbnail in the presentation
         const updatedPresentations = store.presentations.map(pres => {
           if (pres.id === id) return { ...pres, thumbnail: thumbnailData };
           return pres;
@@ -113,11 +112,34 @@ const EditPresentation = () => {
         store.presentations = updatedPresentations;
         await axios.put("http://localhost:5005/store", { store }, headers);
         setPresentation(prev => ({ ...prev, thumbnail: thumbnailData }));
+        setShowEditThumbnailModal(false);
       } catch (error) {
         console.error("Error updating thumbnail:", error);
       }
     };
-    reader.readAsDataURL(file); // Convert image file to Base64
+    reader.readAsDataURL(file);
+  };
+
+  // Handle thumbnail removal
+  const handleRemoveThumbnail = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const headers = { headers: { Authorization: `Bearer ${token}` } };
+      const response = await axios.get("http://localhost:5005/store", headers);
+      const store = response.data.store;
+
+      const updatedPresentations = store.presentations.map(pres => {
+        if (pres.id === id) return { ...pres, thumbnail: null };
+        return pres;
+      });
+
+      store.presentations = updatedPresentations;
+      await axios.put("http://localhost:5005/store", { store }, headers);
+      setPresentation(prev => ({ ...prev, thumbnail: null }));
+      setShowEditThumbnailModal(false);
+    } catch (error) {
+      console.error("Error removing thumbnail:", error);
+    }
   };
 
   return (
@@ -138,10 +160,7 @@ const EditPresentation = () => {
             </div>
           )}
 
-          <label className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer">
-            Update Thumbnail
-            <input type="file" accept="image/*" onChange={handleThumbnailUpdate} className="hidden" />
-          </label>
+          <button onClick={() => setShowEditThumbnailModal(true)} className="bg-blue-500 text-white px-4 py-2 rounded">Update Thumbnail</button>
           <h1 className="text-2xl font-bold">{presentation?.name}</h1>
           <button onClick={() => setShowEditTitleModal(true)}>EDIT TITLE</button>
         </div>
@@ -174,6 +193,25 @@ const EditPresentation = () => {
             <div className="flex justify-end mt-4">
               <button onClick={() => setShowEditTitleModal(false)} className="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2">Cancel</button>
               <button onClick={handleTitleUpdate} className="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showEditThumbnailModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-md">
+            <h2 className="text-xl font-semibold mb-4">Edit Thumbnail</h2>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleThumbnailUpdate}
+              className="border rounded w-full px-3 py-2 mb-4"
+            />
+            <div className="flex justify-end">
+              <button onClick={handleRemoveThumbnail} className="bg-gray-500 text-white px-4 py-2 rounded mr-2">Remove Thumbnail</button>
+              <button onClick={() => setShowEditThumbnailModal(false)} className="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2">Cancel</button>
+              <button onClick={handleThumbnailUpdate} className="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
             </div>
           </div>
         </div>
