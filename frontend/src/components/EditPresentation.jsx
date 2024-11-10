@@ -14,6 +14,7 @@ const EditPresentation = () => {
 
   const [presentation, setPresentation] = useState(null);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [slides, setSlides] = useState(null);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showDeleteSlidePopup, setShowDeleteSlidePopup] = useState(false);
   const [showCannotDeleteSlidePopup, setShowCannotDeleteSlidePopup] = useState(false);
@@ -49,6 +50,7 @@ const EditPresentation = () => {
 
         if (presentation) {
           setPresentation(presentation);
+          setSlides(presentation.slides);
         } else {
           console.error("Presentation not found");
         }
@@ -62,8 +64,8 @@ const EditPresentation = () => {
 
   // Function to save the updated presentation to the server
   const savePresentation = async (updatedPresentation) => {
+    const headers = { headers: { Authorization: `Bearer ${token}` } };
     try {
-      const headers = { headers: { Authorization: `Bearer ${token}` } };
       const response = await axios.get("http://localhost:5005/store", headers);
       const store = response.data.store;
 
@@ -77,6 +79,14 @@ const EditPresentation = () => {
     } catch (error) {
       console.error("Error saving presentation:", error);
     }
+
+    // set the updated presentation
+    const res = await axios.get("http://localhost:5005/store", headers);
+    const updatedPres = res.data.store.presentations.find(pres => pres.id === id);
+    if (updatedPres) {
+      setPresentation(updatedPres);
+      setSlides(updatedPres.slides);
+    }   
   };
 
   // Handle creating a new slide
@@ -97,7 +107,6 @@ const EditPresentation = () => {
     };
 
     setPresentation(updatedPresentation);
-    setCurrentSlideIndex(updatedPresentation.slides.length - 1);
 
     await savePresentation(updatedPresentation);
   };
@@ -257,12 +266,7 @@ const EditPresentation = () => {
 
   return (
     <div className="edit-presentation">
-      <h1>Need to fix navbar covering up everything lol</h1>
-      <h1>Need to fix navbar covering up everything lol</h1>
-      <h1>Need to fix navbar covering up everything lol</h1>
-      <h1>Need to fix navbar covering up everything lol</h1>
-
-      <div className="max-w-screen-xl flex items-center justify-between mx-auto py-4">
+      <div className="max-w-screen-xl flex items-center justify-between mx-auto py-4 mt-20">
         <button onClick={() => navigate("/dashboard")} className="bg-gray-500 text-white px-4 py-2 rounded">Back</button>
 
         <div className="flex items-center space-x-2">
@@ -330,10 +334,10 @@ const EditPresentation = () => {
         />
       )}
 
-      {presentation ? (
+      {slides ? (
         <div className="max-w-screen-xl bg-gray-100 rounded-lg mx-auto h-[75vh] flex flex-col items-center justify-center">
           {/* Slide content */}
-          <div className="bg-white w-[65vw] h-full flex items-center justify-center mt-5 rounded">
+          <div className={`bg-[${slides[currentSlideIndex].background.colour}] w-[65vw] h-full flex items-center justify-center mt-5 rounded`}>
             {/* Render the current slide's content here */}
             <p className="text-center text-gray-600">
               Slide {currentSlideIndex + 1} of {presentation.slides.length}
