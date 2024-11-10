@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 
 const EditPresentation = () => {
@@ -106,6 +106,24 @@ const EditPresentation = () => {
       setCurrentSlideIndex(currentSlideIndex - 1);
     }
   };
+
+  // Handle keyboard events
+  const handleKeyDown = useCallback((event) => {
+    if (event.key === 'ArrowRight') {
+      goToNextSlide();
+    } else if (event.key === 'ArrowLeft') {
+      goToPreviousSlide();
+    }
+  }, [currentSlideIndex, presentation]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+
+    // Clean up the event listener
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleKeyDown]);
 
   // Handle delete confirmation
   const handleDelete = async () => {
