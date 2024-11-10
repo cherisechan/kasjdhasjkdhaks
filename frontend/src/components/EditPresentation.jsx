@@ -9,7 +9,9 @@ const EditPresentation = () => {
   const [presentation, setPresentation] = useState(null);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showEditTitleModal, setShowEditTitleModal] = useState(false);
+  const [showEditThumbnailModal, setShowEditThumbnailModal] = useState(false);
   const [newTitle, setNewTitle] = useState("");
+  const [newThumbnail, setNewThumbnail] = useState(null);
 
   useEffect(() => {
     const fetchPresentation = async () => {
@@ -83,6 +85,37 @@ const EditPresentation = () => {
     }
   };
 
+  // Handle thumbnail update
+  const handleThumbnailUpdate = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const thumbnailData = reader.result;
+
+      try {
+        const token = localStorage.getItem("token");
+        const headers = { headers: { Authorization: `Bearer ${token}` } };
+        const response = await axios.get("http://localhost:5005/store", headers);
+        const store = response.data.store;
+
+        // Update the thumbnail in the presentation
+        const updatedPresentations = store.presentations.map(pres => {
+          if (pres.id === id) return { ...pres, thumbnail: thumbnailData };
+          return pres;
+        });
+
+        store.presentations = updatedPresentations;
+        await axios.put("http://localhost:5005/store", { store }, headers);
+        setPresentation(prev => ({ ...prev, thumbnail: thumbnailData }));
+      } catch (error) {
+        console.error("Error updating thumbnail:", error);
+      }
+    };
+    reader.readAsDataURL(file); // Convert image file to Base64
+  };
+
   return (
     <div className="edit-presentation">
       <h1>Need to fix navbar covering up everything lol</h1>
@@ -93,6 +126,18 @@ const EditPresentation = () => {
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
         <button onClick={() => navigate("/dashboard")} className="bg-gray-500 text-white px-4 py-2 rounded">Back</button>
         <div className="flex items-center space-x-2">
+          {presentation?.thumbnail ? (
+            <img src={presentation.thumbnail} alt="Thumbnail" className="w-12 h-12 object-cover"/>
+          ) : (
+            <div className="w-12 h-12 bg-gray-200 flex items-center justify-center">
+              <span className="text-gray-500 text-xs">No Thumbnail</span>
+            </div>
+          )}
+
+          <label className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer">
+            Update Thumbnail
+            <input type="file" accept="image/*" onChange={handleThumbnailUpdate} className="hidden" />
+          </label>
           <h1 className="text-2xl font-bold">{presentation?.name}</h1>
           <button onClick={() => setShowEditTitleModal(true)}>EDIT TITLE</button>
         </div>
