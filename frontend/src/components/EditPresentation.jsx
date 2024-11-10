@@ -1,6 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
+import DeletePopup from './DeletePopup';
+import EditTitleModal from './EditTitleModal';
+import EditThumbnailModal from './EditThumbnailModal';
 
 const EditPresentation = () => {
   const { id } = useParams();
@@ -247,53 +250,27 @@ const EditPresentation = () => {
       </div>
       
       {showDeletePopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <p className="text-lg mb-4">Are you sure?</p>
-            <div className="flex justify-end">
-              <button onClick={() => setShowDeletePopup(false)} className="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2">No</button>
-              <button onClick={handleDelete} className="bg-red-500 text-white px-4 py-2 rounded">Yes</button>
-            </div>
-          </div>
-        </div>
+        <DeletePopup
+          onCancel={() => setShowDeletePopup(false)}
+          onConfirm={handleDelete}
+        />
       )}
 
       {showEditTitleModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-md">
-            <h2 className="text-xl font-semibold mb-4">Edit presentation title</h2>
-            <input
-              type="text"
-              className="border rounded w-full px-3 py-2"
-              placeholder="Enter new title"
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-            />
-            <div className="flex justify-end mt-4">
-              <button onClick={() => setShowEditTitleModal(false)} className="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2">Cancel</button>
-              <button onClick={handleTitleUpdate} className="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
-            </div>
-          </div>
-        </div>
+        <EditTitleModal
+          newTitle={newTitle}
+          setNewTitle={setNewTitle}
+          onCancel={() => setShowEditTitleModal(false)}
+          onSave={handleTitleUpdate}
+        />
       )}
 
       {showEditThumbnailModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-md">
-            <h2 className="text-xl font-semibold mb-4">Edit Thumbnail</h2>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleThumbnailUpdate}
-              className="border rounded w-full px-3 py-2 mb-4"
-            />
-            <div className="flex justify-end">
-              <button onClick={handleRemoveThumbnail} className="bg-gray-500 text-white px-4 py-2 rounded mr-2">Remove Thumbnail</button>
-              <button onClick={() => setShowEditThumbnailModal(false)} className="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2">Cancel</button>
-              <button onClick={handleThumbnailUpdate} className="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
-            </div>
-          </div>
-        </div>
+        <EditThumbnailModal
+          onFileChange={handleThumbnailUpdate}
+          onRemoveThumbnail={handleRemoveThumbnail}
+          onCancel={() => setShowEditThumbnailModal(false)}
+        />
       )}
 
       {presentation ? (
