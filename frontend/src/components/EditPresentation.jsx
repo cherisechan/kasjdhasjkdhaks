@@ -9,9 +9,10 @@ const EditPresentation = () => {
   const [presentation, setPresentation] = useState(null);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showEditTitleModal, setShowEditTitleModal] = useState(false);
-  const [showEditThumbnailModal, setShowEditThumbnailModal] = useState(false);
+  // const [showEditThumbnailModal, setShowEditThumbnailModal] = useState(false);
   const [newTitle, setNewTitle] = useState("");
-  const [newThumbnail, setNewThumbnail] = useState(null);
+  // const [newThumbnail, setNewThumbnail] = useState(null);
+  const [firstSlide, setFirstSlide] = useState(null);
 
   useEffect(() => {
     const fetchPresentation = async () => {
@@ -31,6 +32,9 @@ const EditPresentation = () => {
 
         if (presentation) {
           setPresentation(presentation);
+          if (presentation.slides && presentation.slides.length > 0) {
+            setFirstSlide(presentation.slides[0]);
+          }
         } else {
           console.error("Presentation not found");
         }
@@ -176,8 +180,13 @@ const EditPresentation = () => {
       )}
 
       {presentation ? (
-        <div className="bg-gray-100 rounded-lg mx-auto mt-8 w-4/5 h-[60vh] flex items-center justify-center">
-          <p className="text-center text-gray-600">Slide content for "{presentation.name}" goes here</p>
+        <div className="bg-gray-100 rounded-lg mx-auto h-[70vh] flex items-center justify-center">
+          {/* <p className="text-center text-gray-600">Slide content for "{presentation.name}" goes here</p> */}
+          {firstSlide ? (
+            <p className="text-center text-gray-600">First slide content: {firstSlide.content}</p>
+          ) : (
+            <p className="text-center text-gray-600">No slides available</p>
+          )}
         </div>
       ) : (
         <p>Loading presentation...</p>
