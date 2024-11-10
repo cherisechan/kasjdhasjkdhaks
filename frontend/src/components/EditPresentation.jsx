@@ -354,11 +354,8 @@ const EditPresentation = () => {
             <button onClick={() => {setShowTextCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Text</button>
           </div>
           {/* Slide content */}
-          <Slide slide={slides[currentSlideIndex]}>
-            {/* Render the current slide's content here */}
-            <p className="absolute text-center text-gray-600 bottom-2 left-3 text-[1em]">
-              {currentSlideIndex + 1}
-            </p>
+          <Slide slide={slides[currentSlideIndex]} currIndex={currentSlideIndex}>
+            
           </Slide>
 
           {/* Navigation controls */}
