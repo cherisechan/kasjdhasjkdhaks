@@ -4,6 +4,7 @@ import axios from "axios";
 import DeletePopup from './DeletePopup';
 import EditTitleModal from './EditTitleModal';
 import EditThumbnailModal from './EditThumbnailModal';
+import { PencilIcon, PhotoIcon } from "@heroicons/react/24/outline";
 
 const EditPresentation = () => {
   const { id } = useParams();
@@ -245,11 +246,14 @@ const EditPresentation = () => {
               onClick={() => setShowEditThumbnailModal(true)}
               className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 text-white text-xs rounded"
             >
-              Image
+              <PhotoIcon className="h-6 w-6" />
             </button>
           </div>
 
-          <button onClick={() => setShowEditTitleModal(true)}>TITLE</button>
+          {/* <button onClick={() => setShowEditTitleModal(true)}>TITLE</button> */}
+          <button onClick={() => setShowEditTitleModal(true)}>
+            <PencilIcon className="h-6 w-6 text-black" />
+          </button>
           <h1 className="text-2xl font-bold">{presentation?.name}</h1>
         </div>
         <button onClick={() => setShowDeletePopup(true)} className="bg-red-500 text-white px-4 py-2 rounded">Delete Presentation</button>
