@@ -266,11 +266,47 @@ const EditPresentation = () => {
     }
   };
 
+  // add text element
   const [showTextCreateModal, setShowTextCreateModal] = useState(false);
-  const [text, setText] = useState("");
-  const handleTextCreate = () => {
-
-  }
+  const [textBoxText, setTextBoxText] = useState("");
+  const [textBoxWidth, setTextBoxWidth] = useState("");
+  const [textBoxHeight, setTextBoxHeight] = useState("");
+  const [textBoxFontSize, setTextBoxFontSize] = useState("");
+  const [textBoxTextColour, setTextBoxTextColour] = useState("");
+  const [textSubmit, setTextSubmit] = useState(false);
+  const addElem = async (elemObj) => {
+    const headers = { headers: { Authorization: `Bearer ${token}` } };
+    const response = await axios.get("http://localhost:5005/store", headers);
+    const store = response.data.store;
+    store.presentations.map(p => {
+      if (p.id === id) {
+        p.slides[currentSlideIndex].elements.unshift(elemObj);
+      }
+    })
+    await axios.put("http://localhost:5005/store", {store}, headers);
+    const updatedRes = await axios.get("http://localhost:5005/store", headers);
+    const presentation = updatedRes.data.store.presentations.find(pres => pres.id === id);
+    if (presentation) {
+      setPresentation(presentation);
+      setSlides(presentation.slides);
+    }
+  } 
+  useEffect(() => {
+    if (textSubmit) {
+      const textElem = {
+        "type": "text",
+        "text": textBoxText,
+        "width": textBoxWidth,
+        "height": textBoxHeight,
+        "fontSize": textBoxFontSize,
+        "textColour": textBoxTextColour,
+        "x": 0,
+        "y": 0
+      }
+      addElem(textElem);
+      setTextSubmit(false);
+    }
+  }, [textSubmit])
 
   return (
     <div className="edit-presentation px-2">
@@ -344,6 +380,12 @@ const EditPresentation = () => {
 
       {showTextCreateModal && (
         <TextCreateModal
+          setSubmitText={setTextBoxText}
+          setSubmitWidth={setTextBoxWidth}
+          setSubmitHeight={setTextBoxHeight}
+          setSubmitFontSize={setTextBoxFontSize}
+          setSubmitTextColour={setTextBoxTextColour}
+          setTextSubmit={setTextSubmit}
           setShowTextCreateModal={setShowTextCreateModal}
         />
       )}
