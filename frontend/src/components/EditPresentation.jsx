@@ -266,14 +266,7 @@ const EditPresentation = () => {
     }
   };
 
-  // add text element
-  const [showTextCreateModal, setShowTextCreateModal] = useState(false);
-  const [textBoxText, setTextBoxText] = useState("");
-  const [textBoxWidth, setTextBoxWidth] = useState("");
-  const [textBoxHeight, setTextBoxHeight] = useState("");
-  const [textBoxFontSize, setTextBoxFontSize] = useState("");
-  const [textBoxTextColour, setTextBoxTextColour] = useState("");
-  const [textSubmit, setTextSubmit] = useState(false);
+  // adds element to slide
   const addElem = async (elemObj) => {
     const headers = { headers: { Authorization: `Bearer ${token}` } };
     const response = await axios.get("http://localhost:5005/store", headers);
@@ -290,7 +283,16 @@ const EditPresentation = () => {
       setPresentation(presentation);
       setSlides(presentation.slides);
     }
-  } 
+  }
+
+  // add text element
+  const [showTextCreateModal, setShowTextCreateModal] = useState(false);
+  const [textBoxText, setTextBoxText] = useState("");
+  const [textBoxWidth, setTextBoxWidth] = useState("");
+  const [textBoxHeight, setTextBoxHeight] = useState("");
+  const [textBoxFontSize, setTextBoxFontSize] = useState("");
+  const [textBoxTextColour, setTextBoxTextColour] = useState("");
+  const [textSubmit, setTextSubmit] = useState(false);
   useEffect(() => {
     if (textSubmit) {
       const textElem = {
