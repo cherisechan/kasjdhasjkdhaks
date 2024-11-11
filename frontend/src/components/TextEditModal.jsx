@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-const TextEditModal = ({ element, setSubmitText, setSubmitWidth, setSubmitHeight, setSubmitFontSize, setSubmitTextColour, setTextEditSubmit, setShowTextEditModal }) => {
+const TextEditModal = ({ element, setSubmitText, setSubmitWidth, setSubmitHeight, setSubmitFontSize, setSubmitTextColour, setTextEditSubmit, setSubmitTextX, setSubmitTextY, setShowTextEditModal }) => {
   const [text, setText] = useState(element.text);
   const [width, setWidth] = useState(element.width);
   const [height, setHeight] = useState(element.height);
   const [fontSize, setFontSize] = useState(element.fontSize);
   const [textColour, setTextColour] = useState(element.textColour);
+  const [textX, setTextX] = useState(element.x);
+  const [textY, setTextY] = useState(element.y);
   const [error, setError] = useState("");
 
   const onSubmit = () => {
@@ -25,6 +27,8 @@ const TextEditModal = ({ element, setSubmitText, setSubmitWidth, setSubmitHeight
       setSubmitHeight(height);
       setSubmitFontSize(fontSize);
       setSubmitTextColour(textColour);
+      setSubmitTextX(textX);
+      setSubmitTextY(textY);
       setTextEditSubmit(true);
       setShowTextEditModal(false);
     }

@@ -1,7 +1,7 @@
 import SlideBase from "./SlideBase";
 import TextElement from "./TextElement";
 import TextEditModal from "./TextEditModal";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
     let elements = slide.elements;
     elements = elements.map((e, index) => ({
@@ -9,6 +9,23 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
         z: index,
     }))
 
+    // custom double click within 0.5sec
+    const clickCountRef = useRef(0);
+    const timerRef = useRef(null);
+
+    const handleClick = (e) => {
+        clickCountRef.current += 1;
+
+        if (clickCountRef.current === 2) {
+            clearTimeout(timerRef.current);
+            clickCountRef.current = 0;
+            openTextEdit(e);
+        } else {
+            timerRef.current = setTimeout(() => {
+                clickCountRef.current = 0;
+            }, 500);
+        }
+    };
 
     // for text edit
     const [showTextEditModal, setShowTextEditModal] = useState(false);
@@ -19,17 +36,19 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
     const [textBoxHeight, setTextBoxHeight] = useState("");
     const [textBoxFontSize, setTextBoxFontSize] = useState("");
     const [textBoxTextColour, setTextBoxTextColour] = useState("");
+    const [textX, setTextX] = useState("");
+    const [textY, setTextY] = useState("");
     useEffect(() => {
         if (textEditSubmit) {
             const textElem = {
-            "type": "text",
-            "text": textBoxText,
-            "width": textBoxWidth,
-            "height": textBoxHeight,
-            "fontSize": textBoxFontSize,
-            "textColour": textBoxTextColour,
-            "x": 0,
-            "y": 0
+                "type": "text",
+                "text": textBoxText,
+                "width": textBoxWidth,
+                "height": textBoxHeight,
+                "fontSize": textBoxFontSize,
+                "textColour": textBoxTextColour,
+                "x": textX,
+                "y": textY
             }
             setUpdateObj(textElem);
             setUpdateElemId(elemId)
@@ -54,6 +73,8 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
                     setSubmitFontSize={setTextBoxFontSize}
                     setSubmitTextColour={setTextBoxTextColour}
                     setTextEditSubmit={setTextEditSubmit}
+                    setSubmitTextX={setTextX}
+                    setSubmitTextY={setTextY}
                     setShowTextEditModal={setShowTextEditModal}
                 />
             )}
@@ -62,8 +83,8 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
                     elements.map((t, index) =>{
                         if (t.type === "text") {
                             return (
-                                <TextElement id={slide.elements[index].id} className="text-element hover:cursor-pointer" $textObj={t} key={index} onClick={openTextEdit}>
-                                    {t.text}
+                                <TextElement id={slide.elements[index].id} className="text-element hover:cursor-pointer" $textObj={t} key={index} onClick={handleClick}>
+                                    <p className="overflow-hidden pointer-events-none">{t.text}</p>
                                 </TextElement>
                             )
                         }
