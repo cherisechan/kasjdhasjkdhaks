@@ -4,7 +4,6 @@ const TextElementStyled = styled.div(({$textObj}) => ({
     position: 'absolute',
     height: `${$textObj.height}%`,
     width: `${$textObj.width}%`,
-    overflow: "hidden",
     fontSize: `${$textObj.fontSize}em`,
     color: `${$textObj.textColour}`,
     top: `${$textObj.x}`,
