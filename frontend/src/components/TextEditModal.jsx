@@ -54,6 +54,11 @@ const TextEditModal = ({ element, setSubmitText, setSubmitWidth, setSubmitHeight
             <input type="text" name="Height" className="bg-gray-50 rounded-sm border border-gray-200 px-2 py-1 w-full" placeholder="Enter height (%)" onChange={e => {setHeight(e.target.value)}} defaultValue={element.height} />
           </div>
           <div className="flex w-full justify-between mt-[4%]">
+            <p className="text-xl pb-[1%] mr-5">Position</p>
+            <input type="text" name="X" className="bg-gray-50 rounded-sm border border-gray-200 px-2 py-1 w-full mr-5" placeholder="Enter x (%)" onChange={e => {setTextX(e.target.value)}} defaultValue={element.x} />
+            <input type="text" name="Y" className="bg-gray-50 rounded-sm border border-gray-200 px-2 py-1 w-full" placeholder="Enter y (%)" onChange={e => {setTextY(e.target.value)}} defaultValue={element.y} />
+          </div>
+          <div className="flex w-full justify-between mt-[4%]">
             <p className="text-xl pb-[1%] mr-5 whitespace-nowrap">Font size</p>
             <input type="text" name="Font size" className="bg-gray-50 rounded-sm border border-gray-200 px-2 py-1 w-full" placeholder="Enter font size (em)" onChange={e => {setFontSize(e.target.value)}} defaultValue={element.fontSize} />
           </div>
