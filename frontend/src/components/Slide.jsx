@@ -1,11 +1,13 @@
 import SlideBase from "./SlideBase";
 import TextElement from "./TextElement";
 const Slide = ({ slide, currIndex }) => {
-    const elements = slide.elements;
-    elements.map((e, index) => ({
-        ...elements,
-        "z": index,
+    let elements = slide.elements;
+    elements = elements.map((e, index) => ({
+        ...e,
+        z: index,
     }))
+    console.log(elements);
+
     const textElems = elements.filter(e => e.type === "text");
 
     return (
@@ -14,7 +16,6 @@ const Slide = ({ slide, currIndex }) => {
                 {
                     textElems.map((t, index) =>(
                         <TextElement className="text-element" $textObj={t} key={index}>
-                            <div className="absolute"></div>
                             <p>{t.text}</p>
                         </TextElement>
                     ))
