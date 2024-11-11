@@ -10,12 +10,12 @@ const TextElement = ({$textObj, text, id, openTextEdit}) => {
 
     const handleClick = (e) => {
         e.stopPropagation();
+        setShowBoxes(true);
 
         clickCountRef.current += 1;
 
         if (clickCountRef.current === 1) {
             timerRef.current = setTimeout(() => {
-                setShowBoxes(true);
                 clickCountRef.current = 0;
             }, 500);
         }
@@ -23,6 +23,7 @@ const TextElement = ({$textObj, text, id, openTextEdit}) => {
         if (clickCountRef.current === 2) {
             clearTimeout(timerRef.current);
             clickCountRef.current = 0;
+            setShowBoxes(false);
             openTextEdit(e);
         }
     };
