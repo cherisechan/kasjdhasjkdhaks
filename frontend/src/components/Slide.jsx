@@ -6,7 +6,7 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
     let elements = slide.elements;
     elements = elements.map((e, index) => ({
         ...e,
-        z: index,
+        z: `${500 - parseInt(index)}`,
     }))
 
     // for text edit
@@ -40,9 +40,10 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
 
     const openTextEdit = e => {
         setElemId(e.target.id);
-        setShowTextEditModal(true);
+        if (e.target.id) {
+            setShowTextEditModal(true);
+        }
     }
-      
 
     return (
         <>
