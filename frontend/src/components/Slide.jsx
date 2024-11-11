@@ -1,31 +1,13 @@
 import SlideBase from "./SlideBase";
 import TextElement from "./TextElement";
 import TextEditModal from "./TextEditModal";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
     let elements = slide.elements;
     elements = elements.map((e, index) => ({
         ...e,
         z: index,
     }))
-
-    // custom double click within 0.5sec
-    const clickCountRef = useRef(0);
-    const timerRef = useRef(null);
-
-    const handleClick = (e) => {
-        clickCountRef.current += 1;
-
-        if (clickCountRef.current === 2) {
-            clearTimeout(timerRef.current);
-            clickCountRef.current = 0;
-            openTextEdit(e);
-        } else {
-            timerRef.current = setTimeout(() => {
-                clickCountRef.current = 0;
-            }, 500);
-        }
-    };
 
     // for text edit
     const [showTextEditModal, setShowTextEditModal] = useState(false);
@@ -83,9 +65,7 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
                     elements.map((t, index) =>{
                         if (t.type === "text") {
                             return (
-                                <TextElement id={slide.elements[index].id} className="text-element hover:cursor-pointer" $textObj={t} key={index} onClick={handleClick}>
-                                    <p className="overflow-hidden pointer-events-none">{t.text}</p>
-                                </TextElement>
+                                <TextElement id={slide.elements[index].id} className="text-element hover:cursor-pointer" $textObj={t} text={t.text} openTextEdit={openTextEdit} key={index} />
                             )
                         }
                         
