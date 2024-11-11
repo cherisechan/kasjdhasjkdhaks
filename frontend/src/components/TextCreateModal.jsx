@@ -9,7 +9,6 @@ const TextCreateModal = ({ setSubmitText, setSubmitWidth, setSubmitHeight, setSu
   const [error, setError] = useState("");
   const onSubmit = () => {
     if (text === "") {
-      console.log(text);
       setError("Text cannot be empty");
     } else if (isNaN(parseFloat(width)) || parseFloat(width) < 0 || parseFloat(width) > 100) {
       setError("Size must be a number between 0 and 100");

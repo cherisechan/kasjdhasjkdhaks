@@ -9,6 +9,7 @@ import CannotDeleteSlidePopup from './CannotDeleteSlidePopup';
 import { PencilIcon, PhotoIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Slide from "./Slide";
 import TextCreateModal from "./TextCreateModal";
+import uniqid from "uniqid";
 
 const EditPresentation = () => {
   const { id } = useParams();
@@ -96,6 +97,7 @@ const EditPresentation = () => {
     if (!presentation) return;
 
     const newSlide = {
+      id: uniqid(),
       background: {
         colour: "#FFFFFF",
         img: null
@@ -285,6 +287,27 @@ const EditPresentation = () => {
     }
   }
 
+  const editElem = async (elemObj, elemId) => {
+    const headers = { headers: { Authorization: `Bearer ${token}` } };
+    const response = await axios.get("http://localhost:5005/store", headers);
+    const store = response.data.store;
+    store.presentations.map(p => {
+      if (p.id === id) {
+        let updateElem = p.slides[currentSlideIndex].elements.find(e => e.id === elemId);
+        if (updateElem) {
+          Object.assign(updateElem, elemObj);
+        }
+      }
+    })
+    await axios.put("http://localhost:5005/store", {store}, headers);
+    const updatedRes = await axios.get("http://localhost:5005/store", headers);
+    const presentation = updatedRes.data.store.presentations.find(pres => pres.id === id);
+    if (presentation) {
+      setPresentation(presentation);
+      setSlides(presentation.slides);
+    }
+  }
+
   // add text element
   const [showTextCreateModal, setShowTextCreateModal] = useState(false);
   const [textBoxText, setTextBoxText] = useState("");
@@ -296,6 +319,7 @@ const EditPresentation = () => {
   useEffect(() => {
     if (textSubmit) {
       const textElem = {
+        "id": uniqid(),
         "type": "text",
         "text": textBoxText,
         "width": textBoxWidth,
@@ -309,6 +333,17 @@ const EditPresentation = () => {
       setTextSubmit(false);
     }
   }, [textSubmit])
+
+  // updating elements from slide
+  const [updateObj, setUpdateObj] = useState(null);
+  const [elemId, setElemId] = useState("");
+  useEffect(() => {
+    if (updateObj) {
+      editElem(updateObj, elemId);
+      setUpdateObj(null);
+    }
+  }, [updateObj]);
+
 
   return (
     <div className="edit-presentation px-2">
@@ -398,9 +433,7 @@ const EditPresentation = () => {
             <button onClick={() => {setShowTextCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Text</button>
           </div>
           {/* Slide content */}
-          <Slide slide={slides[currentSlideIndex]} currIndex={currentSlideIndex}>
-            
-          </Slide>
+          <Slide slide={slides[currentSlideIndex]} currIndex={currentSlideIndex} setUpdateObj={setUpdateObj} setUpdateElemId={setElemId}/>
 
           {/* Navigation controls */}
           {presentation.slides.length >= 1 && (

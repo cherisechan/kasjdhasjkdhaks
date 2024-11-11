@@ -1,24 +1,74 @@
 import SlideBase from "./SlideBase";
 import TextElement from "./TextElement";
-const Slide = ({ slide, currIndex }) => {
+import TextEditModal from "./TextEditModal";
+import { useState, useEffect } from "react";
+const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
     let elements = slide.elements;
     elements = elements.map((e, index) => ({
         ...e,
         z: index,
     }))
-    console.log(elements);
 
-    const textElems = elements.filter(e => e.type === "text");
+
+    // for text edit
+    const [showTextEditModal, setShowTextEditModal] = useState(false);
+    const [elemId, setElemId] = useState("");
+    const [textEditSubmit, setTextEditSubmit] = useState(false);
+    const [textBoxText, setTextBoxText] = useState("");
+    const [textBoxWidth, setTextBoxWidth] = useState("");
+    const [textBoxHeight, setTextBoxHeight] = useState("");
+    const [textBoxFontSize, setTextBoxFontSize] = useState("");
+    const [textBoxTextColour, setTextBoxTextColour] = useState("");
+    useEffect(() => {
+        if (textEditSubmit) {
+            const textElem = {
+            "type": "text",
+            "text": textBoxText,
+            "width": textBoxWidth,
+            "height": textBoxHeight,
+            "fontSize": textBoxFontSize,
+            "textColour": textBoxTextColour,
+            "x": 0,
+            "y": 0
+            }
+            setUpdateObj(textElem);
+            setUpdateElemId(elemId)
+            setTextEditSubmit(false);
+        }
+    }, [textEditSubmit])
+
+    const openTextEdit = e => {
+        setElemId(e.target.id);
+        setShowTextEditModal(true);
+    }
+      
 
     return (
         <>
-            <SlideBase $bgColour={slide.background.colour}>
+            {showTextEditModal && (
+                <TextEditModal
+                    element={slide.elements.find(e => e.id === elemId)}
+                    setSubmitText={setTextBoxText}
+                    setSubmitWidth={setTextBoxWidth}
+                    setSubmitHeight={setTextBoxHeight}
+                    setSubmitFontSize={setTextBoxFontSize}
+                    setSubmitTextColour={setTextBoxTextColour}
+                    setTextEditSubmit={setTextEditSubmit}
+                    setShowTextEditModal={setShowTextEditModal}
+                />
+            )}
+            <SlideBase $bgColour={slide.background.colour} id={slide.id} >
                 {
-                    textElems.map((t, index) =>(
-                        <TextElement className="text-element" $textObj={t} key={index}>
-                            <p>{t.text}</p>
-                        </TextElement>
-                    ))
+                    elements.map((t, index) =>{
+                        if (t.type === "text") {
+                            return (
+                                <TextElement id={slide.elements[index].id} className="text-element hover:cursor-pointer" $textObj={t} key={index} onClick={openTextEdit}>
+                                    {t.text}
+                                </TextElement>
+                            )
+                        }
+                        
+                    })
                 }
                 <p className="absolute text-center text-gray-600 bottom-2 left-3 text-[1em] z-[900]">{currIndex + 1}</p>
             </SlideBase>
