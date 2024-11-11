@@ -40,6 +40,7 @@ const CreateModal = ({ setShowCreate }) => {
             "thumbnail": null,
             "slides": [
                 {
+                    "id": uniqid(),
                     "background": {
                         "colour": "#FFFFFF",
                         "img": null
@@ -50,7 +51,6 @@ const CreateModal = ({ setShowCreate }) => {
         }
         
         let requestBody;
-        console.log(store);
         if (Object.keys(store.data.store).length === 0) {
             requestBody = {
                 "store" : {
