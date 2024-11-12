@@ -15,6 +15,7 @@ const Dashboard = () => {
         if (!getToken) {
             navigate("/login");
         } else {
+            localStorage.removeItem("pId");
             setToken(getToken);
         }
     }, [navigate]);

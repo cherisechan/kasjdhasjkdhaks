@@ -38,12 +38,22 @@ const CreateModal = ({ setShowCreate }) => {
             "name": name,
             "description": desc,
             "thumbnail": null,
+            "defaultBackground": {
+                "colour1": "#FFFFFF",
+                "colour2": null,
+                "img": null,
+                "gradient": false,
+                "default": true,
+            },
             "slides": [
                 {
                     "id": uniqid(),
                     "background": {
-                        "colour": "#FFFFFF",
-                        "img": null
+                        "colour1": "#FFFFFF",
+                        "colour2": null,
+                        "img": null,
+                        "gradient": false,
+                        "default": true,
                     },
                     "elements": []
                 }

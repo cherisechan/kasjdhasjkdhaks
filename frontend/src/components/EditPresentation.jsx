@@ -9,6 +9,7 @@ import CannotDeleteSlidePopup from './CannotDeleteSlidePopup';
 import { PencilIcon, PhotoIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Slide from "./Slide";
 import TextCreateModal from "./TextCreateModal";
+import BackgroundModal from "./BackgroundModal";
 import uniqid from "uniqid";
 
 const EditPresentation = () => {
@@ -36,32 +37,35 @@ const EditPresentation = () => {
   }, [navigate]);
 
   useEffect(() => {
-    const fetchPresentation = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-    
-      try {
-        const headers = {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          }
-        };
+    localStorage.setItem("pId", id);
+  }, [id])
 
-        const response = await axios.get(`http://localhost:5005/store`, headers);
-        const presentations = response.data.store.presentations;
-        const presentation = presentations.find(pres => pres.id === id);
-
-        if (presentation) {
-          setPresentation(presentation);
-          setSlides(presentation.slides);
-        } else {
-          console.error("Presentation not found");
+  const fetchPresentation = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+  
+    try {
+      const headers = {
+        headers: {
+          'Authorization': `Bearer ${token}`,
         }
-      } catch (error) {
-        console.error("Error fetching presentation:", error);
+      };
+
+      const response = await axios.get(`http://localhost:5005/store`, headers);
+      const presentations = response.data.store.presentations;
+      const presentation = presentations.find(pres => pres.id === id);
+
+      if (presentation) {
+        setPresentation(presentation);
+        setSlides(presentation.slides);
+      } else {
+        console.error("Presentation not found");
       }
-    };
-    
+    } catch (error) {
+      console.error("Error fetching presentation:", error);
+    }
+  };
+  useEffect(() => {    
     fetchPresentation();
   }, [id]);
 
@@ -95,19 +99,27 @@ const EditPresentation = () => {
   // Handle creating a new slide
   const handleCreateSlide = async () => {
     if (!presentation) return;
-
+    const headers = {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+      }
+    };
+    const response = await axios.get(`http://localhost:5005/store`, headers);
+    const presentations = response.data.store.presentations;
+    const pres = presentations.find(pres => pres.id === id);
+    if (!pres) {
+      return;
+    }
+    console.log( pres.defaultBackground)
     const newSlide = {
       id: uniqid(),
-      background: {
-        colour: "#FFFFFF",
-        img: null
-      },
+      background: pres.defaultBackground,
       elements: []
     };
 
     const updatedPresentation = {
-      ...presentation,
-      slides: [...presentation.slides, newSlide]
+      ...pres,
+      slides: [...pres.slides, newSlide]
     };
 
     setPresentation(updatedPresentation);
@@ -344,6 +356,14 @@ const EditPresentation = () => {
     }
   }, [updateObj]);
 
+  // background change
+  const [showBackgroundModal, setShowBackgroundModal] = useState(false);
+  // reloading
+  const [reload, setReload] = useState(false);
+  useEffect(() => {
+    fetchPresentation();
+    setReload(false);
+  }, [reload])
 
   return (
     <div className="edit-presentation px-2">
@@ -427,10 +447,19 @@ const EditPresentation = () => {
         />
       )}
 
+      {
+        showBackgroundModal && <BackgroundModal 
+          setShowBackgroundModal={setShowBackgroundModal}
+          currSlideIndex={currentSlideIndex}
+          setReload={setReload}
+        />
+      }
+
       {slides ? (
         <div className="max-w-screen-xl bg-gray-100 rounded-lg mx-auto h-[75vh] flex flex-col items-center justify-center">
           <div className="flex w-[85%] justify-start items-center h-16">
-            <button onClick={() => {setShowTextCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Text</button>
+          <button onClick={() => {setShowTextCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Text</button>
+          <button onClick={() => {setShowBackgroundModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Theme</button>
           </div>
           {/* Slide content */}
           <Slide slide={slides[currentSlideIndex]} currIndex={currentSlideIndex} setUpdateObj={setUpdateObj} setUpdateElemId={setElemId}/>
