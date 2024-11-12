@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const TextEditModal = ({ element, setSubmitText, setSubmitWidth, setSubmitHeight, setSubmitFontSize, setSubmitTextColour, setTextEditSubmit, setSubmitTextX, setSubmitTextY, setShowTextEditModal }) => {
+const TextEditModal = ({ element, setTextElem, setTextEditSubmit, setShowTextEditModal }) => {
   const [text, setText] = useState(element.text);
   const [width, setWidth] = useState(element.width);
   const [height, setHeight] = useState(element.height);
@@ -22,13 +22,17 @@ const TextEditModal = ({ element, setSubmitText, setSubmitWidth, setSubmitHeight
     } else if (!/(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)|(^#[0-9A-F]{8}$)/i.test(textColour)) {
       setError("Invalid HEX code");
     } else {
-      setSubmitText(text);
-      setSubmitWidth(width);
-      setSubmitHeight(height);
-      setSubmitFontSize(fontSize);
-      setSubmitTextColour(textColour);
-      setSubmitTextX(textX);
-      setSubmitTextY(textY);
+      const textElem = {
+        "type": "text",
+        "text": text,
+        "width": width,
+        "height": height,
+        "fontSize": fontSize,
+        "textColour": textColour,
+        "x": textX,
+        "y": textY
+      }
+      setTextElem(textElem);
       setTextEditSubmit(true);
       setShowTextEditModal(false);
     }

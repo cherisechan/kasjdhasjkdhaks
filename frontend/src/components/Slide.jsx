@@ -13,25 +13,9 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
     const [showTextEditModal, setShowTextEditModal] = useState(false);
     const [elemId, setElemId] = useState("");
     const [textEditSubmit, setTextEditSubmit] = useState(false);
-    const [textBoxText, setTextBoxText] = useState("");
-    const [textBoxWidth, setTextBoxWidth] = useState("");
-    const [textBoxHeight, setTextBoxHeight] = useState("");
-    const [textBoxFontSize, setTextBoxFontSize] = useState("");
-    const [textBoxTextColour, setTextBoxTextColour] = useState("");
-    const [textX, setTextX] = useState("");
-    const [textY, setTextY] = useState("");
+    const [textElem, setTextElem] = useState(null);
     useEffect(() => {
-        if (textEditSubmit) {
-            const textElem = {
-                "type": "text",
-                "text": textBoxText,
-                "width": textBoxWidth,
-                "height": textBoxHeight,
-                "fontSize": textBoxFontSize,
-                "textColour": textBoxTextColour,
-                "x": textX,
-                "y": textY
-            }
+        if (textEditSubmit && textElem) {
             setUpdateObj(textElem);
             setUpdateElemId(elemId)
             setTextEditSubmit(false);
@@ -50,14 +34,8 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
             {showTextEditModal && (
                 <TextEditModal
                     element={slide.elements.find(e => e.id === elemId)}
-                    setSubmitText={setTextBoxText}
-                    setSubmitWidth={setTextBoxWidth}
-                    setSubmitHeight={setTextBoxHeight}
-                    setSubmitFontSize={setTextBoxFontSize}
-                    setSubmitTextColour={setTextBoxTextColour}
+                    setTextElem={setTextElem}
                     setTextEditSubmit={setTextEditSubmit}
-                    setSubmitTextX={setTextX}
-                    setSubmitTextY={setTextY}
                     setShowTextEditModal={setShowTextEditModal}
                 />
             )}

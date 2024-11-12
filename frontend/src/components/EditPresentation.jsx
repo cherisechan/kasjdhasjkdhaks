@@ -324,7 +324,7 @@ const EditPresentation = () => {
   const [textElem, setTextElem] = useState(null);
   const [textSubmit, setTextSubmit] = useState(false);
   useEffect(() => {
-    if (textElem) {
+    if (textSubmit && textElem) {
       addElem(textElem);
       setTextElem(null);
       setTextSubmit(false);
