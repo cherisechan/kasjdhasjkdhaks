@@ -11,6 +11,7 @@ import Slide from "./Slide";
 import TextCreateModal from "./TextCreateModal";
 import BackgroundModal from "./BackgroundModal";
 import uniqid from "uniqid";
+import CodeCreateModal from "./CodeCreateModal";
 
 const EditPresentation = () => {
   const { id } = useParams();
@@ -331,6 +332,18 @@ const EditPresentation = () => {
     }
   }, [textSubmit])
 
+  // add code element
+  const [showCodeCreateModal, setShowCodeCreateModal] = useState(false);
+  const [codeElem, setCodeElem] = useState(null);
+  const [codeSubmit, setCodeSubmit] = useState(false);
+  useEffect(() => {
+    if (codeSubmit && codeElem) {
+      addElem(codeElem);
+      setCodeElem(null);
+      setCodeSubmit(false);
+    }
+  }, [codeSubmit])
+
   // updating elements from slide
   const [updateObj, setUpdateObj] = useState(null);
   const [elemId, setElemId] = useState("");
@@ -436,10 +449,19 @@ const EditPresentation = () => {
         />
       }
 
+      {
+        showCodeCreateModal && <CodeCreateModal
+          setCodeElem={setCodeElem}
+          setCodeSubmit={setCodeSubmit}
+          setShowCodeCreateModal={setShowCodeCreateModal}
+        />
+      }
+
       {slides ? (
         <div className="max-w-screen-xl bg-gray-100 rounded-lg mx-auto h-[75vh] flex flex-col items-center justify-center">
           <div className="flex w-[85%] justify-start items-center h-16">
           <button onClick={() => {setShowTextCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Text</button>
+          <button onClick={() => {setShowCodeCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Code</button>
           <button onClick={() => {setShowBackgroundModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Theme</button>
           </div>
           {/* Slide content */}
