@@ -1,20 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { Rnd } from "react-rnd";
 
 const VideoElementStyled = styled.div`
-  position: absolute;
-  height: ${({ $videoObj }) => `${$videoObj.height}%`};
-  width: ${({ $videoObj }) => `${$videoObj.width}%`};
-  top: ${({ $videoObj }) => `${$videoObj.y}%`};
-  left: ${({ $videoObj }) => `${$videoObj.x}%`};
-  z-index: ${({ $videoObj }) => $videoObj.z};
+  position: relative;
+  height: 100%;
+  width: 100%;
   border: 1px solid #d3d3d3;
   box-sizing: border-box;
+  user-select: none;
   cursor: pointer;
 `;
 
-const VideoElement = ({ $videoObj, id, openVideoEdit }) => {
+const VideoElement = ({ $videoObj, id, openVideoEdit, setUpdateObj, setUpdateElemId }) => {
   const [showBoxes, setShowBoxes] = useState(false);
+  const [position, setPosition] = useState({ x: $videoObj.x, y: $videoObj.y }); // Fixed to use $videoObj
+  const boxesContainerRef = useRef(null);
 
   // Handle double-click and single-click
   const clickCountRef = useRef(0);
@@ -40,15 +41,28 @@ const VideoElement = ({ $videoObj, id, openVideoEdit }) => {
     }
   };
 
-  const boxesContainerRef = useRef(null);
+  const handleDragStop = (e, d) => {
+    setPosition({ x: d.x, y: d.y });
+    if (setUpdateObj && setUpdateElemId) { // Ensure these are defined
+      setUpdateObj({ ...$videoObj, x: d.x, y: d.y });
+      setUpdateElemId(id);
+    }
+  };
+
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      if (boxesContainerRef.current && !boxesContainerRef.current.contains(event.target)) {
+      if (
+        boxesContainerRef.current &&
+        !boxesContainerRef.current.contains(event.target)
+      ) {
         setShowBoxes(false);
       }
     };
-    document.addEventListener('click', handleOutsideClick);
-    return () => document.removeEventListener('click', handleOutsideClick);
+
+    document.addEventListener("click", handleOutsideClick);
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
   }, []);
 
   // Function to construct the iframe URL with proper parameters
@@ -67,23 +81,32 @@ const VideoElement = ({ $videoObj, id, openVideoEdit }) => {
   };
 
   return (
-    <VideoElementStyled id={id} $videoObj={$videoObj} onClick={handleClick}>
-      <iframe
-        src={constructIframeSrc()}
-        title="Video"
-        style={{ width: '100%', height: '100%', pointerEvents: 'none', userSelect: 'none' }}
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      ></iframe>
-      {showBoxes && (
-        <div ref={boxesContainerRef}>
-          <div className="w-[5px] h-[5px] bg-gray-600 absolute top-0 left-0 translate-x-[-2px] translate-y-[-2px] overflow-visible"></div>
-          <div className="w-[5px] h-[5px] bg-gray-600 absolute top-0 right-0 translate-x-[2px] translate-y-[-2px] overflow-visible"></div>
-          <div className="w-[5px] h-[5px] bg-gray-600 absolute bottom-0 left-0 translate-x-[-2px] translate-y-[2px] overflow-visible"></div>
-          <div className="w-[5px] h-[5px] bg-gray-600 absolute bottom-0 right-0 translate-x-[2px] translate-y-[2px] overflow-visible"></div>
-        </div>
-      )}
-    </VideoElementStyled>
+    <Rnd
+      position={{ x: position.x, y: position.y }}
+      size={{ width: `${$videoObj.width}%`, height: `${$videoObj.height}%` }} // Fixed to use $videoObj
+      onDragStop={handleDragStop}
+      bounds="parent"
+      lockAspectRatio={true}
+      enableResizing={true}
+    >
+      <VideoElementStyled id={id} $videoObj={$videoObj} onClick={handleClick}>
+        <iframe
+          src={constructIframeSrc()}
+          title="Video"
+          style={{ width: '100%', height: '100%', pointerEvents: 'none' }}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+        {showBoxes && (
+          <div ref={boxesContainerRef}>
+            <div className="w-[5px] h-[5px] bg-gray-600 absolute top-0 left-0 translate-x-[-2px] translate-y-[-2px] overflow-visible"></div>
+            <div className="w-[5px] h-[5px] bg-gray-600 absolute top-0 right-0 translate-x-[2px] translate-y-[-2px] overflow-visible"></div>
+            <div className="w-[5px] h-[5px] bg-gray-600 absolute bottom-0 left-0 translate-x-[-2px] translate-y-[2px] overflow-visible"></div>
+            <div className="w-[5px] h-[5px] bg-gray-600 absolute bottom-0 right-0 translate-x-[2px] translate-y-[2px] overflow-visible"></div>
+          </div>
+        )}
+      </VideoElementStyled>
+    </Rnd>
   );
 };
 
