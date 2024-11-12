@@ -9,6 +9,7 @@ const ImageElementStyled = styled.div`
   border: 1px solid #d3d3d3;
   box-sizing: border-box;
   user-select: none;
+  cursor: pointer;
 `;
 
 const ImageElement = ({ $imageObj, id, openImageEdit, setUpdateObj, setUpdateElemId }) => {
