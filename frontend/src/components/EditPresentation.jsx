@@ -110,7 +110,6 @@ const EditPresentation = () => {
     if (!pres) {
       return;
     }
-    console.log( pres.defaultBackground)
     const newSlide = {
       id: uniqid(),
       background: pres.defaultBackground,
