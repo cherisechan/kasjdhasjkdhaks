@@ -9,6 +9,7 @@ import CannotDeleteSlidePopup from './CannotDeleteSlidePopup';
 import { PencilIcon, PhotoIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Slide from "./Slide";
 import TextCreateModal from "./TextCreateModal";
+import ImageCreateModal from "./ImageCreateModal";
 import BackgroundModal from "./BackgroundModal";
 import uniqid from "uniqid";
 
@@ -288,15 +289,15 @@ const EditPresentation = () => {
       if (p.id === id) {
         p.slides[currentSlideIndex].elements.unshift(elemObj);
       }
-    })
-    await axios.put("http://localhost:5005/store", {store}, headers);
+    });
+    await axios.put("http://localhost:5005/store", { store }, headers);
     const updatedRes = await axios.get("http://localhost:5005/store", headers);
     const presentation = updatedRes.data.store.presentations.find(pres => pres.id === id);
     if (presentation) {
       setPresentation(presentation);
       setSlides(presentation.slides);
     }
-  }
+  };  
 
   const editElem = async (elemObj, elemId) => {
     const headers = { headers: { Authorization: `Bearer ${token}` } };
@@ -330,6 +331,18 @@ const EditPresentation = () => {
       setTextSubmit(false);
     }
   }, [textSubmit])
+
+  // add image element
+  const [showImageCreateModal, setShowImageCreateModal] = useState(false);
+  const [imageElem, setImageElem] = useState(null);
+  const [imageSubmit, setImageSubmit] = useState(false);
+  useEffect(() => {
+    if (imageSubmit && imageElem) {
+      addElem(imageElem);
+      setImageElem(null);
+      setImageSubmit(false);
+    }
+  }, [imageSubmit]);
 
   // updating elements from slide
   const [updateObj, setUpdateObj] = useState(null);
@@ -428,6 +441,14 @@ const EditPresentation = () => {
         />
       )}
 
+      {showImageCreateModal && (
+        <ImageCreateModal
+          setImageElem={setImageElem}
+          setImageSubmit={setImageSubmit}
+          setShowImageCreateModal={setShowImageCreateModal}
+        />
+      )}
+
       {
         showBackgroundModal && <BackgroundModal 
           setShowBackgroundModal={setShowBackgroundModal}
@@ -440,6 +461,7 @@ const EditPresentation = () => {
         <div className="max-w-screen-xl bg-gray-100 rounded-lg mx-auto h-[75vh] flex flex-col items-center justify-center">
           <div className="flex w-[85%] justify-start items-center h-16">
           <button onClick={() => {setShowTextCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Text</button>
+          <button onClick={() => setShowImageCreateModal(true)} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Image</button>
           <button onClick={() => {setShowBackgroundModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Theme</button>
           </div>
           {/* Slide content */}
