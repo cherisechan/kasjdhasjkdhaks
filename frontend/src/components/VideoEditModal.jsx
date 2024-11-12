@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
 const VideoEditModal = ({ element, setVideoElem, setVideoEditSubmit, setShowVideoEditModal }) => {
   const [width, setWidth] = useState(element.width);
   const [height, setHeight] = useState(element.height);
   const [videoUrl, setVideoUrl] = useState(element.src);
   const [autoplay, setAutoplay] = useState(element.autoplay);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const onSubmit = () => {
     if (videoUrl === "") {
@@ -25,6 +25,7 @@ const VideoEditModal = ({ element, setVideoElem, setVideoEditSubmit, setShowVide
         height: height,
         x: element.x,
         y: element.y,
+        z: element.z,
       };
       setVideoElem(videoElem);
       setVideoEditSubmit(true);
@@ -33,10 +34,9 @@ const VideoEditModal = ({ element, setVideoElem, setVideoEditSubmit, setShowVide
   };
 
   useEffect(() => {
-    setError("");
+    setError('');
   }, [width, height, videoUrl, autoplay]);
 
-  // check later if prevent default is okay to use as well
   useEffect(() => {
     // Check if window is defined (for SSR)
     if (typeof window !== "undefined") {
@@ -65,7 +65,7 @@ const VideoEditModal = ({ element, setVideoElem, setVideoEditSubmit, setShowVide
 
         <div className="flex items-center mb-4">
           <label className="text-xl mr-5 w-32">Autoplay</label>
-          <input type="checkbox" checked={autoplay} onChange={(e) => setAutoplay(e.target.checked)}/>
+          <input type="checkbox" checked={autoplay} onChange={(e) => setAutoplay(e.target.checked)} />
         </div>
 
         <div className="mt-4 flex space-x-2">

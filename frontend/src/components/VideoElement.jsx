@@ -5,14 +5,15 @@ const VideoElementStyled = styled.div`
   position: absolute;
   height: ${({ $videoObj }) => `${$videoObj.height}%`};
   width: ${({ $videoObj }) => `${$videoObj.width}%`};
-  top: ${({ $videoObj }) => `${$videoObj.x}%`};
-  left: ${({ $videoObj }) => `${$videoObj.y}%`};
+  top: ${({ $videoObj }) => `${$videoObj.y}%`};
+  left: ${({ $videoObj }) => `${$videoObj.x}%`};
   z-index: ${({ $videoObj }) => $videoObj.z};
   border: 1px solid #d3d3d3;
   box-sizing: border-box;
+  cursor: pointer;
 `;
 
-const VideoElement = ({ $videoObj, id, openVideoEdit, setUpdateObj, setUpdateElemId }) => {
+const VideoElement = ({ $videoObj, id, openVideoEdit }) => {
   const [showBoxes, setShowBoxes] = useState(false);
 
   // Handle double-click and single-click
@@ -28,7 +29,7 @@ const VideoElement = ({ $videoObj, id, openVideoEdit, setUpdateObj, setUpdateEle
     if (clickCountRef.current === 1) {
       timerRef.current = setTimeout(() => {
         clickCountRef.current = 0;
-      }, 500);
+      }, 300);
     }
 
     if (clickCountRef.current === 2) {
@@ -47,12 +48,30 @@ const VideoElement = ({ $videoObj, id, openVideoEdit, setUpdateObj, setUpdateEle
       }
     };
     document.addEventListener('click', handleOutsideClick);
+    return () => document.removeEventListener('click', handleOutsideClick);
   }, []);
+
+  // Function to construct the iframe URL with proper parameters
+  const constructIframeSrc = () => {
+    try {
+      const url = new URL($videoObj.src);
+      if ($videoObj.autoplay) {
+        url.searchParams.set('autoplay', '1');
+        url.searchParams.set('mute', '1');
+      } else {
+        url.searchParams.delete('autoplay');
+        url.searchParams.delete('mute');
+      }
+      return url.toString();
+    } catch (e) {
+      return $videoObj.src;
+    }
+  };
 
   return (
     <VideoElementStyled id={id} $videoObj={$videoObj} onClick={handleClick}>
       <iframe
-        src={`${$videoObj.src}${$videoObj.autoplay ? '?autoplay=1' : ''}`}
+        src={constructIframeSrc()}
         title="Video"
         style={{ width: '100%', height: '100%', pointerEvents: 'none', userSelect: 'none' }}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
