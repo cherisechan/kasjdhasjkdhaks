@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { Rnd } from "react-rnd";
 
 const ImageElementStyled = styled.div`
-  position: absolute;
-  height: ${({ $imageObj }) => `${$imageObj.height}%`};
-  width: ${({ $imageObj }) => `${$imageObj.width}%`};
-  top: ${({ $imageObj }) => `${$imageObj.x}%`};
-  left: ${({ $imageObj }) => `${$imageObj.y}%`};
-  z-index: ${({ $imageObj }) => $imageObj.z};
+  position: relative;
+  height: 100%;
+  width: 100%;
   border: 1px solid #d3d3d3;
   box-sizing: border-box;
   user-select: none;
@@ -15,6 +13,8 @@ const ImageElementStyled = styled.div`
 
 const ImageElement = ({ $imageObj, id, openImageEdit, setUpdateObj, setUpdateElemId }) => {
   const [showBoxes, setShowBoxes] = useState(false);
+  const [position, setPosition] = useState({ x: $imageObj.x, y: $imageObj.y }); // Fix here
+  const boxesContainerRef = useRef(null);
 
   // Handle double-click and single-click
   const clickCountRef = useRef(0);
@@ -40,28 +40,49 @@ const ImageElement = ({ $imageObj, id, openImageEdit, setUpdateObj, setUpdateEle
     }
   };
 
-  const boxesContainerRef = useRef(null);
+  const handleDragStop = (e, d) => {
+    setPosition({ x: d.x, y: d.y });
+    setUpdateObj({ ...$imageObj, x: d.x, y: d.y }); // Fix here
+    setUpdateElemId(id);
+  };
+
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      if (boxesContainerRef.current && !boxesContainerRef.current.contains(event.target)) {
+      if (
+        boxesContainerRef.current &&
+        !boxesContainerRef.current.contains(event.target)
+      ) {
         setShowBoxes(false);
       }
     };
-    document.addEventListener('click', handleOutsideClick);
+
+    document.addEventListener("click", handleOutsideClick);
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
   }, []);
 
   return (
-    <ImageElementStyled id={id} $imageObj={$imageObj} onClick={handleClick}>
-      <img src={$imageObj.src} alt={$imageObj.altText} style={{ width: '100%', height: '100%', pointerEvents: 'none', userSelect: 'none' }}/>
-      {showBoxes && (
-        <div ref={boxesContainerRef}>
-          <div className="w-[5px] h-[5px] bg-gray-600 absolute top-0 left-0 translate-x-[-2px] translate-y-[-2px] overflow-visible"></div>
-          <div className="w-[5px] h-[5px] bg-gray-600 absolute top-0 right-0 translate-x-[2px] translate-y-[-2px] overflow-visible"></div>
-          <div className="w-[5px] h-[5px] bg-gray-600 absolute bottom-0 left-0 translate-x-[-2px] translate-y-[2px] overflow-visible"></div>
-          <div className="w-[5px] h-[5px] bg-gray-600 absolute bottom-0 right-0 translate-x-[2px] translate-y-[2px] overflow-visible"></div>
-        </div>
-      )}
-    </ImageElementStyled>
+    <Rnd
+      position={{ x: position.x, y: position.y }}
+      size={{ width: `${$imageObj.width}%`, height: `${$imageObj.height}%` }} // Fix here
+      onDragStop={handleDragStop}
+      bounds="parent"
+      lockAspectRatio={true}
+      enableResizing={true}
+    >
+      <ImageElementStyled id={id} $imageObj={$imageObj} className="hover:cursor-pointer" onClick={handleClick}>
+        <img src={$imageObj.src} alt={$imageObj.altText} style={{ width: '100%', height: '100%', pointerEvents: 'none' }}/>
+        {showBoxes && (
+          <div ref={boxesContainerRef}>
+            <div className="w-[5px] h-[5px] bg-gray-600 absolute top-0 left-0 translate-x-[-2px] translate-y-[-2px] overflow-visible"></div>
+            <div className="w-[5px] h-[5px] bg-gray-600 absolute top-0 right-0 translate-x-[2px] translate-y-[-2px] overflow-visible"></div>
+            <div className="w-[5px] h-[5px] bg-gray-600 absolute bottom-0 left-0 translate-x-[-2px] translate-y-[2px] overflow-visible"></div>
+            <div className="w-[5px] h-[5px] bg-gray-600 absolute bottom-0 right-0 translate-x-[2px] translate-y-[2px] overflow-visible"></div>
+          </div>
+        )}
+      </ImageElementStyled>
+    </Rnd>
   );
 };
 
