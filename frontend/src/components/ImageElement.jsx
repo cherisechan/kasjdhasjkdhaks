@@ -1,23 +1,25 @@
+import React, { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 import { Rnd } from "react-rnd";
-import React, { useEffect, useRef, useState } from "react";
-import TextElementStyled from "./TextElementStyled";
 
-const TextElement = ({
-  $textObj,
-  text,
-  id,
-  openTextEdit,
-  setUpdateObj,
-  setUpdateElemId,
-}) => {
-  const [position, setPosition] = useState({ x: $textObj.x, y: $textObj.y });
-  const [size, setSize] = useState({ width: $textObj.width, height: $textObj.height });
+const ImageElementStyled = styled.div`
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border: 1px solid #d3d3d3;
+  box-sizing: border-box;
+  user-select: none;
+  cursor: pointer;
+`;
+
+const ImageElement = ({ $imageObj, id, openImageEdit, setUpdateObj, setUpdateElemId }) => {
   const [showBoxes, setShowBoxes] = useState(false);
+  const [position, setPosition] = useState({ x: $imageObj.x, y: $imageObj.y }); // Fix here
+  const boxesContainerRef = useRef(null);
 
-  // Custom double-click within 0.5 sec
+  // Handle double-click and single-click
   const clickCountRef = useRef(0);
   const timerRef = useRef(null);
-  const boxesContainerRef = useRef(null);
 
   const handleClick = (e) => {
     e.stopPropagation();
@@ -35,13 +37,13 @@ const TextElement = ({
       clearTimeout(timerRef.current);
       clickCountRef.current = 0;
       setShowBoxes(false);
-      openTextEdit(e);
+      openImageEdit(e);
     }
   };
 
   const handleDragStop = (e, d) => {
     setPosition({ x: d.x, y: d.y });
-    setUpdateObj({ ...$textObj, x: d.x, y: d.y });
+    setUpdateObj({ ...$imageObj, x: d.x, y: d.y }); // Fix here
     setUpdateElemId(id);
   };
 
@@ -64,21 +66,14 @@ const TextElement = ({
   return (
     <Rnd
       position={{ x: position.x, y: position.y }}
-      size={{ width: `${$textObj.width}%`, height: `${$textObj.height}%` }}
+      size={{ width: `${$imageObj.width}%`, height: `${$imageObj.height}%` }} // Fix here
       onDragStop={handleDragStop}
       bounds="parent"
       lockAspectRatio={true}
-      enableResizing={true} // Disable resizing
+      enableResizing={true}
     >
-      <TextElementStyled
-        id={id}
-        $textObj={$textObj}
-        className="hover:cursor-pointer"
-        onClick={handleClick}
-      >
-        <div className="h-full w-full overflow-hidden pointer-events-none">
-          <p className="overflow-hidden">{text}</p>
-        </div>
+      <ImageElementStyled id={id} $imageObj={$imageObj} className="hover:cursor-pointer" onClick={handleClick}>
+        <img src={$imageObj.src} alt={$imageObj.altText} style={{ width: '100%', height: '100%', pointerEvents: 'none' }}/>
         {showBoxes && (
           <div ref={boxesContainerRef}>
             <div className="w-[5px] h-[5px] bg-gray-600 absolute top-0 left-0 translate-x-[-2px] translate-y-[-2px] overflow-visible"></div>
@@ -87,9 +82,9 @@ const TextElement = ({
             <div className="w-[5px] h-[5px] bg-gray-600 absolute bottom-0 right-0 translate-x-[2px] translate-y-[2px] overflow-visible"></div>
           </div>
         )}
-      </TextElementStyled>
+      </ImageElementStyled>
     </Rnd>
   );
 };
 
-export default TextElement;
+export default ImageElement;

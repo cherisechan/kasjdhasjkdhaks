@@ -9,6 +9,8 @@ import CannotDeleteSlidePopup from './CannotDeleteSlidePopup';
 import { PencilIcon, PhotoIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Slide from "./Slide";
 import TextCreateModal from "./TextCreateModal";
+import ImageCreateModal from "./ImageCreateModal";
+import VideoCreateModal from "./VideoCreateModal";
 import BackgroundModal from "./BackgroundModal";
 import uniqid from "uniqid";
 import CodeCreateModal from "./CodeCreateModal";
@@ -285,19 +287,19 @@ const EditPresentation = () => {
     const headers = { headers: { Authorization: `Bearer ${token}` } };
     const response = await axios.get("http://localhost:5005/store", headers);
     const store = response.data.store;
-    store.presentations.map(p => {
+    store.presentations.forEach((p) => {
       if (p.id === id) {
         p.slides[currentSlideIndex].elements.unshift(elemObj);
       }
-    })
-    await axios.put("http://localhost:5005/store", {store}, headers);
+    });
+    await axios.put("http://localhost:5005/store", { store }, headers);
     const updatedRes = await axios.get("http://localhost:5005/store", headers);
-    const presentation = updatedRes.data.store.presentations.find(pres => pres.id === id);
+    const presentation = updatedRes.data.store.presentations.find((pres) => pres.id === id);
     if (presentation) {
       setPresentation(presentation);
       setSlides(presentation.slides);
     }
-  }
+  };
 
   const editElem = async (elemObj, elemId) => {
     const headers = { headers: { Authorization: `Bearer ${token}` } };
@@ -331,6 +333,30 @@ const EditPresentation = () => {
       setTextSubmit(false);
     }
   }, [textSubmit])
+
+  // add image element
+  const [showImageCreateModal, setShowImageCreateModal] = useState(false);
+  const [imageElem, setImageElem] = useState(null);
+  const [imageSubmit, setImageSubmit] = useState(false);
+  useEffect(() => {
+    if (imageSubmit && imageElem) {
+      addElem(imageElem);
+      setImageElem(null);
+      setImageSubmit(false);
+    }
+  }, [imageSubmit]);
+
+  // add video element
+  const [showVideoCreateModal, setShowVideoCreateModal] = useState(false);
+  const [videoElem, setVideoElem] = useState(null);
+  const [videoSubmit, setVideoSubmit] = useState(false);
+  useEffect(() => {
+    if (videoSubmit && videoElem) {
+      addElem(videoElem);
+      setVideoElem(null);
+      setVideoSubmit(false);
+    }
+  }, [videoSubmit]);
 
   // add code element
   const [showCodeCreateModal, setShowCodeCreateModal] = useState(false);
@@ -441,6 +467,22 @@ const EditPresentation = () => {
         />
       )}
 
+      {showImageCreateModal && (
+        <ImageCreateModal
+          setImageElem={setImageElem}
+          setImageSubmit={setImageSubmit}
+          setShowImageCreateModal={setShowImageCreateModal}
+        />
+      )}
+
+      {showVideoCreateModal && (
+        <VideoCreateModal
+          setVideoElem={setVideoElem}
+          setVideoSubmit={setVideoSubmit}
+          setShowVideoCreateModal={setShowVideoCreateModal}
+        />
+      )}
+
       {
         showBackgroundModal && <BackgroundModal 
           setShowBackgroundModal={setShowBackgroundModal}
@@ -461,8 +503,10 @@ const EditPresentation = () => {
         <div className="max-w-screen-xl bg-gray-100 rounded-lg mx-auto h-[75vh] flex flex-col items-center justify-center">
           <div className="flex w-[85%] justify-start items-center h-16">
           <button onClick={() => {setShowTextCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Text</button>
+          <button onClick={() => setShowImageCreateModal(true)} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Image</button>
+          <button onClick={() => setShowVideoCreateModal(true)} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Video</button>
           <button onClick={() => {setShowCodeCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Code</button>
-          <button onClick={() => {setShowBackgroundModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Theme</button>
+          <button onClick={() => {setShowBackgroundModal(true);}} className="bg-violet-400 text-white px-4 h-10 rounded ml-2">Theme</button>
           </div>
           {/* Slide content */}
           <Slide slide={slides[currentSlideIndex]} currIndex={currentSlideIndex} setUpdateObj={setUpdateObj} setUpdateElemId={setElemId}/>
