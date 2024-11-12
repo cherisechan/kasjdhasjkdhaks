@@ -94,24 +94,6 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
         }
     }
 
-    // for code edit
-    const [showCodeEditModal, setShowCodeEditModal] = useState(false);
-    const [codeEditSubmit, setCodeEditSubmit] = useState(false);
-    const [codeElem, setCodeElem] = useState(null);
-    useEffect(() => {
-        if (codeEditSubmit && codeElem) {
-            setUpdateObj(codeElem);
-            setUpdateElemId(elemId)
-            setCodeEditSubmit(false);
-        }
-    }, [codeEditSubmit])
-    const openCodeEdit = e => {
-        if (e.target.id) {
-            setElemId(e.target.id);
-            setShowCodeEditModal(true);
-        }
-    }
-
     return (
         <>
             {showTextEditModal && (
