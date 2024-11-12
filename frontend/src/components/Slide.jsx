@@ -6,7 +6,8 @@ import TextEditModal from "./TextEditModal";
 import ImageEditModal from "./ImageEditModal"; 
 import VideoEditModal from "./VideoEditModal";
 import { useState, useEffect } from "react";
-
+import CodeElement from "./CodeElement";
+import CodeEditModal from "./CodeEditModal";
 const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
     let elements = slide.elements;
     elements = elements.map((e, index) => ({
@@ -28,9 +29,9 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
         }
     }, [textEditSubmit, textElem]);
 
-    const openTextEdit = (e) => {
-        setElemId(e.target.id);
+    const openTextEdit = e => {
         if (e.target.id) {
+            setElemId(e.target.id);
             setShowTextEditModal(true);
         }
     };
@@ -75,6 +76,24 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
         }
     };
 
+    // for code edit
+    const [showCodeEditModal, setShowCodeEditModal] = useState(false);
+    const [codeEditSubmit, setCodeEditSubmit] = useState(false);
+    const [codeElem, setCodeElem] = useState(null);
+    useEffect(() => {
+        if (codeEditSubmit && codeElem) {
+            setUpdateObj(codeElem);
+            setUpdateElemId(elemId)
+            setCodeEditSubmit(false);
+        }
+    }, [codeEditSubmit])
+    const openCodeEdit = e => {
+        if (e.target.id) {
+            setElemId(e.target.id);
+            setShowCodeEditModal(true);
+        }
+    }
+
     return (
         <>
             {showTextEditModal && (
@@ -83,6 +102,15 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
                     setTextElem={setTextElem}
                     setTextEditSubmit={setTextEditSubmit}
                     setShowTextEditModal={setShowTextEditModal}
+                />
+            )}
+
+            {showCodeEditModal && (
+                <CodeEditModal
+                    element={slide.elements.find(e => e.id === elemId)}
+                    setCodeElem={setCodeElem}
+                    setCodeEditSubmit={setCodeEditSubmit}
+                    setShowCodeEditModal={setShowCodeEditModal}
                 />
             )}
 
@@ -119,6 +147,11 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
                         return (
                             <VideoElement id={t.id} $videoObj={t} openVideoEdit={openVideoEdit} key={t.id} setUpdateObj={setUpdateObj} setUpdateElemId={setUpdateElemId}/>
                         );
+                    } else if (t.type === "code") {
+                        console.log(t);
+                        return (
+                            <CodeElement id={slide.elements[index].id} className="text-element hover:cursor-pointer" $codeObj={t} code={t.code} openCodeEdit={openCodeEdit} key={index}  />
+                        )
                     }
                     return null;
                 })}
