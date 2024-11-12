@@ -10,6 +10,7 @@ import { PencilIcon, PhotoIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Slide from "./Slide";
 import TextCreateModal from "./TextCreateModal";
 import ImageCreateModal from "./ImageCreateModal";
+import VideoCreateModal from "./VideoCreateModal";
 import BackgroundModal from "./BackgroundModal";
 import uniqid from "uniqid";
 
@@ -285,19 +286,19 @@ const EditPresentation = () => {
     const headers = { headers: { Authorization: `Bearer ${token}` } };
     const response = await axios.get("http://localhost:5005/store", headers);
     const store = response.data.store;
-    store.presentations.map(p => {
+    store.presentations.forEach((p) => {
       if (p.id === id) {
         p.slides[currentSlideIndex].elements.unshift(elemObj);
       }
     });
     await axios.put("http://localhost:5005/store", { store }, headers);
     const updatedRes = await axios.get("http://localhost:5005/store", headers);
-    const presentation = updatedRes.data.store.presentations.find(pres => pres.id === id);
+    const presentation = updatedRes.data.store.presentations.find((pres) => pres.id === id);
     if (presentation) {
       setPresentation(presentation);
       setSlides(presentation.slides);
     }
-  };  
+  };
 
   const editElem = async (elemObj, elemId) => {
     const headers = { headers: { Authorization: `Bearer ${token}` } };
@@ -348,6 +349,13 @@ const EditPresentation = () => {
   const [showVideoCreateModal, setShowVideoCreateModal] = useState(false);
   const [videoElem, setVideoElem] = useState(null);
   const [videoSubmit, setVideoSubmit] = useState(false);
+  useEffect(() => {
+    if (videoSubmit && videoElem) {
+      addElem(videoElem);
+      setVideoElem(null);
+      setVideoSubmit(false);
+    }
+  }, [videoSubmit]);
 
   // updating elements from slide
   const [updateObj, setUpdateObj] = useState(null);
@@ -451,6 +459,14 @@ const EditPresentation = () => {
           setImageElem={setImageElem}
           setImageSubmit={setImageSubmit}
           setShowImageCreateModal={setShowImageCreateModal}
+        />
+      )}
+
+      {showVideoCreateModal && (
+        <VideoCreateModal
+          setVideoElem={setVideoElem}
+          setVideoSubmit={setVideoSubmit}
+          setShowVideoCreateModal={setShowVideoCreateModal}
         />
       )}
 
