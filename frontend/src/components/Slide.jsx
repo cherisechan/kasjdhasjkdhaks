@@ -150,7 +150,7 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
                     } else if (t.type === "code") {
                         console.log(t);
                         return (
-                            <CodeElement id={slide.elements[index].id} className="text-element hover:cursor-pointer" $codeObj={t} code={t.code} openCodeEdit={openCodeEdit} key={index}  />
+                            <CodeElement id={slide.elements[index].id} className="text-element hover:cursor-pointer" $codeObj={t} code={t.code} openCodeEdit={openCodeEdit} key={index} setUpdateObj={setUpdateObj} setUpdateElemId={setUpdateElemId}/>
                         )
                     }
                     return null;

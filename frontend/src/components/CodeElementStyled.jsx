@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 
 const CodeElementStyled = styled.div(({$codeObj}) => ({
-    position: "absolute",
-    height: `${$codeObj.height}%`,
-    width: `${$codeObj.width}%`,
+    position: "relative",
+    height: '100%',
+    width: '100%',
     fontSize: `${$codeObj.fontSize}em`,
-    overflow: "none",
-    top: `${$codeObj.x}%`,
-    left: `${$codeObj.y}%`,
-    zIndex: `${$codeObj.z}`,
+    overflow: "hidden",
+    // top: `${$codeObj.x}%`,
+    // left: `${$codeObj.y}%`,
+    // zIndex: `${$codeObj.z}`,
     border: "1px solid #d3d3d3",
     backgroundColor: "#2d2d2d",
 }));

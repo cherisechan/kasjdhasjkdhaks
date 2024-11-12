@@ -1,37 +1,16 @@
-// import CodeElementStyled from "./CodeElementStyled";
+import CodeElementStyled from "./CodeElementStyled";
 import React, { useEffect, useRef, useState } from "react";
 import { detect } from "program-language-detector"
 import Prism from "prismjs";
 import "prismjs/components/prism-c.min.js"; 
 import 'prismjs/themes/prism-tomorrow.css';
-import styled from "styled-components";
 import { Rnd } from "react-rnd";
 
-const CodeElementStyled = styled.div`
-    position: relative;
-    height: 100%;
-    width: 100%;
-    font-size: 1em;
-    overflow: none;
-    border: 1px solid #d3d3d3;
-    background-color: #2d2d2d;
-    user-select: none;
-`;
 
-const CodeElement = ({
-    $codeObj,
-    code,
-    id,
-    openCodeEdit,
-    setUpdateObj,
-    setUpdateElemId,
-}) => {
+const CodeElement = ({ $codeObj, code, id, openCodeEdit, setUpdateObj, setUpdateElemId }) => {
     const [showBoxes, setShowBoxes] = useState(false);
     const [position, setPosition] = useState({ x: $codeObj.x, y: $codeObj.y });
-    const [size, setSize] = useState({
-        width: `${$codeObj.width}%`,
-        height: `${$codeObj.height}%`,
-    });
+
 
     // custom double click within 0.5sec
     const clickCountRef = useRef(0);
@@ -39,6 +18,7 @@ const CodeElement = ({
 
     const handleClick = (e) => {
         e.stopPropagation();
+        console.log("handleClick fired"); 
         setShowBoxes(true);
 
         clickCountRef.current += 1;
@@ -59,27 +39,19 @@ const CodeElement = ({
 
     const handleDragStop = (e, d) => {
         setPosition({ x: d.x, y: d.y });
-        if (setUpdateObj && setUpdateElemId) {
-            setUpdateObj({ ...$codeObj, x: d.x, y: d.y });
-            setUpdateElemId(id);
-        }
+        setUpdateObj({ ...$codeObj, x: d.x, y: d.y });
+        setUpdateElemId(id);
     };
 
     const boxesContainerRef = useRef(null);
     useEffect(() => {
         const handleOutsideClick = (event) => {
-            if (
-                boxesContainerRef.current &&
-                !boxesContainerRef.current.contains(event.target)
-            ) {
+            if (boxesContainerRef.current && !boxesContainerRef.current.contains(event.target)) {
                 setShowBoxes(false);
             }
         };
 
         document.addEventListener("click", handleOutsideClick);
-        return () => {
-            document.removeEventListener("click", handleOutsideClick);
-        };
     }, []);
 
     const [language, setLanguage] = useState("");
@@ -106,12 +78,13 @@ const CodeElement = ({
 
     return (
         <Rnd
-            position={position}
-            size={size}
+            position={ { x: position.x, y: position.y } }
+            size={{ width: `${$codeObj.width}%`, height: `${$codeObj.height}%` }}
             onDragStop={handleDragStop}
             bounds="parent"
-            lockAspectRatio={true}
-            disableDragging={false}
+            // lockAspectRatio={true}
+            enableResizing={false}
+            // onClick={handleClick}
         >
             <CodeElementStyled id={id} $codeObj={$codeObj} className="hover:cursor-pointer" onClick={handleClick}>
                 <div className="h-full w-full overflow-hidden pointer-events-none">
