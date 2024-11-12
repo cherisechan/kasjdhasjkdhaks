@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const TextElementStyled = styled.div(({$textObj}) => ({
-    position: 'absolute',
+    position: "absolute",
     height: `${$textObj.height}%`,
     width: `${$textObj.width}%`,
     fontSize: `${$textObj.fontSize}em`,

@@ -1,5 +1,5 @@
-import TextElementStyled from './TextElementStyled';
-import React, { useEffect, useRef, useState } from 'react';
+import TextElementStyled from "./TextElementStyled";
+import React, { useEffect, useRef, useState } from "react";
 
 const TextElement = ({$textObj, text, id, openTextEdit}) => {
     const [showBoxes, setShowBoxes] = useState(false);
