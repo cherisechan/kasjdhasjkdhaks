@@ -8,7 +8,7 @@ import VideoEditModal from "./VideoEditModal";
 import { useState, useEffect } from "react";
 import CodeElement from "./CodeElement";
 import CodeEditModal from "./CodeEditModal";
-const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
+const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId, fontFam }) => {
     let elements = slide.elements;
     elements = elements.map((e, index) => ({
         ...e,
@@ -133,7 +133,7 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
             )}
 
             {/* Slide Content */}
-            <SlideBase $bgColour1={slide.background.colour1} $bgColour2={slide.background.colour2} $gradient={slide.background.gradient} $bgImg={slide.background.img} id={slide.id}>
+            <SlideBase $bgColour1={slide.background.colour1} $bgColour2={slide.background.colour2} $gradient={slide.background.gradient} $bgImg={slide.background.img} $fontFam={fontFam} id={slide.id}>
                 {elements.map((t, index) => {
                     if (t.type === "text") {
                         return (
@@ -148,7 +148,6 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
                             <VideoElement id={t.id} $videoObj={t} openVideoEdit={openVideoEdit} key={t.id} setUpdateObj={setUpdateObj} setUpdateElemId={setUpdateElemId}/>
                         );
                     } else if (t.type === "code") {
-                        console.log(t);
                         return (
                             <CodeElement id={slide.elements[index].id} className="text-element hover:cursor-pointer" $codeObj={t} code={t.code} openCodeEdit={openCodeEdit} key={index}  />
                         )

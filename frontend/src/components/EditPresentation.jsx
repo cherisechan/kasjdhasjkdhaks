@@ -508,10 +508,10 @@ const EditPresentation = () => {
             <button onClick={() => setShowVideoCreateModal(true)} className="bg-violet-500 text-white px-4 h-10 rounded ml-2 font-semibold">Video</button>
             <button onClick={() => {setShowCodeCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2 font-semibold">Code</button>
             <button onClick={() => {setShowBackgroundModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2 font-semibold">Theme</button>
-            <FontSelector/>
+            <FontSelector setReload={setReload} defaultFont={presentation.fontFamily}/>
           </div>
           {/* Slide content */}
-          <Slide slide={slides[currentSlideIndex]} currIndex={currentSlideIndex} setUpdateObj={setUpdateObj} setUpdateElemId={setElemId}/>
+          <Slide slide={slides[currentSlideIndex]} currIndex={currentSlideIndex} setUpdateObj={setUpdateObj} setUpdateElemId={setElemId} fontFam={presentation.fontFamily}/>
 
           {/* Navigation controls */}
           {presentation.slides.length >= 1 && (
@@ -522,7 +522,6 @@ const EditPresentation = () => {
                 <button onClick={goToNextSlide} disabled={currentSlideIndex === presentation.slides.length - 1} className={`w-10 h-10 rounded ${currentSlideIndex === presentation.slides.length - 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>&gt;</button>
               </div>
               <div className="absolute right-2 flex justify-center items-center">
-                {/* <button className="bg-red-500 text-white w-10 h-10 rounded flex items-center justify-center"> */}
                 <button
                   onClick={() => {
                     if (presentation && presentation.slides.length === 1) {

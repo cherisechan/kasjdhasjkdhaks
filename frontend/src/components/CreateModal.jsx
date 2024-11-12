@@ -38,6 +38,7 @@ const CreateModal = ({ setShowCreate }) => {
             "name": name,
             "description": desc,
             "thumbnail": null,
+            "fontFamily": "Arial, Helvetica, sans-serif",
             "defaultBackground": {
                 "colour1": "#FFFFFF",
                 "colour2": null,
