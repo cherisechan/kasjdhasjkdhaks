@@ -6,8 +6,8 @@ const TextElementStyled = styled.div(({$textObj}) => ({
     width: `${$textObj.width}%`,
     fontSize: `${$textObj.fontSize}em`,
     color: `${$textObj.textColour}`,
-    top: `${$textObj.x}`,
-    left: `${$textObj.y}`,
+    top: `${$textObj.x}%`,
+    left: `${$textObj.y}%`,
     zIndex: `${$textObj.z}`,
     border: "1px solid #d3d3d3"
 }));
