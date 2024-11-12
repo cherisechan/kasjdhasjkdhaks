@@ -4,6 +4,7 @@ import axios from "axios";
 const BackgroundModal = ({ setShowBackgroundModal, currSlideIndex, setReload }) => {
   const [option, setOption] = useState(0);
   const [colour1, setColour1] = useState("#FFFFFF");
+  const [colour2, setColour2] = useState("#FFFFFF");
   const [defaultBg, setDefaultBg] = useState(false);
 
   const handleSubmit = async() => {
@@ -45,10 +46,40 @@ const BackgroundModal = ({ setShowBackgroundModal, currSlideIndex, setReload }) 
           }
         }
       })
-      await axios.put(`http://localhost:5005/store`, {store}, headers);
-      setReload(true);
-      setShowBackgroundModal(false);
+    } else  if (option === 1) {
+      store.presentations.map(p => {
+        if (p.id === pid) {
+          if (defaultBg) {
+            p.slides[currSlideIndex].background.default = true;
+            p.defaultBackground = {
+              "colour1": colour1,
+              "colour2": colour2,
+              "img": null,
+              "gradient": true,
+              "default": true,
+            }
+            // set the same colour for all default bg
+            p.slides.forEach((s) => {
+              if (s.background.default) {
+                s.background.gradient = true;
+                s.background.img = null;
+                s.background.colour1 = colour1;
+                s.background.colour2 = colour2;
+              }
+            })
+          } else {
+            p.slides[currSlideIndex].background.default = false;
+            p.slides[currSlideIndex].background.colour1 = colour1;
+            p.slides[currSlideIndex].background.colour2 = colour2;
+            p.slides[currSlideIndex].background.img = null;
+            p.slides[currSlideIndex].background.gradient = true;
+          }
+        }
+      })
     }
+    await axios.put(`http://localhost:5005/store`, {store}, headers);
+    setReload(true);
+    setShowBackgroundModal(false);
   }
 
   return (
@@ -72,7 +103,14 @@ const BackgroundModal = ({ setShowBackgroundModal, currSlideIndex, setReload }) 
           {
             option === 1 && (
               <div>
-                gradient
+                <div className="flex py-4 items-center">
+                  <p className="pr-4">Colour 1</p>
+                  <input type="color" name="colour-picker" className="w-14 h-14 bg-white" onChange={e => setColour1(e.target.value)} defaultValue={"#FFFFFF"}/>
+                </div>
+                <div className="flex py-4 items-center">
+                  <p className="pr-4">Colour 2</p>
+                  <input type="color" name="colour-picker" className="w-14 h-14 bg-white" onChange={e => setColour2(e.target.value)} defaultValue={"#FFFFFF"}/>
+                </div>
               </div>
             )
           }

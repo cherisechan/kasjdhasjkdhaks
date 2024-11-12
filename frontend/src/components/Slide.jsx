@@ -61,7 +61,7 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId }) => {
                     setShowTextEditModal={setShowTextEditModal}
                 />
             )}
-            <SlideBase $bgColour={slide.background.colour1} id={slide.id} >
+            <SlideBase $bgColour1={slide.background.colour1} $bgColour2={slide.background.colour2} $gradient={slide.background.gradient} $bgImg={slide.background.img} id={slide.id} >
                 {
                     elements.map((t, index) =>{
                         if (t.type === "text") {
