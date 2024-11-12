@@ -14,6 +14,7 @@ import VideoCreateModal from "./VideoCreateModal";
 import BackgroundModal from "./BackgroundModal";
 import uniqid from "uniqid";
 import CodeCreateModal from "./CodeCreateModal";
+import FontSelector from "./FontSelector";
 
 const EditPresentation = () => {
   const { id } = useParams();
@@ -392,7 +393,7 @@ const EditPresentation = () => {
   return (
     <div className="edit-presentation px-2">
       <div className="max-w-screen-xl flex items-center justify-between mx-auto py-4 mt-20">
-        <button onClick={() => navigate("/dashboard")} className="bg-gray-500 text-white px-4 py-2 rounded">Back</button>
+        <button onClick={() => navigate("/dashboard")} className="bg-gray-500 text-white px-4 py-2 rounded font-semibold">Back</button>
 
         <div className="flex items-center space-x-2">
           <div className="relative w-12 h-12">
@@ -415,7 +416,7 @@ const EditPresentation = () => {
           </button>
           <h1 className="text-2xl font-bold">{presentation?.name}</h1>
         </div>
-        <button onClick={() => setShowDeletePopup(true)} className="bg-red-500 text-white px-4 py-2 rounded">Delete Presentation</button>
+        <button onClick={() => setShowDeletePopup(true)} className="bg-red-500 text-white px-4 py-2 rounded font-semibold">Delete Presentation</button>
       </div>
       
       {showDeletePopup && (
@@ -501,12 +502,13 @@ const EditPresentation = () => {
 
       {slides ? (
         <div className="max-w-screen-xl bg-gray-100 rounded-lg mx-auto h-[75vh] flex flex-col items-center justify-center">
-          <div className="flex w-[85%] justify-start items-center h-16">
-          <button onClick={() => {setShowTextCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Text</button>
-          <button onClick={() => setShowImageCreateModal(true)} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Image</button>
-          <button onClick={() => setShowVideoCreateModal(true)} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Video</button>
-          <button onClick={() => {setShowCodeCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Code</button>
-          <button onClick={() => {setShowBackgroundModal(true);}} className="bg-violet-400 text-white px-4 h-10 rounded ml-2">Theme</button>
+          <div className="flex w-[85%] justify-start items-center h-16 max-sm:h-32 max-sm:flex-wrap">
+            <button onClick={() => {setShowTextCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2 font-semibold">Text</button>
+            <button onClick={() => setShowImageCreateModal(true)} className="bg-violet-500 text-white px-4 h-10 rounded ml-2 font-semibold">Image</button>
+            <button onClick={() => setShowVideoCreateModal(true)} className="bg-violet-500 text-white px-4 h-10 rounded ml-2 font-semibold">Video</button>
+            <button onClick={() => {setShowCodeCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2 font-semibold">Code</button>
+            <button onClick={() => {setShowBackgroundModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2 font-semibold">Theme</button>
+            <FontSelector/>
           </div>
           {/* Slide content */}
           <Slide slide={slides[currentSlideIndex]} currIndex={currentSlideIndex} setUpdateObj={setUpdateObj} setUpdateElemId={setElemId}/>
