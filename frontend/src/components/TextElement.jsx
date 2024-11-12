@@ -45,6 +45,15 @@ const TextElement = ({
     setUpdateElemId(id);
   };
 
+  const handleResizeStop = (e, direction, ref, delta, position) => {
+    const newWidth = parseFloat(ref.style.width);
+    const newHeight = parseFloat(ref.style.height);
+    setSize({ width: newWidth, height: newHeight });
+    setPosition(position);
+    setUpdateObj({ ...$textObj, width: newWidth, height: newHeight, x: position.x, y: position.y });
+    setUpdateElemId(id);
+  };
+
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (
@@ -66,9 +75,10 @@ const TextElement = ({
       position={{ x: position.x, y: position.y }}
       size={{ width: `${$textObj.width}%`, height: `${$textObj.height}%` }}
       onDragStop={handleDragStop}
+      onResizeStop={handleResizeStop}
       bounds="parent"
       lockAspectRatio={true}
-      enableResizing={true} // Disable resizing
+      enableResizing={true}
     >
       <TextElementStyled
         id={id}

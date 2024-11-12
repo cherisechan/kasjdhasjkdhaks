@@ -4,9 +4,14 @@ import { detect } from "program-language-detector"
 import Prism from "prismjs";
 import "prismjs/components/prism-c.min.js"; 
 import 'prismjs/themes/prism-tomorrow.css';
+import { Rnd } from "react-rnd";
 
-const CodeElement = ({$codeObj, code, id, openCodeEdit}) => {
+
+const CodeElement = ({ $codeObj, code, id, openCodeEdit, setUpdateObj, setUpdateElemId }) => {
     const [showBoxes, setShowBoxes] = useState(false);
+    const [position, setPosition] = useState({ x: $codeObj.x, y: $codeObj.y });
+    const [size, setSize] = useState({ width: `${$codeObj.width}%`, height: `${$codeObj.height}%` });
+
 
     // custom double click within 0.5sec
     const clickCountRef = useRef(0);
@@ -14,6 +19,7 @@ const CodeElement = ({$codeObj, code, id, openCodeEdit}) => {
 
     const handleClick = (e) => {
         e.stopPropagation();
+        console.log("handleClick fired"); 
         setShowBoxes(true);
 
         clickCountRef.current += 1;
@@ -30,6 +36,21 @@ const CodeElement = ({$codeObj, code, id, openCodeEdit}) => {
             setShowBoxes(false);
             openCodeEdit(e);
         }
+    };
+
+    const handleDragStop = (e, d) => {
+        setPosition({ x: d.x, y: d.y });
+        setUpdateObj({ ...$codeObj, x: d.x, y: d.y });
+        setUpdateElemId(id);
+    };
+
+    const handleResizeStop = (e, direction, ref, delta, position) => {
+        const newWidth = parseFloat(ref.style.width);
+        const newHeight = parseFloat(ref.style.height);
+
+        setSize({ width: newWidth, height: newHeight });
+        setUpdateObj({ ...$codeObj, width: newWidth, height: newHeight });
+        setPosition(position);
     };
 
     const boxesContainerRef = useRef(null);
@@ -66,7 +87,16 @@ const CodeElement = ({$codeObj, code, id, openCodeEdit}) => {
     }, [code, language]);
 
     return (
-        <>
+        <Rnd
+            position={ { x: position.x, y: position.y } }
+            size={{ width: `${$codeObj.width}%`, height: `${$codeObj.height}%` }}
+            onDragStop={handleDragStop}
+            onResizeStop={handleResizeStop}
+            bounds="parent"
+            lockAspectRatio={true}
+            enableResizing={true}
+            // onClick={handleClick}
+        >
             <CodeElementStyled id={id} $codeObj={$codeObj} className="hover:cursor-pointer" onClick={handleClick}>
                 <div className="h-full w-full overflow-hidden pointer-events-none">
                     <pre>
@@ -86,7 +116,7 @@ const CodeElement = ({$codeObj, code, id, openCodeEdit}) => {
                     )
                 }
             </CodeElementStyled>
-        </>
+        </Rnd>
     );
 };
 

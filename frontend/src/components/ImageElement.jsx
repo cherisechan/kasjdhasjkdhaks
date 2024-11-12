@@ -14,7 +14,8 @@ const ImageElementStyled = styled.div`
 
 const ImageElement = ({ $imageObj, id, openImageEdit, setUpdateObj, setUpdateElemId }) => {
   const [showBoxes, setShowBoxes] = useState(false);
-  const [position, setPosition] = useState({ x: $imageObj.x, y: $imageObj.y }); // Fix here
+  const [position, setPosition] = useState({ x: $imageObj.x, y: $imageObj.y });
+  const [size, setSize] = useState({ width: $imageObj.width, height: $imageObj.height });
   const boxesContainerRef = useRef(null);
 
   // Handle double-click and single-click
@@ -43,7 +44,16 @@ const ImageElement = ({ $imageObj, id, openImageEdit, setUpdateObj, setUpdateEle
 
   const handleDragStop = (e, d) => {
     setPosition({ x: d.x, y: d.y });
-    setUpdateObj({ ...$imageObj, x: d.x, y: d.y }); // Fix here
+    setUpdateObj({ ...$imageObj, x: d.x, y: d.y });
+    setUpdateElemId(id);
+  };
+
+  const handleResizeStop = (e, direction, ref, delta, position) => {
+    const newWidth = parseFloat(ref.style.width);
+    const newHeight = parseFloat(ref.style.height);
+    setSize({ width: newWidth, height: newHeight });
+    setPosition(position);
+    setUpdateObj({ ...$imageObj, width: newWidth, height: newHeight, x: position.x, y: position.y });
     setUpdateElemId(id);
   };
 
@@ -68,6 +78,7 @@ const ImageElement = ({ $imageObj, id, openImageEdit, setUpdateObj, setUpdateEle
       position={{ x: position.x, y: position.y }}
       size={{ width: `${$imageObj.width}%`, height: `${$imageObj.height}%` }} // Fix here
       onDragStop={handleDragStop}
+      onResizeStop={handleResizeStop}
       bounds="parent"
       lockAspectRatio={true}
       enableResizing={true}

@@ -14,7 +14,8 @@ const VideoElementStyled = styled.div`
 
 const VideoElement = ({ $videoObj, id, openVideoEdit, setUpdateObj, setUpdateElemId }) => {
   const [showBoxes, setShowBoxes] = useState(false);
-  const [position, setPosition] = useState({ x: $videoObj.x, y: $videoObj.y }); // Fixed to use $videoObj
+  const [position, setPosition] = useState({ x: $videoObj.x, y: $videoObj.y });
+  const [size, setSize] = useState({ width: $videoObj.width, height: $videoObj.height });
   const boxesContainerRef = useRef(null);
 
   // Handle double-click and single-click
@@ -43,8 +44,19 @@ const VideoElement = ({ $videoObj, id, openVideoEdit, setUpdateObj, setUpdateEle
 
   const handleDragStop = (e, d) => {
     setPosition({ x: d.x, y: d.y });
-    if (setUpdateObj && setUpdateElemId) { // Ensure these are defined
+    if (setUpdateObj && setUpdateElemId) {
       setUpdateObj({ ...$videoObj, x: d.x, y: d.y });
+      setUpdateElemId(id);
+    }
+  };
+
+  const handleResizeStop = (e, direction, ref, delta, position) => {
+    const newWidth = parseFloat(ref.style.width);
+    const newHeight = parseFloat(ref.style.height);
+    setSize({ width: newWidth, height: newHeight });
+    setPosition(position);
+    if (setUpdateObj && setUpdateElemId) {
+      setUpdateObj({ ...$videoObj, width: newWidth, height: newHeight, x: position.x, y: position.y });
       setUpdateElemId(id);
     }
   };
@@ -85,6 +97,7 @@ const VideoElement = ({ $videoObj, id, openVideoEdit, setUpdateObj, setUpdateEle
       position={{ x: position.x, y: position.y }}
       size={{ width: `${$videoObj.width}%`, height: `${$videoObj.height}%` }} // Fixed to use $videoObj
       onDragStop={handleDragStop}
+      onResizeStop={handleResizeStop}
       bounds="parent"
       lockAspectRatio={true}
       enableResizing={true}
