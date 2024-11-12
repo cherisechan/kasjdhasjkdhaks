@@ -57,10 +57,8 @@ const VideoElement = ({ $videoObj, id, openVideoEdit }) => {
       const url = new URL($videoObj.src);
       if ($videoObj.autoplay) {
         url.searchParams.set('autoplay', '1');
-        url.searchParams.set('mute', '1');
       } else {
         url.searchParams.delete('autoplay');
-        url.searchParams.delete('mute');
       }
       return url.toString();
     } catch (e) {
