@@ -1,12 +1,15 @@
-import TextElementStyled from './TextElementStyled';
-import React, { useEffect, useRef, useState } from 'react';
+import { Rnd } from "react-rnd";
+import React, { useEffect, useRef, useState } from "react";
+import TextElementStyled from "./TextElementStyled";
 
-const TextElement = ({$textObj, text, id, openTextEdit}) => {
+const TextElement = ({ $textObj, text, id, openTextEdit, setUpdateObj, setUpdateElemId }) => {
+    const [position, setPosition] = useState({ x: $textObj.x, y: $textObj.y });
     const [showBoxes, setShowBoxes] = useState(false);
 
-    // custom double click within 0.5sec
+    // Custom double-click within 0.5 sec
     const clickCountRef = useRef(0);
     const timerRef = useRef(null);
+    const boxesContainerRef = useRef(null);
 
     const handleClick = (e) => {
         e.stopPropagation();
@@ -28,7 +31,12 @@ const TextElement = ({$textObj, text, id, openTextEdit}) => {
         }
     };
 
-    const boxesContainerRef = useRef(null);
+    const handleDragStop = (e, d) => {
+        setPosition({ x: d.x, y: d.y });
+        setUpdateObj({ ...$textObj, x: d.x, y: d.y });
+        setUpdateElemId(id);
+    };
+
     useEffect(() => {
         const handleOutsideClick = (event) => {
             if (boxesContainerRef.current && !boxesContainerRef.current.contains(event.target)) {
@@ -37,26 +45,38 @@ const TextElement = ({$textObj, text, id, openTextEdit}) => {
         };
 
         document.addEventListener("click", handleOutsideClick);
+        return () => {
+            document.removeEventListener("click", handleOutsideClick);
+        };
     }, []);
 
     return (
-        <>
-            <TextElementStyled id={id} $textObj={$textObj} className="hover:cursor-pointer" onClick={handleClick}>
+        <Rnd
+            position={{ x: position.x, y: position.y }}
+            onDragStop={handleDragStop}
+            bounds="parent"
+            lockAspectRatio={true}
+            enableResizing={false}  // Disable resizing
+        >
+            <TextElementStyled
+                id={id}
+                $textObj={$textObj}
+                className="hover:cursor-pointer"
+                onClick={handleClick}
+            >
                 <div className="h-full w-full overflow-hidden pointer-events-none">
                     <p className="overflow-hidden">{text}</p>
                 </div>
-                {
-                    showBoxes && (
-                        <div ref={boxesContainerRef}>
-                            <div className="w-[5px] h-[5px] bg-gray-600 absolute top-0 left-0 translate-x-[-2px] translate-y-[-2px] overflow-visible"></div>
-                            <div className="w-[5px] h-[5px] bg-gray-600 absolute top-0 right-0 translate-x-[2px] translate-y-[-2px] overflow-visible"></div>
-                            <div className="w-[5px] h-[5px] bg-gray-600 absolute bottom-0 left-0 translate-x-[-2px] translate-y-[2px] overflow-visible"></div>
-                            <div className="w-[5px] h-[5px] bg-gray-600 absolute bottom-0 right-0 translate-x-[2px] translate-y-[2px] overflow-visible"></div>
-                        </div>
-                    )
-                }
+                {showBoxes && (
+                    <div ref={boxesContainerRef}>
+                        <div className="w-[5px] h-[5px] bg-gray-600 absolute top-0 left-0 translate-x-[-2px] translate-y-[-2px] overflow-visible"></div>
+                        <div className="w-[5px] h-[5px] bg-gray-600 absolute top-0 right-0 translate-x-[2px] translate-y-[-2px] overflow-visible"></div>
+                        <div className="w-[5px] h-[5px] bg-gray-600 absolute bottom-0 left-0 translate-x-[-2px] translate-y-[2px] overflow-visible"></div>
+                        <div className="w-[5px] h-[5px] bg-gray-600 absolute bottom-0 right-0 translate-x-[2px] translate-y-[2px] overflow-visible"></div>
+                    </div>
+                )}
             </TextElementStyled>
-        </>
+        </Rnd>
     );
 };
 
