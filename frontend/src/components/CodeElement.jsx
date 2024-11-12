@@ -10,6 +10,7 @@ import { Rnd } from "react-rnd";
 const CodeElement = ({ $codeObj, code, id, openCodeEdit, setUpdateObj, setUpdateElemId }) => {
     const [showBoxes, setShowBoxes] = useState(false);
     const [position, setPosition] = useState({ x: $codeObj.x, y: $codeObj.y });
+    const [size, setSize] = useState({ width: `${$codeObj.width}%`, height: `${$codeObj.height}%` });
 
 
     // custom double click within 0.5sec
@@ -41,6 +42,15 @@ const CodeElement = ({ $codeObj, code, id, openCodeEdit, setUpdateObj, setUpdate
         setPosition({ x: d.x, y: d.y });
         setUpdateObj({ ...$codeObj, x: d.x, y: d.y });
         setUpdateElemId(id);
+    };
+
+    const handleResizeStop = (e, direction, ref, delta, position) => {
+        const newWidth = parseFloat(ref.style.width);
+        const newHeight = parseFloat(ref.style.height);
+
+        setSize({ width: newWidth, height: newHeight });
+        setUpdateObj({ ...$codeObj, width: newWidth, height: newHeight });
+        setPosition(position);
     };
 
     const boxesContainerRef = useRef(null);
@@ -81,9 +91,10 @@ const CodeElement = ({ $codeObj, code, id, openCodeEdit, setUpdateObj, setUpdate
             position={ { x: position.x, y: position.y } }
             size={{ width: `${$codeObj.width}%`, height: `${$codeObj.height}%` }}
             onDragStop={handleDragStop}
+            onResizeStop={handleResizeStop}
             bounds="parent"
-            // lockAspectRatio={true}
-            enableResizing={false}
+            lockAspectRatio={true}
+            enableResizing={true}
             // onClick={handleClick}
         >
             <CodeElementStyled id={id} $codeObj={$codeObj} className="hover:cursor-pointer" onClick={handleClick}>
