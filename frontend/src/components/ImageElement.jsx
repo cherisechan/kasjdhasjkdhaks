@@ -10,6 +10,7 @@ const ImageElementStyled = styled.div`
   z-index: ${({ $imageObj }) => $imageObj.z};
   border: 1px solid #d3d3d3;
   box-sizing: border-box;
+  user-select: none;
 `;
 
 const ImageElement = ({ $imageObj, id, openImageEdit, setUpdateObj, setUpdateElemId }) => {
@@ -51,7 +52,7 @@ const ImageElement = ({ $imageObj, id, openImageEdit, setUpdateObj, setUpdateEle
 
   return (
     <ImageElementStyled id={id} $imageObj={$imageObj} onClick={handleClick}>
-      <img src={$imageObj.src} alt={$imageObj.altText} style={{ width: '100%', height: '100%', pointerEvents: 'none' }}/>
+      <img src={$imageObj.src} alt={$imageObj.altText} style={{ width: '100%', height: '100%', pointerEvents: 'none', userSelect: 'none' }}/>
       {showBoxes && (
         <div ref={boxesContainerRef}>
           <div className="w-[5px] h-[5px] bg-gray-600 absolute top-0 left-0 translate-x-[-2px] translate-y-[-2px] overflow-visible"></div>

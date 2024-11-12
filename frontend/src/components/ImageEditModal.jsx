@@ -49,6 +49,17 @@ const ImageEditModal = ({ element, setImageElem, setImageEditSubmit, setShowImag
     setError("");
   }, [width, height, imageUrl, imageFile, altText]);
 
+  // check later if prevent default is okay to use as well
+  useEffect(() => {
+    // Check if window is defined (for SSR)
+    if (typeof window !== "undefined") {
+      const selection = window.getSelection();
+      if (selection) {
+        selection.removeAllRanges();
+      }
+    }
+  }, []);
+
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-[#00000090] z-[999]">
       <div className="bg-white rounded-lg flex flex-col px-6 py-4 m-2">
