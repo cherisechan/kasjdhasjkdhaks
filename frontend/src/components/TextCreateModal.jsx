@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import uniqid from "uniqid";
 
-const TextCreateModal = ({ setSubmitText, setSubmitWidth, setSubmitHeight, setSubmitFontSize, setSubmitTextColour, setTextSubmit, setShowTextCreateModal }) => {
+const TextCreateModal = ({ setTextElem, setTextSubmit, setShowTextCreateModal }) => {
   const [text, setText] = useState("");
   const [width, setWidth] = useState("");
   const [height, setHeight] = useState("");
@@ -19,11 +20,18 @@ const TextCreateModal = ({ setSubmitText, setSubmitWidth, setSubmitHeight, setSu
     } else if (!/(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)|(^#[0-9A-F]{8}$)/i.test(textColour)) {
       setError("Invalid HEX code");
     } else {
-      setSubmitText(text);
-      setSubmitWidth(width);
-      setSubmitHeight(height);
-      setSubmitFontSize(fontSize);
-      setSubmitTextColour(textColour);
+      const textElem = {
+        "id": uniqid(),
+        "type": "text",
+        "text": text,
+        "width": width,
+        "height": height,
+        "fontSize": fontSize,
+        "textColour": textColour,
+        "x": 0,
+        "y": 0
+      }
+      setTextElem(textElem);
       setTextSubmit(true);
       setShowTextCreateModal(false);
     }

@@ -321,26 +321,12 @@ const EditPresentation = () => {
 
   // add text element
   const [showTextCreateModal, setShowTextCreateModal] = useState(false);
-  const [textBoxText, setTextBoxText] = useState("");
-  const [textBoxWidth, setTextBoxWidth] = useState("");
-  const [textBoxHeight, setTextBoxHeight] = useState("");
-  const [textBoxFontSize, setTextBoxFontSize] = useState("");
-  const [textBoxTextColour, setTextBoxTextColour] = useState("");
+  const [textElem, setTextElem] = useState(null);
   const [textSubmit, setTextSubmit] = useState(false);
   useEffect(() => {
-    if (textSubmit) {
-      const textElem = {
-        "id": uniqid(),
-        "type": "text",
-        "text": textBoxText,
-        "width": textBoxWidth,
-        "height": textBoxHeight,
-        "fontSize": textBoxFontSize,
-        "textColour": textBoxTextColour,
-        "x": 0,
-        "y": 0
-      }
+    if (textElem) {
       addElem(textElem);
+      setTextElem(null);
       setTextSubmit(false);
     }
   }, [textSubmit])
@@ -436,11 +422,7 @@ const EditPresentation = () => {
 
       {showTextCreateModal && (
         <TextCreateModal
-          setSubmitText={setTextBoxText}
-          setSubmitWidth={setTextBoxWidth}
-          setSubmitHeight={setTextBoxHeight}
-          setSubmitFontSize={setTextBoxFontSize}
-          setSubmitTextColour={setTextBoxTextColour}
+          setTextElem={setTextElem}
           setTextSubmit={setTextSubmit}
           setShowTextCreateModal={setShowTextCreateModal}
         />
