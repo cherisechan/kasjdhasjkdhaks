@@ -344,6 +344,11 @@ const EditPresentation = () => {
     }
   }, [imageSubmit]);
 
+  // add video element
+  const [showVideoCreateModal, setShowVideoCreateModal] = useState(false);
+  const [videoElem, setVideoElem] = useState(null);
+  const [videoSubmit, setVideoSubmit] = useState(false);
+
   // updating elements from slide
   const [updateObj, setUpdateObj] = useState(null);
   const [elemId, setElemId] = useState("");
@@ -462,7 +467,8 @@ const EditPresentation = () => {
           <div className="flex w-[85%] justify-start items-center h-16">
           <button onClick={() => {setShowTextCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Text</button>
           <button onClick={() => setShowImageCreateModal(true)} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Image</button>
-          <button onClick={() => {setShowBackgroundModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Theme</button>
+          <button onClick={() => setShowVideoCreateModal(true)} className="bg-violet-500 text-white px-4 h-10 rounded ml-2">Video</button>
+          <button onClick={() => {setShowBackgroundModal(true);}} className="bg-violet-400 text-white px-4 h-10 rounded ml-2">Theme</button>
           </div>
           {/* Slide content */}
           <Slide slide={slides[currentSlideIndex]} currIndex={currentSlideIndex} setUpdateObj={setUpdateObj} setUpdateElemId={setElemId}/>
