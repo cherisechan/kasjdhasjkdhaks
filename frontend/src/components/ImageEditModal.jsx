@@ -107,7 +107,7 @@ const ImageEditModal = ({ element, setImageElem, setImageEditSubmit, setShowImag
           />
         </div>
 
-        <div className="flex w-full items-center mb-4">
+        {/* <div className="flex w-full items-center mb-4">
           <label className="text-xl mr-5 w-32">Size (%)</label>
           <input
             type="text"
@@ -123,7 +123,7 @@ const ImageEditModal = ({ element, setImageElem, setImageEditSubmit, setShowImag
             value={height}
             onChange={(e) => setHeight(e.target.value)}
           />
-        </div>
+        </div> */}
 
         <div className="mt-4 flex space-x-2">
           <button className="bg-violet-500 text-white px-4 py-2 rounded" onClick={onSubmit}>Submit</button>

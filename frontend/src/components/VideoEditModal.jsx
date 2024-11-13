@@ -57,11 +57,11 @@ const VideoEditModal = ({ element, setVideoElem, setVideoEditSubmit, setShowVide
           <input type="text" className="bg-gray-50 border px-2 py-1 w-full" placeholder="YouTube embed URL" value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)}/>
         </div>
 
-        <div className="flex w-full items-center mb-4">
+        {/* <div className="flex w-full items-center mb-4">
           <label className="text-xl mr-5 w-32">Size (%)</label>
           <input type="text" className="bg-gray-50 border px-2 py-1 w-full mr-2" placeholder="Width" value={width} onChange={(e) => setWidth(e.target.value)}/>
           <input type="text" className="bg-gray-50 border px-2 py-1 w-full" placeholder="Height" value={height} onChange={(e) => setHeight(e.target.value)}/>
-        </div>
+        </div> */}
 
         <div className="flex items-center mb-4">
           <label className="text-xl mr-5 w-32">Autoplay</label>
