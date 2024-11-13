@@ -515,8 +515,8 @@ const EditPresentation = () => {
       }
 
       {slides ? (
-        <div className="max-w-screen-xl bg-gray-100 rounded-lg mx-auto h-[75vh] flex flex-col items-center justify-center">
-          <div className="flex w-[85%] justify-start items-center h-16 max-sm:h-32 max-sm:flex-wrap">
+        <div className="max-w-screen-xl bg-gray-100 rounded-lg mx-auto flex flex-col items-center justify-center">
+          <div className="flex w-full justify-start items-center h-16 max-sm:h-32 max-sm:flex-wrap">
             <button onClick={() => {setShowTextCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2 font-semibold">Text</button>
             <button onClick={() => setShowImageCreateModal(true)} className="bg-violet-500 text-white px-4 h-10 rounded ml-2 font-semibold">Image</button>
             <button onClick={() => setShowVideoCreateModal(true)} className="bg-violet-500 text-white px-4 h-10 rounded ml-2 font-semibold">Video</button>
@@ -525,7 +525,9 @@ const EditPresentation = () => {
             <FontSelector setReload={setReload} defaultFont={presentation.fontFamily}/>
           </div>
           {/* Slide content */}
-          <Slide slide={slides[currentSlideIndex]} currIndex={currentSlideIndex} setUpdateObj={setUpdateObj} setUpdateElemId={setElemId} fontFam={presentation.fontFamily}/>
+          <div className="w-full max-w-4xl">
+            <Slide slide={slides[currentSlideIndex]} currIndex={currentSlideIndex} setUpdateObj={setUpdateObj} setUpdateElemId={setElemId} fontFam={presentation.fontFamily}/>
+          </div>
 
           {/* Navigation controls */}
           {presentation.slides.length >= 1 && (
