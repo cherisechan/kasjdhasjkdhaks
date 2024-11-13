@@ -393,9 +393,10 @@ const EditPresentation = () => {
   return (
     <div className="edit-presentation px-2">
       <div className="max-w-screen-xl flex items-center justify-between mx-auto py-4 mt-20">
-        <button onClick={() => navigate("/dashboard")} className="bg-gray-500 text-white px-4 py-2 rounded font-semibold">Back</button>
-
-        <div className="flex items-center space-x-2">
+        <div className="flex-1 flex justify-start">
+          <button onClick={() => navigate("/dashboard")} className="bg-gray-500 text-white px-4 py-2 rounded font-semibold">Back</button>
+        </div>
+        <div className="flex items-center space-x-2 flex-1 justify-center">
           <div className="relative w-12 h-12">
             {presentation?.thumbnail ? (
               <img src={presentation.thumbnail} alt="Thumbnail" className="w-full h-full object-cover rounded" />
@@ -416,7 +417,11 @@ const EditPresentation = () => {
           </button>
           <h1 className="text-2xl font-bold">{presentation?.name}</h1>
         </div>
-        <button onClick={() => setShowDeletePopup(true)} className="bg-red-500 text-white px-4 py-2 rounded font-semibold">Delete Presentation</button>
+
+        <div className="flex flex-1 justify-end space-x-2">
+          <button className="bg-violet-500 text-white px-4 py-2 rounded font-semibold">Preview Presentation</button>
+          <button onClick={() => setShowDeletePopup(true)} className="bg-red-500 text-white px-4 py-2 rounded font-semibold">Delete Presentation</button>
+        </div>
       </div>
       
       {showDeletePopup && (
