@@ -10,6 +10,12 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
     navigate('/');
   };
 
+  const showNavbar = !location.pathname.startsWith('/preview');
+
+  if (!showNavbar) {
+    return null;
+  }
+
   // hide buttons on navbar on login and register page
   const showButtons = location.pathname !== '/login' && location.pathname !== '/register';
   
