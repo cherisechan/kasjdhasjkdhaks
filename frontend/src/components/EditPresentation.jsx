@@ -290,7 +290,8 @@ const EditPresentation = () => {
     const store = response.data.store;
     store.presentations.forEach((p) => {
       if (p.id === id) {
-        p.slides[currentSlideIndex].elements.unshift(elemObj);
+        // use .unshift instead of .push if doing bonus and doing custom stacking
+        p.slides[currentSlideIndex].elements.push(elemObj);
       }
     });
     await axios.put("http://localhost:5005/store", { store }, headers);
