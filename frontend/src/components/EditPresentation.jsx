@@ -6,7 +6,7 @@ import EditTitleModal from './EditTitleModal';
 import EditThumbnailModal from './EditThumbnailModal';
 import DeleteSlidePopup from './DeleteSlidePopup';
 import CannotDeleteSlidePopup from './CannotDeleteSlidePopup';
-import { PencilIcon, PhotoIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, PhotoIcon, TrashIcon, EyeIcon } from "@heroicons/react/24/outline";
 import Slide from "./Slide";
 import TextCreateModal from "./TextCreateModal";
 import ImageCreateModal from "./ImageCreateModal";
@@ -419,8 +419,17 @@ const EditPresentation = () => {
         </div>
 
         <div className="flex flex-1 justify-end space-x-2">
-          <button className="bg-violet-500 text-white px-4 py-2 rounded font-semibold">Preview Presentation</button>
-          <button onClick={() => setShowDeletePopup(true)} className="bg-red-500 text-white px-4 py-2 rounded font-semibold">Delete Presentation</button>
+          <button 
+            onClick={() => window.open(`/preview/${id}`, '_blank')}
+            className="flex items-center space-x-2 bg-violet-500 text-white px-4 py-2 rounded font-semibold"
+          >
+            <EyeIcon className="h-6 w-6 text-white" />
+            <span>Preview</span>
+          </button>
+          <button onClick={() => setShowDeletePopup(true)} className="flex items-center space-x-2 bg-red-500 text-white px-4 py-2 rounded font-semibold">
+            <TrashIcon className="h-6 w-6 text-white" />
+            <span>Delete Presentation</span>
+          </button>
         </div>
       </div>
       
