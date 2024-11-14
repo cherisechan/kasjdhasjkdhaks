@@ -15,6 +15,7 @@ import BackgroundModal from "./BackgroundModal";
 import uniqid from "uniqid";
 import CodeCreateModal from "./CodeCreateModal";
 import FontSelector from "./FontSelector";
+import SlideRearrange from "./SlideRearrange";
 
 const EditPresentation = () => {
   const { id } = useParams();
@@ -32,6 +33,7 @@ const EditPresentation = () => {
   const [newTitle, setNewTitle] = useState("");
   const [token, setToken] = useState(null);
   const [selectedElemId, setSelectedElemId] = useState(null);
+  const [rearrange, setRearrange] = useState(false);
 
   useEffect(() => {
     const getToken = localStorage.getItem("token");
@@ -556,6 +558,14 @@ const EditPresentation = () => {
         />
       }
 
+      {
+        rearrange && <SlideRearrange 
+          presentation={presentation}
+          savePresentation={savePresentation}
+          setRearrange={setRearrange}
+        />
+      }
+
       {slides ? (
         <div className="max-w-screen-xl bg-gray-200 px-3 rounded-lg mx-auto flex flex-col items-center justify-center">
           <div className="flex w-full justify-start items-center h-16 max-sm:h-32 max-sm:flex-wrap">
@@ -580,6 +590,7 @@ const EditPresentation = () => {
                 <button onClick={goToNextSlide} disabled={currentSlideIndex === presentation.slides.length - 1} className={`w-10 h-10 rounded ${currentSlideIndex === presentation.slides.length - 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>&gt;</button>
               </div>
               <div className="absolute right-2 flex justify-center items-center">
+              <button onClick={() => setRearrange(true)} className="bg-violet-500 text-white w-fit h-10 rounded ml-2 px-2">Rearrange</button>
                 <button
                   onClick={() => {
                     if (presentation && presentation.slides.length === 1) {
@@ -588,7 +599,7 @@ const EditPresentation = () => {
                       setShowDeleteSlidePopup(true);
                     }
                   }}
-                  className="bg-red-500 text-white w-10 h-10 rounded flex items-center justify-center"
+                  className="bg-red-500 text-white w-10 h-10 rounded flex items-center justify-center ml-2"
                 >
                   <TrashIcon className="h-5 w-5" />
                 </button>
