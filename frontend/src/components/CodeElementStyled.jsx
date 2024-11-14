@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const CodeElementStyled = styled.div(({$codeObj}) => ({
+const CodeElementStyled = styled.div(({$codeObj, readOnly}) => ({
     position: "relative",
     height: '100%',
     width: '100%',
@@ -9,7 +9,8 @@ const CodeElementStyled = styled.div(({$codeObj}) => ({
     // top: `${$codeObj.x}%`,
     // left: `${$codeObj.y}%`,
     // zIndex: `${$codeObj.z}`,
-    border: "1px solid #d3d3d3",
+    // border: "1px solid #d3d3d3",
+    border: readOnly ? 'none' : '1px solid #d3d3d3',
     backgroundColor: "#2d2d2d",
 }));
 

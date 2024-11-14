@@ -1,5 +1,6 @@
 // SlideBase.js
 import styled from 'styled-components';
+import React from 'react';
 
 const SlideBase = styled.div(({
   $bgColour1,
@@ -23,4 +24,7 @@ const SlideBase = styled.div(({
     : $bgColour1,
 }));
 
-export default SlideBase;
+// export default SlideBase;
+export default React.forwardRef((props, ref) => (
+  <SlideBase {...props} ref={ref} />
+));

@@ -1,5 +1,5 @@
-import { Rnd } from "react-rnd";
 import React, { useEffect, useRef, useState } from "react";
+import { Rnd } from "react-rnd";
 import TextElementStyled from "./TextElementStyled";
 
 const TextElement = ({
@@ -9,16 +9,47 @@ const TextElement = ({
   openTextEdit,
   setUpdateObj,
   setUpdateElemId,
+  parentRef, // Receive the parentRef here
+  readOnly = false,
 }) => {
-  const [position, setPosition] = useState({ x: $textObj.x, y: $textObj.y });
-  const [size, setSize] = useState({ width: $textObj.width, height: $textObj.height });
-  const [showBoxes, setShowBoxes] = useState(false);
+  const rndRef = useRef(null);
+  const [parentSize, setParentSize] = useState({ width: 0, height: 0 });
 
-  // Custom double-click within 0.5 sec
+  // Initialize position and size in percentages
+  const [position, setPosition] = useState({
+    x: $textObj.x,
+    y: $textObj.y,
+  });
+  const [size, setSize] = useState({
+    width: $textObj.width,
+    height: $textObj.height,
+  });
+
+  const [showBoxes, setShowBoxes] = useState(false);
   const clickCountRef = useRef(0);
   const timerRef = useRef(null);
   const boxesContainerRef = useRef(null);
 
+  // Function to update parent size
+  const updateParentSize = () => {
+    if (parentRef.current) {
+      setParentSize({
+        width: parentRef.current.offsetWidth,
+        height: parentRef.current.offsetHeight,
+      });
+    }
+  };
+
+  // Update parent size on mount and when window resizes
+  useEffect(() => {
+    updateParentSize();
+    window.addEventListener("resize", updateParentSize);
+    return () => {
+      window.removeEventListener("resize", updateParentSize);
+    };
+  }, []);
+
+  // Handle clicks for editing
   const handleClick = (e) => {
     e.stopPropagation();
     setShowBoxes(true);
@@ -39,19 +70,47 @@ const TextElement = ({
     }
   };
 
+  // Handle drag stop
   const handleDragStop = (e, d) => {
-    setPosition({ x: d.x, y: d.y });
-    setUpdateObj({ ...$textObj, x: d.x, y: d.y });
+    const parentWidth = parentSize.width;
+    const parentHeight = parentSize.height;
+
+    const newXPercent = (d.x / parentWidth) * 100;
+    const newYPercent = (d.y / parentHeight) * 100;
+
+    setPosition({ x: newXPercent, y: newYPercent });
+    setUpdateObj({ ...$textObj, x: newXPercent, y: newYPercent });
     setUpdateElemId(id);
   };
 
+  // Handle resize stop
   const handleResizeStop = (e, direction, ref, delta, position) => {
-    const newWidth = parseFloat(ref.style.width);
-    const newHeight = parseFloat(ref.style.height);
-    setSize({ width: newWidth, height: newHeight });
-    setPosition(position);
-    setUpdateObj({ ...$textObj, width: newWidth, height: newHeight, x: position.x, y: position.y });
+    const parentWidth = parentSize.width;
+    const parentHeight = parentSize.height;
+
+    const newWidthPercent = (ref.offsetWidth / parentWidth) * 100;
+    const newHeightPercent = (ref.offsetHeight / parentHeight) * 100;
+
+    const newXPercent = (position.x / parentWidth) * 100;
+    const newYPercent = (position.y / parentHeight) * 100;
+
+    setSize({ width: newWidthPercent, height: newHeightPercent });
+    setPosition({ x: newXPercent, y: newYPercent });
+
+    setUpdateObj({
+      ...$textObj,
+      width: newWidthPercent,
+      height: newHeightPercent,
+      x: newXPercent,
+      y: newYPercent,
+    });
     setUpdateElemId(id);
+  };
+
+  // Calculate pixel values from percentages
+  const calculatedPosition = {
+    x: (position.x / 100) * parentSize.width || 0,
+    y: (position.y / 100) * parentSize.height || 0,
   };
 
   useEffect(() => {
@@ -65,26 +124,30 @@ const TextElement = ({
     };
 
     document.addEventListener("click", handleOutsideClick);
-    return () => {
-      document.removeEventListener("click", handleOutsideClick);
-    };
   }, []);
 
   return (
     <Rnd
-      position={{ x: position.x, y: position.y }}
-      size={{ width: `${$textObj.width}%`, height: `${$textObj.height}%` }}
+      ref={rndRef}
+      position={calculatedPosition}
+      size={{
+        width: `${size.width}%`,
+        height: `${size.height}%`,
+      }}
       onDragStop={handleDragStop}
       onResizeStop={handleResizeStop}
       bounds="parent"
-      lockAspectRatio={true}
-      enableResizing={true}
+      lockAspectRatio={false}
+      enableResizing={!readOnly}
+      disableDragging={readOnly}
+      style={{ pointerEvents: readOnly ? 'none' : 'auto' }}
     >
       <TextElementStyled
         id={id}
         $textObj={$textObj}
         className="hover:cursor-pointer"
         onClick={handleClick}
+        readOnly={readOnly}
       >
         <div className="h-full w-full overflow-hidden pointer-events-none">
           <p className="overflow-hidden">{text}</p>
