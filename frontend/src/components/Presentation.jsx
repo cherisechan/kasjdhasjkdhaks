@@ -5,7 +5,7 @@ const Presentation = ({ name, thumbnail, description, numSlides, id }) => {
     const navigate = useNavigate();
 
     const handlePresentationClick = () => {
-        navigate(`/design/${id}`);
+        navigate(`/design/${id}/0`);
     }
 
     return (

@@ -18,6 +18,7 @@ import FontSelector from "./FontSelector";
 
 const EditPresentation = () => {
   const { id } = useParams();
+  const { sindex } = useParams();
   const navigate = useNavigate();
 
   const [presentation, setPresentation] = useState(null);
@@ -43,6 +44,16 @@ const EditPresentation = () => {
   useEffect(() => {
     localStorage.setItem("pId", id);
   }, [id])
+
+  useEffect(() => {
+    if (presentation) {
+      if (parseInt(sindex) && parseInt(sindex) <= presentation.slides.length) {
+        setCurrentSlideIndex(parseInt(sindex) - 1);
+      } else {
+        navigate(`/design/${id}/${currentSlideIndex + 1}`)
+      }
+    }
+  }, [sindex, presentation])
 
   const fetchPresentation = async () => {
     const token = localStorage.getItem("token");
@@ -151,7 +162,7 @@ const EditPresentation = () => {
     setPresentation(updatedPresentation);
     setCurrentSlideIndex(newSlideIndex);
     setShowDeleteSlidePopup(false);
-
+    navigate(`/design/${id}/${currentSlideIndex + 1}`);
     // Save the updated presentation to the server
     await savePresentation(updatedPresentation);
   };
@@ -159,12 +170,14 @@ const EditPresentation = () => {
   // Handle navigation between slides
   const goToNextSlide = () => {
     if (currentSlideIndex < presentation.slides.length - 1) {
+      navigate(`/design/${id}/${currentSlideIndex + 2}`);
       setCurrentSlideIndex(currentSlideIndex + 1);
     }
   };
 
   const goToPreviousSlide = () => {
     if (currentSlideIndex > 0) {
+      navigate(`/design/${id}/${currentSlideIndex}`);
       setCurrentSlideIndex(currentSlideIndex - 1);
     }
   };
