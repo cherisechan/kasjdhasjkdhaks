@@ -30,8 +30,8 @@ function App() {
         <Route path='/login' element={<Login onLogin={handleLogin} />} />
         <Route path='/register' element={<Register onRegister={handleLogin} />} />
         <Route path='/dashboard' element={<Dashboard />}/>
-        <Route path="/design/:id" element={<EditPresentation />} />
-        <Route path="/preview/:id" element={<Preview />}/>
+        <Route path="/design/:id/:sindex?" element={<EditPresentation />} />
+        <Route path="/preview/:id/:sindex?" element={<Preview />}/>
       </Routes>
     </BrowserRouter>
   )

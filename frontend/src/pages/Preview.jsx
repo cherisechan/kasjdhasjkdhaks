@@ -3,9 +3,12 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import SlidePreview from '../components/SlidePreview';
+import { useNavigate } from 'react-router-dom';
 
 const Preview = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
+  const { sindex } = useParams();
   const [presentation, setPresentation] = useState(null);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
@@ -33,14 +36,26 @@ const Preview = () => {
     fetchPresentation();
   }, [id]);
 
+  useEffect(() => {
+    if (presentation) {
+      if (parseInt(sindex) && parseInt(sindex) <= presentation.slides.length) {
+        setCurrentSlideIndex(parseInt(sindex) - 1);
+      } else {
+        navigate(`/preview/${id}/${currentSlideIndex + 1}`)
+      }
+    }
+  }, [sindex, presentation])
+
   const goToNextSlide = () => {
     if (currentSlideIndex < presentation.slides.length - 1) {
+      navigate(`/preview/${id}/${currentSlideIndex + 2}`)
       setCurrentSlideIndex(currentSlideIndex + 1);
     }
   };
 
   const goToPreviousSlide = () => {
     if (currentSlideIndex > 0) {
+      navigate(`/preview/${id}/${currentSlideIndex}`)
       setCurrentSlideIndex(currentSlideIndex - 1);
     }
   };
