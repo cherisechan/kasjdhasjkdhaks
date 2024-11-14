@@ -6,7 +6,7 @@ const VideoElementStyled = styled.div`
   position: relative;
   height: 100%;
   width: 100%;
-  border: 1px solid #d3d3d3;
+  border: ${({ readOnly }) => (readOnly ? 'none' : '1px solid #d3d3d3')};
   box-sizing: border-box;
   user-select: none;
   cursor: pointer;
