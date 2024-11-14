@@ -393,11 +393,11 @@ const EditPresentation = () => {
 
   return (
     <div className="edit-presentation px-2">
-      <div className="max-w-screen-xl flex items-center justify-between mx-auto py-4 mt-20">
-        <div className="flex-1 flex justify-start">
+      <div className="max-w-screen-xl flex items-center justify-between mx-auto mt-20 flex-wrap sm:max-h-[20vh]">
+        <div className="flex justify-start">
           <button onClick={() => navigate("/dashboard")} className="bg-gray-500 text-white px-4 py-2 rounded font-semibold">Back</button>
         </div>
-        <div className="flex items-center space-x-2 flex-1 justify-center">
+        <div className="flex items-center space-x-2 justify-center">
           <div className="relative w-12 h-12">
             {presentation?.thumbnail ? (
               <img src={presentation.thumbnail} alt="Thumbnail" className="w-full h-full object-cover rounded" />
@@ -416,10 +416,10 @@ const EditPresentation = () => {
           <button onClick={() => setShowEditTitleModal(true)}>
             <PencilIcon className="h-6 w-6 text-black" />
           </button>
-          <h1 className="text-2xl font-bold">{presentation?.name}</h1>
+          <h1 className="text-2xl font-bold max-w-[20vw] truncate">{presentation?.name}</h1>
         </div>
 
-        <div className="flex flex-1 justify-end space-x-2">
+        <div className="flex justify-end space-x-2">
           <button 
             onClick={() => window.open(`/preview/${id}`, '_blank')}
             className="flex items-center space-x-2 bg-violet-500 text-white px-4 py-2 rounded font-semibold"
@@ -429,7 +429,7 @@ const EditPresentation = () => {
           </button>
           <button onClick={() => setShowDeletePopup(true)} className="flex items-center space-x-2 bg-red-500 text-white px-4 py-2 rounded font-semibold">
             <TrashIcon className="h-6 w-6 text-white" />
-            <span>Delete Presentation</span>
+            <span>Delete</span>
           </button>
         </div>
       </div>
@@ -516,7 +516,7 @@ const EditPresentation = () => {
       }
 
       {slides ? (
-        <div className="max-w-screen-xl bg-gray-100 rounded-lg mx-auto flex flex-col items-center justify-center">
+        <div className="max-w-screen-xl bg-gray-200 px-3 rounded-lg mx-auto flex flex-col items-center justify-center">
           <div className="flex w-full justify-start items-center h-16 max-sm:h-32 max-sm:flex-wrap">
             <button onClick={() => {setShowTextCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2 font-semibold">Text</button>
             <button onClick={() => setShowImageCreateModal(true)} className="bg-violet-500 text-white px-4 h-10 rounded ml-2 font-semibold">Image</button>
