@@ -1,7 +1,8 @@
-import React from 'react'
+import React from 'react';
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
+import SlidePreview from '../components/SlidePreview';
 
 const Preview = () => {
   const { id } = useParams();
@@ -51,7 +52,7 @@ const Preview = () => {
     } else if (event.key === 'ArrowLeft') {
       goToPreviousSlide();
     }
-  }, [currentSlideIndex, presentation]);
+  }, [goToNextSlide, goToPreviousSlide]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -63,24 +64,23 @@ const Preview = () => {
   }, [handleKeyDown]);
 
   return (
-    <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-900 text-white">
+    <div className="w-screen h-screen flex flex-col items-center justify-center bg-black text-white">
       {presentation ? (
         <div className="w-full h-full flex flex-col items-center justify-center">
           {/* Slide content */}
-          <div className="flex-grow flex items-center justify-center">
-            <div className="text-center">
-              {/* Render the current slide content here */}
-              {/* Replace this with the actual slide structure */}
-              <h1 className="text-4xl font-bold">{presentation.slides[currentSlideIndex]?.title}</h1>
-              {/* Other slide elements can go here */}
+          <div className="flex-grow flex items-center justify-center w-full h-full">
+            <div className="relative w-full h-full flex items-center justify-center">
+              <div className="relative" style={{ width: '100%', height: '100%', maxWidth: 'calc(100vh * (16/9))', maxHeight: '100vh' }}>
+                <SlidePreview slide={presentation.slides[currentSlideIndex]} currIndex={currentSlideIndex} />
+              </div>
             </div>
           </div>
 
           {/* Navigation controls */}
-          <div className="w-full flex justify-center px-4 py-2 space-x-2 font-semibold">
-            <button onClick={goToPreviousSlide} disabled={currentSlideIndex === 0}>&lt;</button>
-            <span>Slide {currentSlideIndex + 1} of {presentation.slides.length}</span>
-            <button onClick={goToNextSlide} disabled={currentSlideIndex === presentation.slides.length - 1}>&gt;</button>
+          <div className="absolute bottom-5 flex justify-center px-4 py-2 space-x-4 font-semibold">
+            <button onClick={goToPreviousSlide} disabled={currentSlideIndex === 0} className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">&lt;</button>
+            <span className='text-black'>Slide {currentSlideIndex + 1} of {presentation.slides.length}</span>
+            <button onClick={goToNextSlide} disabled={currentSlideIndex === presentation.slides.length - 1} className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">&gt;</button>
           </div>
         </div>
       ) : (
@@ -90,4 +90,4 @@ const Preview = () => {
   );
 }
 
-export default Preview
+export default Preview;
