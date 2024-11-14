@@ -77,7 +77,7 @@ const Preview = () => {
           </div>
 
           {/* Navigation controls */}
-          <div className="absolute bottom-5 flex justify-center px-4 py-2 space-x-4 font-semibold">
+          <div className="absolute bottom-5 flex justify-center items-center px-4 py-2 space-x-4 font-semibold">
             <button onClick={goToPreviousSlide} disabled={currentSlideIndex === 0} className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">&lt;</button>
             <span className='text-black'>Slide {currentSlideIndex + 1} of {presentation.slides.length}</span>
             <button onClick={goToNextSlide} disabled={currentSlideIndex === presentation.slides.length - 1} className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">&gt;</button>
