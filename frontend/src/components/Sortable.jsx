@@ -15,7 +15,7 @@ const Sortable = ({ id, index, slide, fontFam }) => {
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      className="m-4 flex-shrink-0 w-[20vw] min-w-56"
+      className="m-4 flex-shrink-0 w-[18vw] min-w-56"
     >
       <SlidePreview key={id} slide={slide} currIndex={index} fontFam={fontFam} />
       <p className="text-center">{index + 1}</p>
