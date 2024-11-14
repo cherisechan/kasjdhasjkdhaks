@@ -30,6 +30,7 @@ const EditPresentation = () => {
   const [showEditThumbnailModal, setShowEditThumbnailModal] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [token, setToken] = useState(null);
+  const [selectedElemId, setSelectedElemId] = useState(null);
 
   useEffect(() => {
     const getToken = localStorage.getItem("token");
@@ -175,8 +176,13 @@ const EditPresentation = () => {
       goToNextSlide();
     } else if (event.key === 'ArrowLeft') {
       goToPreviousSlide();
+    } else if (event.key === 'Delete' || event.key === 'Backspace') {
+      if (selectedElemId) {
+        deleteElem(selectedElemId);
+        setSelectedElemId(null);
+      }
     }
-  }, [currentSlideIndex, presentation]);
+  }, [currentSlideIndex, presentation, selectedElemId]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -323,6 +329,28 @@ const EditPresentation = () => {
       setSlides(presentation.slides);
     }
   }
+
+  const deleteElem = async (elemId) => {
+    const headers = { headers: { Authorization: `Bearer ${token}` } };
+    const response = await axios.get("http://localhost:5005/store", headers);
+    const store = response.data.store;
+  
+    store.presentations.forEach((p) => {
+      if (p.id === id) {
+        const elements = p.slides[currentSlideIndex].elements;
+        p.slides[currentSlideIndex].elements = elements.filter(e => e.id !== elemId);
+      }
+    });
+  
+    await axios.put("http://localhost:5005/store", { store }, headers);
+  
+    const updatedRes = await axios.get("http://localhost:5005/store", headers);
+    const presentation = updatedRes.data.store.presentations.find((pres) => pres.id === id);
+    if (presentation) {
+      setPresentation(presentation);
+      setSlides(presentation.slides);
+    }
+  };
 
   // add text element
   const [showTextCreateModal, setShowTextCreateModal] = useState(false);
@@ -527,7 +555,7 @@ const EditPresentation = () => {
           </div>
           {/* Slide content */}
           <div className="w-full max-w-4xl">
-            <Slide slide={slides[currentSlideIndex]} currIndex={currentSlideIndex} setUpdateObj={setUpdateObj} setUpdateElemId={setElemId} fontFam={presentation.fontFamily}/>
+            <Slide slide={slides[currentSlideIndex]} currIndex={currentSlideIndex} setUpdateObj={setUpdateObj} setUpdateElemId={setElemId} fontFam={presentation.fontFamily} deleteElem={deleteElem} setSelectedElemId={setSelectedElemId}/>
           </div>
 
           {/* Navigation controls */}

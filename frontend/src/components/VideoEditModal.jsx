@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const VideoEditModal = ({ element, setVideoElem, setVideoEditSubmit, setShowVideoEditModal }) => {
+const VideoEditModal = ({ element, setVideoElem, setVideoEditSubmit, setShowVideoEditModal, deleteElem, elemId }) => {
   const [width, setWidth] = useState(element.width);
   const [height, setHeight] = useState(element.height);
   const [videoUrl, setVideoUrl] = useState(element.src);
@@ -71,6 +71,7 @@ const VideoEditModal = ({ element, setVideoElem, setVideoEditSubmit, setShowVide
         <div className="mt-4 flex space-x-2">
           <button className="bg-violet-500 text-white px-4 py-2 rounded" onClick={onSubmit}>Submit</button>
           <button onClick={() => setShowVideoEditModal(false)} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+          <button onClick={() => { deleteElem(elemId); setShowVideoEditModal(false); }} className="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
         </div>
         {error && <p className="text-red-500 text-center mt-2">{error}</p>}
       </div>
