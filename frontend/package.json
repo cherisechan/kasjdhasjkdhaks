@@ -16,6 +16,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@heroicons/react": "^2.1.5",
     "axios": "^1.7.7",
+    "framer-motion": "^11.11.17",
     "prismjs": "^1.29.0",
     "program-language-detector": "^0.0.12",
     "react": "^18.3.1",

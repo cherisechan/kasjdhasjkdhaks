@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import SlidePreview from '../components/SlidePreview';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Preview = () => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const Preview = () => {
   const { sindex } = useParams();
   const [presentation, setPresentation] = useState(null);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [direction, setDirection] = useState(0);
 
   useEffect(() => {
     const fetchPresentation = async () => {
@@ -78,6 +80,31 @@ const Preview = () => {
     };
   }, [handleKeyDown]);
 
+  // Define variants for the motion component
+  const variants = {
+    enter: (direction) => ({
+      x: direction > 0 ? 300 : -300, // Start from right if going forward, left if backward
+      opacity: 0,
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+    },
+    exit: (direction) => ({
+      x: direction < 0 ? 300 : -300, // Exit to left if going forward, right if backward
+      opacity: 0,
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+    }),
+  };
+
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center bg-black text-white">
       {presentation ? (
@@ -85,8 +112,24 @@ const Preview = () => {
           {/* Slide content */}
           <div className="flex-grow flex items-center justify-center w-full h-full">
             <div className="relative w-full h-full flex items-center justify-center">
-              <div className="relative" style={{ width: '100%', height: '100%', maxWidth: 'calc(100vh * (16/9))', maxHeight: '100vh' }}>
-                <SlidePreview slide={presentation.slides[currentSlideIndex]} currIndex={currentSlideIndex} fontFam={presentation.fontFamily}/>
+              <div className="relative w-full h-full max-w-screen max-h-screen overflow-hidden">
+                <AnimatePresence custom={direction} initial={false}>
+                  <motion.div
+                    key={currentSlideIndex}
+                    custom={direction}
+                    variants={variants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{
+                      x: { type: 'spring', stiffness: 300, damping: 50 },
+                      opacity: { duration: 0.5 },
+                    }}
+                    className="w-full h-full"
+                  >
+                    <SlidePreview slide={presentation.slides[currentSlideIndex]} currIndex={currentSlideIndex} />
+                  </motion.div>
+                </AnimatePresence>
               </div>
             </div>
           </div>
