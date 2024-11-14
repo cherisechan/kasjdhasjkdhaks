@@ -163,7 +163,7 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId, fontFam, setSe
                     }
                     return null;
                 })}
-                <p className="absolute text-center text-gray-600 bottom-2 left-3 text-[1em] z-[900]">{currIndex + 1}</p>
+                <p className="absolute text-center text-gray-600 bottom-2 left-3 text-[1em] z-[500]">{currIndex + 1}</p>
             </SlideBase>
         </>
     );

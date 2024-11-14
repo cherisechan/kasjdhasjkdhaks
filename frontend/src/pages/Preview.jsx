@@ -86,7 +86,7 @@ const Preview = () => {
           <div className="flex-grow flex items-center justify-center w-full h-full">
             <div className="relative w-full h-full flex items-center justify-center">
               <div className="relative" style={{ width: '100%', height: '100%', maxWidth: 'calc(100vh * (16/9))', maxHeight: '100vh' }}>
-                <SlidePreview slide={presentation.slides[currentSlideIndex]} currIndex={currentSlideIndex} />
+                <SlidePreview slide={presentation.slides[currentSlideIndex]} currIndex={currentSlideIndex} fontFam={presentation.fontFamily}/>
               </div>
             </div>
           </div>
