@@ -7,7 +7,7 @@ import 'prismjs/themes/prism-tomorrow.css';
 import { Rnd } from "react-rnd";
 
 
-const CodeElement = ({ $codeObj, code, id, openCodeEdit, setUpdateObj, setUpdateElemId, parentRef, readOnly = false }) => {
+const CodeElement = ({ $codeObj, code, id, openCodeEdit, setUpdateObj, setUpdateElemId, parentRef, readOnly = false, setSelectedElemId }) => {
     const rndRef = useRef(null);
     const [parentSize, setParentSize] = useState({ width: 0, height: 0 });
 
@@ -47,7 +47,7 @@ const CodeElement = ({ $codeObj, code, id, openCodeEdit, setUpdateObj, setUpdate
 
     const handleClick = (e) => {
         e.stopPropagation();
-        console.log("handleClick fired"); 
+        setSelectedElemId(id);
         setShowBoxes(true);
 
         clickCountRef.current += 1;

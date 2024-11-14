@@ -12,7 +12,7 @@ const VideoElementStyled = styled.div`
   cursor: pointer;
 `;
 
-const VideoElement = ({ $videoObj, id, openVideoEdit, setUpdateObj, setUpdateElemId, parentRef, readOnly = false }) => {
+const VideoElement = ({ $videoObj, id, openVideoEdit, setUpdateObj, setUpdateElemId, parentRef, readOnly = false, setSelectedElemId }) => {
   const rndRef = useRef(null);
   const [parentSize, setParentSize] = useState({ width: 0, height: 0 });
 
@@ -52,6 +52,7 @@ const VideoElement = ({ $videoObj, id, openVideoEdit, setUpdateObj, setUpdateEle
 
   const handleClick = (e) => {
     e.stopPropagation();
+    setSelectedElemId(id);
     setShowBoxes(true);
 
     clickCountRef.current += 1;

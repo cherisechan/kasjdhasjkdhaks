@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const ImageEditModal = ({ element, setImageElem, setImageEditSubmit, setShowImageEditModal }) => {
+const ImageEditModal = ({ element, setImageElem, setImageEditSubmit, setShowImageEditModal, deleteElem, elemId }) => {
   const [width, setWidth] = useState(element.width);
   const [height, setHeight] = useState(element.height);
   const [imageUrl, setImageUrl] = useState(element.src);
@@ -128,6 +128,7 @@ const ImageEditModal = ({ element, setImageElem, setImageEditSubmit, setShowImag
         <div className="mt-4 flex space-x-2">
           <button className="bg-violet-500 text-white px-4 py-2 rounded" onClick={onSubmit}>Submit</button>
           <button onClick={() => setShowImageEditModal(false)} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+          <button onClick={() => { deleteElem(elemId); setShowImageEditModal(false); }} className="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
         </div>
         {error && <p className="text-red-500 text-center mt-2">{error}</p>}
       </div>

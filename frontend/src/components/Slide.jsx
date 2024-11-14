@@ -8,7 +8,7 @@ import VideoEditModal from "./VideoEditModal";
 import { useState, useEffect, useRef } from "react";
 import CodeElement from "./CodeElement";
 import CodeEditModal from "./CodeEditModal";
-const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId, fontFam }) => {
+const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId, fontFam, setSelectedElemId, deleteElem }) => {
     const slideRef = useRef(null);
     let elements = slide.elements;
     elements = elements.map((e, index) => ({
@@ -103,6 +103,8 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId, fontFam }) => 
                     setTextElem={setTextElem}
                     setTextEditSubmit={setTextEditSubmit}
                     setShowTextEditModal={setShowTextEditModal}
+                    deleteElem={deleteElem}
+                    elemId={elemId}
                 />
             )}
 
@@ -112,6 +114,8 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId, fontFam }) => 
                     setCodeElem={setCodeElem}
                     setCodeEditSubmit={setCodeEditSubmit}
                     setShowCodeEditModal={setShowCodeEditModal}
+                    deleteElem={deleteElem}
+                    elemId={elemId}
                 />
             )}
 
@@ -121,6 +125,8 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId, fontFam }) => 
                     setImageElem={setImageElem}
                     setImageEditSubmit={setImageEditSubmit}
                     setShowImageEditModal={setShowImageEditModal}
+                    deleteElem={deleteElem}
+                    elemId={elemId}
                 />
             )}
 
@@ -130,27 +136,29 @@ const Slide = ({ slide, currIndex, setUpdateObj, setUpdateElemId, fontFam }) => 
                     setVideoElem={setVideoElem}
                     setVideoEditSubmit={setVideoEditSubmit}
                     setShowVideoEditModal={setShowVideoEditModal}
+                    deleteElem={deleteElem}
+                    elemId={elemId}
                 />
             )}
 
             {/* Slide Content */}
-            <SlideBase ref={slideRef} $bgColour1={slide.background.colour1} $bgColour2={slide.background.colour2} $gradient={slide.background.gradient} $bgImg={slide.background.img} $fontFam={fontFam} id={slide.id}>
+            <SlideBase onClick={() => setSelectedElemId(null)} ref={slideRef} $bgColour1={slide.background.colour1} $bgColour2={slide.background.colour2} $gradient={slide.background.gradient} $bgImg={slide.background.img} $fontFam={fontFam} id={slide.id}>
                 {elements.map((t, index) => {
                     if (t.type === "text") {
                         return (
-                            <TextElement id={t.id} $textObj={t} text={t.text} openTextEdit={openTextEdit} key={t.id} setUpdateObj={setUpdateObj} setUpdateElemId={setUpdateElemId} parentRef={slideRef}/>
+                            <TextElement id={t.id} $textObj={t} text={t.text} openTextEdit={openTextEdit} key={t.id} setUpdateObj={setUpdateObj} setUpdateElemId={setUpdateElemId} parentRef={slideRef} setSelectedElemId={setSelectedElemId}/>
                         );
                     } else if (t.type === "image") {
                         return (
-                            <ImageElement id={t.id} $imageObj={t} openImageEdit={openImageEdit} key={t.id} setUpdateObj={setUpdateObj} setUpdateElemId={setUpdateElemId} parentRef={slideRef}/>
+                            <ImageElement id={t.id} $imageObj={t} openImageEdit={openImageEdit} key={t.id} setUpdateObj={setUpdateObj} setUpdateElemId={setUpdateElemId} parentRef={slideRef} setSelectedElemId={setSelectedElemId}/>
                         );
                     } else if (t.type === "video") {
                         return (
-                            <VideoElement id={t.id} $videoObj={t} openVideoEdit={openVideoEdit} key={t.id} setUpdateObj={setUpdateObj} setUpdateElemId={setUpdateElemId} parentRef={slideRef}/>
+                            <VideoElement id={t.id} $videoObj={t} openVideoEdit={openVideoEdit} key={t.id} setUpdateObj={setUpdateObj} setUpdateElemId={setUpdateElemId} parentRef={slideRef} setSelectedElemId={setSelectedElemId}/>
                         );
                     } else if (t.type === "code") {
                         return (
-                            <CodeElement id={slide.elements[index].id} className="text-element hover:cursor-pointer" $codeObj={t} code={t.code} openCodeEdit={openCodeEdit} key={index} setUpdateObj={setUpdateObj} setUpdateElemId={setUpdateElemId} parentRef={slideRef}/>
+                            <CodeElement id={slide.elements[index].id} className="text-element hover:cursor-pointer" $codeObj={t} code={t.code} openCodeEdit={openCodeEdit} key={index} setUpdateObj={setUpdateObj} setUpdateElemId={setUpdateElemId} parentRef={slideRef} setSelectedElemId={setSelectedElemId}/>
                         )
                     }
                     return null;

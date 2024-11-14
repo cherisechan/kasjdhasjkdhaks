@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const CodeEditModal = ({ element, setCodeElem, setCodeEditSubmit, setShowCodeEditModal }) => {
+const CodeEditModal = ({ element, setCodeElem, setCodeEditSubmit, setShowCodeEditModal, deleteElem, elemId }) => {
   const [code, setCode] = useState(element.code);
   const [width, setWidth] = useState(element.width);
   const [height, setHeight] = useState(element.height);
@@ -77,6 +77,7 @@ const CodeEditModal = ({ element, setCodeElem, setCodeEditSubmit, setShowCodeEdi
           <div className="mt-4 flex space-x-2">
             <button className="bg-violet-500 text-white px-4 py-2 rounded" onClick={onSubmit}>Submit</button>
             <button onClick={() => setShowCodeEditModal(false)} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+            <button onClick={() => { deleteElem(elemId); setShowCodeEditModal(false); }} className="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
           </div>
           <p className="text-red-500 flex self-center">{error}</p>
         </div>

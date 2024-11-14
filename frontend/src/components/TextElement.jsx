@@ -11,6 +11,7 @@ const TextElement = ({
   setUpdateElemId,
   parentRef, // Receive the parentRef here
   readOnly = false,
+  setSelectedElemId
 }) => {
   const rndRef = useRef(null);
   const [parentSize, setParentSize] = useState({ width: 0, height: 0 });
@@ -52,6 +53,7 @@ const TextElement = ({
   // Handle clicks for editing
   const handleClick = (e) => {
     e.stopPropagation();
+    setSelectedElemId(id);
     setShowBoxes(true);
 
     clickCountRef.current += 1;
