@@ -156,7 +156,7 @@ const ImageElement = ({
       lockAspectRatio={false}
       enableResizing={!readOnly}
       disableDragging={readOnly}
-      style={{ pointerEvents: readOnly ? 'none' : 'auto' }}
+      className={readOnly ? "pointer-events-none" : "pointer-events-auto"}
     >
       <ImageElementStyled
         id={id}
@@ -168,7 +168,7 @@ const ImageElement = ({
         <img
           src={$imageObj.src}
           alt={$imageObj.altText}
-          style={{ width: '100%', height: '100%', pointerEvents: 'none' }}
+          className="w-[100%] h-[100%] pointer-events-none"
         />
         {showBoxes && (
           <div ref={boxesContainerRef}>

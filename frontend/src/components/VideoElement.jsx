@@ -162,13 +162,13 @@ const VideoElement = ({ $videoObj, id, openVideoEdit, setUpdateObj, setUpdateEle
       lockAspectRatio={false}
       enableResizing={!readOnly}
       disableDragging={readOnly}
-      style={{ pointerEvents: readOnly ? 'none' : 'auto' }}
+      className={readOnly ? "pointer-events-none" : "pointer-events-auto"}
     >
       <VideoElementStyled id={id} $videoObj={$videoObj} onClick={handleClick} readOnly={readOnly}>
         <iframe
           src={constructIframeSrc()}
           title="Video"
-          style={{ width: '100%', height: '100%', pointerEvents: 'none' }}
+          className="w-[100%] h-[100%] pointer-events-none"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
         ></iframe>

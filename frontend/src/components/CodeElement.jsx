@@ -159,7 +159,7 @@ const CodeElement = ({ $codeObj, code, id, openCodeEdit, setUpdateObj, setUpdate
       lockAspectRatio={false}
       enableResizing={!readOnly}
       disableDragging={readOnly}
-      style={{ pointerEvents: readOnly ? 'none' : 'auto' }}
+      className={readOnly ? "pointer-events-none" : "pointer-events-auto"}
     >
       <CodeElementStyled id={id} $codeObj={$codeObj} className="hover:cursor-pointer" onClick={handleClick} readOnly={readOnly}>
         <div className="h-full w-full overflow-hidden pointer-events-none">
