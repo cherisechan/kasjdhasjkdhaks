@@ -171,10 +171,14 @@ const EditPresentation = () => {
   
       // Save the updated store back to the server
       await axios.put("http://localhost:5005/store", { store }, headers);
+  
+      // Update local state
+      setPresentation(updatedPresentation);
+      setSlides(updatedPresentation.slides);
     } catch (error) {
       console.error("Error saving presentation:", error);
     }
-  };
+  };  
   
 
   // Handle creating a new slide
