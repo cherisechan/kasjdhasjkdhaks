@@ -3,7 +3,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import SlidePreview from "./SlidePreview";
 
 const Sortable = ({ id, index, slide, fontFam }) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: id });
+  const { attributes, listeners, setNodeRef, transform } = useSortable({ id: id });
 
   const style = {
     transform: CSS.Transform.toString(transform)
