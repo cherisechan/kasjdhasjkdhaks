@@ -1,5 +1,5 @@
 import CodeElementStyled from "./CodeElementStyled";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useLayoutEffect, useEffect, useRef, useState } from "react";
 import { detect } from "program-language-detector"
 import Prism from "prismjs";
 import "prismjs/components/prism-c.min.js"; 
@@ -37,7 +37,7 @@ const CodeElement = ({ $codeObj, code, id, openCodeEdit, setUpdateObj, setUpdate
     };
 
     // Update parent size on mount and when window resizes
-    useEffect(() => {
+    useLayoutEffect(() => {
         updateParentSize();
         window.addEventListener("resize", updateParentSize);
         return () => {
@@ -108,7 +108,7 @@ const CodeElement = ({ $codeObj, code, id, openCodeEdit, setUpdateObj, setUpdate
         y: (position.y / 100) * parentSize.height || 0,
     };
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const handleOutsideClick = (event) => {
             if (boxesContainerRef.current && !boxesContainerRef.current.contains(event.target)) {
                 setShowBoxes(false);
@@ -116,6 +116,9 @@ const CodeElement = ({ $codeObj, code, id, openCodeEdit, setUpdateObj, setUpdate
         };
 
         document.addEventListener("click", handleOutsideClick);
+        return () => {
+            document.removeEventListener("click", handleOutsideClick);
+        };
     }, []);
 
     const [language, setLanguage] = useState("");
