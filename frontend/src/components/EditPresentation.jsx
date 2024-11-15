@@ -118,8 +118,8 @@ const EditPresentation = () => {
   const handleCreateSlide = async () => {
     if (!presentation) return;
     const headers = {
-        headers: {
-          'Authorization': `Bearer ${token}`,
+      headers: {
+        'Authorization': `Bearer ${token}`,
       }
     };
     const response = await axios.get(`http://localhost:5005/store`, headers);
@@ -590,7 +590,7 @@ const EditPresentation = () => {
                 <button onClick={goToNextSlide} disabled={currentSlideIndex === presentation.slides.length - 1} className={`w-10 h-10 rounded ${currentSlideIndex === presentation.slides.length - 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>&gt;</button>
               </div>
               <div className="absolute right-2 flex justify-center items-center">
-              <button onClick={() => setRearrange(true)} className="bg-violet-500 text-white w-fit h-10 rounded ml-2 px-2">Rearrange</button>
+                <button onClick={() => setRearrange(true)} className="bg-violet-500 text-white w-fit h-10 rounded ml-2 px-2">Rearrange</button>
                 <button
                   onClick={() => {
                     if (presentation && presentation.slides.length === 1) {

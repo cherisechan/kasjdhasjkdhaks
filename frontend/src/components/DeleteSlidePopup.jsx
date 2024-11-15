@@ -1,5 +1,3 @@
-import React from 'react';
-
 const DeleteSlidePopup = ({ onCancel, onConfirm }) => {
   return (
     <div className="fixed z-[999] inset-0 bg-black bg-opacity-30 flex items-center justify-center">
