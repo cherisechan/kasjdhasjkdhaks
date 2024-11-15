@@ -23,4 +23,4 @@ section,completed
 2.4.6,YES
 2.4.7,NO 
 
-FE_DEPLOYED_URL: <Enter your deployed url here>
+FE_DEPLOYED_URL: https://presto-deploy-ub8a-z5431362.vercel.app/
