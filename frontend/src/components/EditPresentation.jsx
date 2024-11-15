@@ -6,7 +6,7 @@ import EditTitleModal from './EditTitleModal';
 import EditThumbnailModal from './EditThumbnailModal';
 import DeleteSlidePopup from './DeleteSlidePopup';
 import CannotDeleteSlidePopup from './CannotDeleteSlidePopup';
-import { PencilIcon, PhotoIcon, TrashIcon, EyeIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, PhotoIcon, TrashIcon, EyeIcon, ClockIcon } from "@heroicons/react/24/outline";
 import Slide from "./Slide";
 import TextCreateModal from "./TextCreateModal";
 import ImageCreateModal from "./ImageCreateModal";
@@ -15,6 +15,7 @@ import BackgroundModal from "./BackgroundModal";
 import uniqid from "uniqid";
 import CodeCreateModal from "./CodeCreateModal";
 import FontSelector from "./FontSelector";
+import RevisionHistoryModal from './RevisionHistoryModal';
 import SlideRearrange from "./SlideRearrange";
 
 const EditPresentation = () => {
@@ -33,6 +34,8 @@ const EditPresentation = () => {
   const [newTitle, setNewTitle] = useState("");
   const [token, setToken] = useState(null);
   const [selectedElemId, setSelectedElemId] = useState(null);
+  const [showRevisionHistory, setShowRevisionHistory] = useState(false);
+  const [revisions, setRevisions] = useState([]);
   const [rearrange, setRearrange] = useState(false);
 
   useEffect(() => {
@@ -87,32 +90,96 @@ const EditPresentation = () => {
     fetchPresentation();
   }, [id]);
 
+  // New function to fetch revision history
+  const fetchRevisionHistory = useCallback(async () => {
+    if (!presentation) return;
+  
+    try {
+      const headers = { headers: { Authorization: `Bearer ${token}` } };
+      const response = await axios.get(`http://localhost:5005/store`, headers);
+      const pres = response.data.store.presentations.find(p => p.id === id);
+      if (pres && pres.revisions) {
+        const validRevisions = pres.revisions.filter(rev => rev.state && rev.state !== "undefined");
+        setRevisions(validRevisions);
+      }
+    } catch (error) {
+      console.error("Error fetching revision history:", error);
+    }
+  }, [id, token, presentation]);
+
+  // New function to save a revision
+  const saveRevision = useCallback(async (presentationToSave) => {
+    if (!presentationToSave) return;
+  
+    // Create a deep copy and exclude 'revisions'
+    const { revisions, ...presentationWithoutRevisions } = presentationToSave;
+  
+    const newRevision = {
+      timestamp: new Date().toISOString(),
+      state: JSON.stringify(presentationWithoutRevisions)
+    };
+  
+    try {
+      const headers = { headers: { Authorization: `Bearer ${token}` } };
+      const response = await axios.get(`http://localhost:5005/store`, headers);
+      const store = response.data.store;
+      const presIndex = store.presentations.findIndex((p) => p.id === id);
+  
+      if (presIndex !== -1) {
+        if (!store.presentations[presIndex].revisions) {
+          store.presentations[presIndex].revisions = [];
+        }
+        store.presentations[presIndex].revisions.push(newRevision);
+  
+        // Limit to last 10 revisions
+        if (store.presentations[presIndex].revisions.length > 10) {
+          store.presentations[presIndex].revisions.shift();
+        }
+  
+        await axios.put("http://localhost:5005/store", { store }, headers);
+        fetchRevisionHistory();
+      }
+    } catch (error) {
+      console.error("Error saving revision:", error);
+    }
+  }, [id, token, fetchRevisionHistory]);
+  
+  
+
   // Function to save the updated presentation to the server
   const savePresentation = async (updatedPresentation) => {
     const headers = { headers: { Authorization: `Bearer ${token}` } };
     try {
+      // Fetch the current store
       const response = await axios.get("http://localhost:5005/store", headers);
       const store = response.data.store;
-
-      const updatedPresentations = store.presentations.map(pres => {
-        if (pres.id === id) return updatedPresentation;
-        return pres;
-      });
-
-      store.presentations = updatedPresentations;
+  
+      // Find the current presentation
+      const currentPresIndex = store.presentations.findIndex(pres => pres.id === updatedPresentation.id);
+      if (currentPresIndex === -1) {
+        console.error("Presentation not found in store");
+        return;
+      }
+  
+      const currentPresentation = store.presentations[currentPresIndex];
+  
+      // Ensure that updatedPresentation.revisions is up-to-date
+      updatedPresentation.revisions = currentPresentation.revisions;
+  
+      // Update the presentation in the store
+      store.presentations[currentPresIndex] = updatedPresentation;
+  
+      // Save the updated store back to the server
       await axios.put("http://localhost:5005/store", { store }, headers);
+  
+      // Update local state
+      setPresentation(updatedPresentation);
+      setSlides(updatedPresentation.slides);
     } catch (error) {
       console.error("Error saving presentation:", error);
     }
-
-    // set the updated presentation
-    const res = await axios.get("http://localhost:5005/store", headers);
-    const updatedPres = res.data.store.presentations.find(pres => pres.id === id);
-    if (updatedPres) {
-      setPresentation(updatedPres);
-      setSlides(updatedPres.slides);
-    }   
-  };
+  };  
+  
 
   // Handle creating a new slide
   const handleCreateSlide = async () => {
@@ -142,6 +209,7 @@ const EditPresentation = () => {
     setPresentation(updatedPresentation);
 
     await savePresentation(updatedPresentation);
+    await saveRevision(updatedPresentation);
   };
 
   // Handle deleting the current slide
@@ -168,6 +236,7 @@ const EditPresentation = () => {
     navigate(`/design/${id}/${currentSlideIndex + 1}`);
     // Save the updated presentation to the server
     await savePresentation(updatedPresentation);
+    await saveRevision(updatedPresentation);
   };
 
   // Handle navigation between slides
@@ -246,6 +315,9 @@ const EditPresentation = () => {
 
       setPresentation(prev => ({ ...prev, name: newTitle }));
       setShowEditTitleModal(false);
+
+      await savePresentation(updatedPresentation);
+      await saveRevision(updatedPresentation);
     } catch (error) {
       console.error("Error updating title:", error);
     }
@@ -275,6 +347,8 @@ const EditPresentation = () => {
         await axios.put("http://localhost:5005/store", { store }, headers);
         setPresentation(prev => ({ ...prev, thumbnail: thumbnailData }));
         setShowEditThumbnailModal(false);
+        await savePresentation(updatedPresentation);
+        await saveRevision(updatedPresentation);
       } catch (error) {
         console.error("Error updating thumbnail:", error);
       }
@@ -299,10 +373,39 @@ const EditPresentation = () => {
       await axios.put("http://localhost:5005/store", { store }, headers);
       setPresentation(prev => ({ ...prev, thumbnail: null }));
       setShowEditThumbnailModal(false);
+
+      await savePresentation(updatedPresentation);
+      await saveRevision(updatedPresentation);
     } catch (error) {
       console.error("Error removing thumbnail:", error);
     }
   };
+
+  // New function to restore a revision
+  const handleRestoreRevision = async (revision) => {
+    try {
+      const restoredState = JSON.parse(revision.state);
+  
+      // Preserve the current 'revisions' array
+      restoredState.revisions = presentation.revisions;
+  
+      setPresentation(restoredState);
+      setSlides(restoredState.slides);
+  
+      // Save the restored presentation
+      await savePresentation(restoredState);
+  
+      setShowRevisionHistory(false);
+    } catch (error) {
+      console.error("Error restoring revision:", error);
+    }
+  };
+  
+
+  // Use effect to fetch revision history
+  useEffect(() => {
+    fetchRevisionHistory();
+  }, [fetchRevisionHistory]);
 
   // adds element to slide
   const addElem = async (elemObj) => {
@@ -321,29 +424,35 @@ const EditPresentation = () => {
     if (presentation) {
       setPresentation(presentation);
       setSlides(presentation.slides);
+
+      await savePresentation(updatedPresentation);
+      await saveRevision(updatedPresentation);
     }
   };
 
   const editElem = async (elemObj, elemId) => {
-    const headers = { headers: { Authorization: `Bearer ${token}` } };
-    const response = await axios.get("http://localhost:5005/store", headers);
-    const store = response.data.store;
-    store.presentations.map(p => {
-      if (p.id === id) {
-        let updateElem = p.slides[currentSlideIndex].elements.find(e => e.id === elemId);
-        if (updateElem) {
-          Object.assign(updateElem, elemObj);
-        }
-      }
-    })
-    await axios.put("http://localhost:5005/store", {store}, headers);
-    const updatedRes = await axios.get("http://localhost:5005/store", headers);
-    const presentation = updatedRes.data.store.presentations.find(pres => pres.id === id);
-    if (presentation) {
-      setPresentation(presentation);
-      setSlides(presentation.slides);
+    if (!presentation) return;
+  
+    // Create a deep copy of the current presentation
+    const updatedPresentation = JSON.parse(JSON.stringify(presentation));
+  
+    // Find and update the element in the local presentation
+    const elements = updatedPresentation.slides[currentSlideIndex].elements;
+    const index = elements.findIndex((e) => e.id === elemId);
+    if (index !== -1) {
+      elements[index] = { ...elements[index], ...elemObj };
     }
-  }
+  
+    // Update the local state before saving
+    setPresentation(updatedPresentation);
+    setSlides(updatedPresentation.slides);
+  
+    // Save the updated presentation to the server
+    await savePresentation(updatedPresentation);
+  
+    // Save a revision
+    await saveRevision(updatedPresentation);
+  };
 
   const deleteElem = async (elemId) => {
     const headers = { headers: { Authorization: `Bearer ${token}` } };
@@ -364,6 +473,8 @@ const EditPresentation = () => {
     if (presentation) {
       setPresentation(presentation);
       setSlides(presentation.slides);
+      await savePresentation(updatedPresentation);
+      await saveRevision(updatedPresentation);
     }
   };
 
@@ -464,6 +575,13 @@ const EditPresentation = () => {
 
         <div className="flex justify-end space-x-2">
           <button 
+            onClick={() => setShowRevisionHistory(true)}
+            className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded font-semibold"
+          >
+            <ClockIcon className="h-6 w-6 text-white" />
+            <span>Revision History</span>
+          </button>
+          <button 
             onClick={() => window.open(`/preview/${id}`, '_blank')}
             className="flex items-center space-x-2 bg-violet-500 text-white px-4 py-2 rounded font-semibold"
           >
@@ -558,6 +676,13 @@ const EditPresentation = () => {
         />
       }
 
+      {showRevisionHistory && (
+        <RevisionHistoryModal
+          revisions={revisions}
+          onClose={() => setShowRevisionHistory(false)}
+          onRestore={handleRestoreRevision}
+        />
+      )}
       {
         rearrange && <SlideRearrange 
           presentation={presentation}
