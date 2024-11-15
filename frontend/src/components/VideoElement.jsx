@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Rnd } from "react-rnd";
 
@@ -42,7 +42,7 @@ const VideoElement = ({ $videoObj, id, openVideoEdit, setUpdateObj, setUpdateEle
   };
 
   // Update parent size on mount and when window resizes
-  useEffect(() => {
+  useLayoutEffect(() => {
     updateParentSize();
     window.addEventListener("resize", updateParentSize);
     return () => {
@@ -111,7 +111,7 @@ const VideoElement = ({ $videoObj, id, openVideoEdit, setUpdateObj, setUpdateEle
     y: (position.y / 100) * parentSize.height || 0,
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const handleOutsideClick = (event) => {
       if (
         boxesContainerRef.current &&
@@ -127,6 +127,10 @@ const VideoElement = ({ $videoObj, id, openVideoEdit, setUpdateObj, setUpdateEle
     };
   }, []);
 
+  if (parentSize.width === 0 || parentSize.height === 0) {
+    return null;
+  }
+
   // Function to construct the iframe URL with proper parameters
   const constructIframeSrc = () => {
     try {
@@ -137,7 +141,7 @@ const VideoElement = ({ $videoObj, id, openVideoEdit, setUpdateObj, setUpdateEle
         url.searchParams.delete('autoplay');
       }
       return url.toString();
-    } catch (e) {
+    } catch {
       return $videoObj.src;
     }
   };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import uniqid from "uniqid";
 const CodeCreateModal = ({ setCodeElem, setCodeSubmit, setShowCodeCreateModal }) => {
   const [code, setCode] = useState("");
@@ -73,8 +73,8 @@ const CodeCreateModal = ({ setCodeElem, setCodeSubmit, setShowCodeCreateModal })
             <input type="text" name="Font size" className="bg-gray-50 rounded-sm border border-gray-200 px-2 py-1 w-full" placeholder="Enter font size (em)" onChange={e => {setFontSize(e.target.value)}} />
           </div>
           <div className="mt-4 flex space-x-2">
-              <button className="bg-violet-500 text-white px-4 py-2 rounded" onClick={onSubmit}>Submit</button>
-              <button onClick={() => setShowCodeCreateModal(false)} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+            <button className="bg-violet-500 text-white px-4 py-2 rounded" onClick={onSubmit}>Submit</button>
+            <button onClick={() => setShowCodeCreateModal(false)} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
           </div>
           <p className="text-red-500 flex self-center">{error}</p>
         </div>

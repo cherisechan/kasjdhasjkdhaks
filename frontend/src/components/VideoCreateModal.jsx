@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import uniqid from "uniqid";
 
 const VideoCreateModal = ({ setVideoElem, setVideoSubmit, setShowVideoCreateModal }) => {

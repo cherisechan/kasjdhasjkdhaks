@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Rnd } from "react-rnd";
 
@@ -45,7 +45,7 @@ const ImageElement = ({
   };
 
   // Update parent size on mount and when window resizes
-  useEffect(() => {
+  useLayoutEffect(() => {
     updateParentSize();
     window.addEventListener("resize", updateParentSize);
     return () => {
@@ -123,7 +123,7 @@ const ImageElement = ({
     height: `${size.height}%`,
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const handleOutsideClick = (event) => {
       if (
         boxesContainerRef.current &&
@@ -138,6 +138,10 @@ const ImageElement = ({
       document.removeEventListener("click", handleOutsideClick);
     };
   }, []);
+
+  if (parentSize.width === 0 || parentSize.height === 0) {
+    return null;
+  }
 
   return (
     <Rnd

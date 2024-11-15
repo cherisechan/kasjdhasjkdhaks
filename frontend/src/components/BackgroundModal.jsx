@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 const BackgroundModal = ({ setShowBackgroundModal, currSlideIndex, setReload }) => {
@@ -18,8 +18,8 @@ const BackgroundModal = ({ setShowBackgroundModal, currSlideIndex, setReload }) 
   const handleSubmit = async() => {
     const token = localStorage.getItem("token");
     const headers = {
-        headers: {
-          'Authorization': `Bearer ${token}`,
+      headers: {
+        'Authorization': `Bearer ${token}`,
       }
     };
     const response = await axios.get(`http://localhost:5005/store`, headers);

@@ -24,7 +24,7 @@ const SlidePreview = ({ slide, currIndex, fontFam }) => {
         $fontFam={fontFam}
         id={slide.id}
       >
-        {elements.map((t, index) => {
+        {elements.map((t) => {
           if (t.type === "text") {
             return (
               <TextElement

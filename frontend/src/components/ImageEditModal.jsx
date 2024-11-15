@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const ImageEditModal = ({ element, setImageElem, setImageEditSubmit, setShowImageEditModal, deleteElem, elemId }) => {
-  const [width, setWidth] = useState(element.width);
-  const [height, setHeight] = useState(element.height);
+  const width = element.width;
+  const height = element.height;
   const [imageUrl, setImageUrl] = useState(element.src);
   const [imageFile, setImageFile] = useState(null);
   const [altText, setAltText] = useState(element.altText);

@@ -1,0 +1,7 @@
+- consistent use of colour, with stark colour contrast
+- buttons colours are in respect to their functionality (e.g. red is usually indication of removing item)
+- aria labels
+- alt text for images
+- keyboard press events in conjucntion with navigation control buttons
+- keyboard navigation in general using tab key
+- navbar functionality slightly differs depending on the page

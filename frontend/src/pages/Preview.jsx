@@ -1,4 +1,3 @@
-import React from 'react';
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
@@ -12,7 +11,7 @@ const Preview = () => {
   const { sindex } = useParams();
   const [presentation, setPresentation] = useState(null);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
+  const direction = useState(0);
 
   useEffect(() => {
     const fetchPresentation = async () => {

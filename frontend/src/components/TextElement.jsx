@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { Rnd } from "react-rnd";
 import TextElementStyled from "./TextElementStyled";
 
@@ -9,9 +9,9 @@ const TextElement = ({
   openTextEdit,
   setUpdateObj,
   setUpdateElemId,
-  parentRef, // Receive the parentRef here
+  parentRef,
   readOnly = false,
-  setSelectedElemId
+  setSelectedElemId,
 }) => {
   const rndRef = useRef(null);
   const [parentSize, setParentSize] = useState({ width: 0, height: 0 });
@@ -42,7 +42,7 @@ const TextElement = ({
   };
 
   // Update parent size on mount and when window resizes
-  useEffect(() => {
+  useLayoutEffect(() => {
     updateParentSize();
     window.addEventListener("resize", updateParentSize);
     return () => {
@@ -115,7 +115,7 @@ const TextElement = ({
     y: (position.y / 100) * parentSize.height || 0,
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const handleOutsideClick = (event) => {
       if (
         boxesContainerRef.current &&
@@ -126,7 +126,14 @@ const TextElement = ({
     };
 
     document.addEventListener("click", handleOutsideClick);
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
   }, []);
+
+  if (parentSize.width === 0 || parentSize.height === 0) {
+    return null;
+  }
 
   return (
     <Rnd
@@ -142,12 +149,12 @@ const TextElement = ({
       lockAspectRatio={false}
       enableResizing={!readOnly}
       disableDragging={readOnly}
-      style={{ pointerEvents: readOnly ? 'none' : 'auto' }}
+      style={{ pointerEvents: readOnly ? "none" : "auto" }}
     >
       <TextElementStyled
         id={id}
         $textObj={$textObj}
-        className="hover:cursor-pointer"
+        className="hover:cursor-pointer text-div"
         onClick={handleClick}
         readOnly={readOnly}
       >

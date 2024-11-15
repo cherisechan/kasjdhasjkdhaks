@@ -1,5 +1,3 @@
-import React from 'react';
-
 const CannotDeleteSlidePopup = ({ onCancel, onDeletePresentation }) => {
   return (
     <div className="fixed z-[999] inset-0 bg-black bg-opacity-30 flex items-center justify-center">

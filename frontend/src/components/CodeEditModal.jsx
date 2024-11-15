@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const CodeEditModal = ({ element, setCodeElem, setCodeEditSubmit, setShowCodeEditModal, deleteElem, elemId }) => {
   const [code, setCode] = useState(element.code);
-  const [width, setWidth] = useState(element.width);
-  const [height, setHeight] = useState(element.height);
+  const width = element.width;
+  const height = element.height;
   const [fontSize, setFontSize] = useState(element.fontSize);
-  const [textX, setCodeX] = useState(element.x);
-  const [textY, setCodeY] = useState(element.y);
+  const textX = element.x;
+  const textY = element.y;
   const [error, setError] = useState("");
 
   const onSubmit = () => {

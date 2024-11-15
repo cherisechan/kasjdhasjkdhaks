@@ -1,4 +1,3 @@
-import React from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const Navbar = ({ isLoggedIn, onLogout }) => {
@@ -26,7 +25,7 @@ const Navbar = ({ isLoggedIn, onLogout }) => {
         {showButtons && (
           <div className="flex space-x-4">
             {isLoggedIn ? (
-              <button onClick={handleLogout} className="bg-red-500 text-white hover:bg-red-700 font-bold py-2 px-4 rounded">Logout</button>
+              <button onClick={handleLogout} className="bg-red-500 text-white hover:bg-red-700 font-bold py-2 px-4 rounded" name='logout'>Logout</button>
             ) : (
               <>
                 <button onClick={() => navigate('/login')} className="text-white hover:bg-violet-500 font-bold py-2 px-4 rounded">Log In</button>
