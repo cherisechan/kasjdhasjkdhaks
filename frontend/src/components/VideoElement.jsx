@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Rnd } from "react-rnd";
 
@@ -141,7 +141,7 @@ const VideoElement = ({ $videoObj, id, openVideoEdit, setUpdateObj, setUpdateEle
         url.searchParams.delete('autoplay');
       }
       return url.toString();
-    } catch (e) {
+    } catch {
       return $videoObj.src;
     }
   };
