@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const TextEditModal = ({ element, setTextElem, setTextEditSubmit, setShowTextEditModal, deleteElem, elemId }) => {
   const [text, setText] = useState(element.text);
@@ -71,9 +71,9 @@ const TextEditModal = ({ element, setTextElem, setTextEditSubmit, setShowTextEdi
             <input type="text" name="Text" className="bg-gray-50 rounded-sm border border-gray-200 px-2 py-1 w-full" placeholder="Enter HEX code (e.g. #FFFFFF)" onChange={e => {setTextColour(e.target.value)}} defaultValue={element.textColour} />
           </div>
           <div className="mt-4 flex space-x-2">
-              <button className="bg-violet-500 text-white px-4 py-2 rounded" onClick={onSubmit}>Submit</button>
-              <button onClick={() => setShowTextEditModal(false)} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-              <button onClick={() => { deleteElem(elemId); setShowTextEditModal(false); }} className="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
+            <button className="bg-violet-500 text-white px-4 py-2 rounded" onClick={onSubmit}>Submit</button>
+            <button onClick={() => setShowTextEditModal(false)} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+            <button onClick={() => { deleteElem(elemId); setShowTextEditModal(false); }} className="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
           </div>
           <p className="text-red-500 flex self-center">{error}</p>
         </div>

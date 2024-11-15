@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { Rnd } from "react-rnd";
 import TextElementStyled from "./TextElementStyled";
 
