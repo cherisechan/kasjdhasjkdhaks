@@ -58,7 +58,8 @@ const CreateModal = ({ setShowCreate }) => {
                     },
                     "elements": []
                 }
-            ]
+            ],
+            revisions: [],
         }
         
         let requestBody;
