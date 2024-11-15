@@ -7,6 +7,7 @@ const EditThumbnailModal = ({ onFileChange, onRemoveThumbnail, onCancel }) => (
         accept="image/*"
         onChange={onFileChange}
         className="border rounded w-full px-3 py-2 mb-4"
+        aria-label="Choose file"
       />
       <div className="flex justify-end">
         <button onClick={onRemoveThumbnail} className="bg-gray-500 text-white px-4 py-2 rounded mr-2">Remove Thumbnail</button>

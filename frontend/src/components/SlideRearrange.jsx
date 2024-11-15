@@ -11,16 +11,15 @@ const SlideRearrange = ({presentation, savePresentation, setRearrange}) => {
     }
   }, [presentation])
 
-  const handleDragEnd = (e) => {
-    const { active, over } = e;
-    if (active.id !== over.id) {
-      setSlides((items) => {
-        const activeInd = items.findIndex((s) => s.id === active.id);
-        const overInd = items.findIndex((s) => s.id === over.id);
-        update.current = true;
-        return arrayMove(items, activeInd, overInd);
-      });
-    }
+  const handleDragEnd = ({ active, over }) => {
+    if (!over) return;
+  
+    const oldIndex = slides.findIndex(slide => slide.id === active.id);
+    const newIndex = slides.findIndex(slide => slide.id === over.id);
+  
+    const updatedSlides = arrayMove(slides, oldIndex, newIndex);
+    setSlides(updatedSlides);
+    savePresentation({ ...presentation, slides: updatedSlides });
   };
 
   useEffect(() => {
