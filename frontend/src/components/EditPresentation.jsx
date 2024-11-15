@@ -586,8 +586,8 @@ const EditPresentation = () => {
             <div className="w-full flex relative h-14 mt-2">
               <p className="absolute left-2 h-10 rounded flex items-center justify-center text-bold whitespace-nowrap text-gray-600">Slide {currentSlideIndex + 1} of {presentation.slides.length}</p>
               <div className="absolute left-[50%] translate-x-[-50%] flex justify-center space-x-2">
-                <button onClick={goToPreviousSlide} disabled={currentSlideIndex === 0} className={`w-10 h-10 rounded ${currentSlideIndex === 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>&lt;</button>
-                <button onClick={goToNextSlide} disabled={currentSlideIndex === presentation.slides.length - 1} className={`w-10 h-10 rounded ${currentSlideIndex === presentation.slides.length - 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`}>&gt;</button>
+                <button onClick={goToPreviousSlide} disabled={currentSlideIndex === 0} className={`w-10 h-10 rounded ${currentSlideIndex === 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`} id="prev-slide">&lt;</button>
+                <button onClick={goToNextSlide} disabled={currentSlideIndex === presentation.slides.length - 1} className={`w-10 h-10 rounded ${currentSlideIndex === presentation.slides.length - 1 ? 'bg-gray-300 cursor-not-allowed' : 'bg-violet-500 text-white'}`} id="next-slide">&gt;</button>
               </div>
               <div className="absolute right-2 flex justify-center items-center">
                 <button onClick={() => setRearrange(true)} className="bg-violet-500 text-white w-fit h-10 rounded ml-2 px-2">Rearrange</button>
@@ -603,7 +603,7 @@ const EditPresentation = () => {
                 >
                   <TrashIcon className="h-5 w-5" />
                 </button>
-                <button onClick={handleCreateSlide} className="bg-violet-500 text-white w-10 h-10 rounded ml-2">+</button>
+                <button onClick={handleCreateSlide} className="bg-violet-500 text-white w-10 h-10 rounded ml-2" name="add-slide">+</button>
               </div>
             </div>
           )}          
