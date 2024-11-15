@@ -5,8 +5,8 @@ const DeleteSlidePopup = ({ onCancel, onConfirm }) => {
         <h2 className="text-xl font-semibold mb-4">Delete Slide</h2>
         <p>Are you sure you want to delete this slide?</p>
         <div className="mt-4 flex justify-end space-x-2">
-          <button onClick={onCancel} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-          <button onClick={onConfirm} className="bg-red-500 text-white px-4 py-2 rounded">Delete</button>
+          <button onClick={onCancel} className="bg-gray-500 text-white px-4 py-2 rounded" >Cancel</button>
+          <button onClick={onConfirm} className="bg-red-500 text-white px-4 py-2 rounded" id="delete-pres">Delete</button>
         </div>
       </div>
     </div>

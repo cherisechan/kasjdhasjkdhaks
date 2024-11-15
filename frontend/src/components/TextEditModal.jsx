@@ -68,7 +68,7 @@ const TextEditModal = ({ element, setTextElem, setTextEditSubmit, setShowTextEdi
           </div>
           <div className="flex w-full justify-between mt-[4%]">
             <p className="text-xl pb-[1%] mr-5 whitespace-nowrap">Colour</p>
-            <input type="text" name="Text" className="bg-gray-50 rounded-sm border border-gray-200 px-2 py-1 w-full" placeholder="Enter HEX code (e.g. #FFFFFF)" onChange={e => {setTextColour(e.target.value)}} defaultValue={element.textColour} />
+            <input type="text" name="Colour" className="bg-gray-50 rounded-sm border border-gray-200 px-2 py-1 w-full" placeholder="Enter HEX code (e.g. #FFFFFF)" onChange={e => {setTextColour(e.target.value)}} defaultValue={element.textColour} />
           </div>
           <div className="mt-4 flex space-x-2">
             <button className="bg-violet-500 text-white px-4 py-2 rounded" onClick={onSubmit}>Submit</button>

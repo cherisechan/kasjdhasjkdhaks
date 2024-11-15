@@ -90,7 +90,7 @@ const Register = ({ onRegister }) => {
               <input id="register-name" type="text" className="bg-violet-50 px-2 py-1 pr-6 rounded border-solid border-2 border-gray-200" name="name" placeholder="Enter your name" onChange={e => setName(e.target.value)}/>
             </div>
           </div>
-          <button className="bg-violet-700 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded my-2" onClick={submitRegister}>REGISTER</button>
+          <button className="bg-violet-700 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded my-2" onClick={submitRegister} >REGISTER</button>
           <button className="py-2 px-4 rounded my-2" onClick={goToLogin}>Already have an account? <span className="text-violet-700 hover:underline">Log in</span></button>
           {showError ? (<p className="text-red-600">{error}</p>) : (<></>)}
         </form>

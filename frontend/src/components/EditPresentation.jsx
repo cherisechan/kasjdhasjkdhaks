@@ -470,7 +470,7 @@ const EditPresentation = () => {
             <EyeIcon className="h-6 w-6 text-white" />
             <span>Preview</span>
           </button>
-          <button onClick={() => setShowDeletePopup(true)} className="flex items-center space-x-2 bg-red-500 text-white px-4 py-2 rounded font-semibold">
+          <button onClick={() => setShowDeletePopup(true)} className="flex items-center space-x-2 bg-red-500 text-white px-4 py-2 rounded font-semibold" id="delete-pres">
             <TrashIcon className="h-6 w-6 text-white" />
             <span>Delete</span>
           </button>
@@ -569,7 +569,7 @@ const EditPresentation = () => {
       {slides ? (
         <div className="max-w-screen-xl bg-gray-200 px-3 rounded-lg mx-auto flex flex-col items-center justify-center">
           <div className="flex w-full justify-start items-center h-16 max-sm:h-32 max-sm:flex-wrap">
-            <button onClick={() => {setShowTextCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2 font-semibold">Text</button>
+            <button onClick={() => {setShowTextCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2 font-semibold" id="text-add">Text</button>
             <button onClick={() => setShowImageCreateModal(true)} className="bg-violet-500 text-white px-4 h-10 rounded ml-2 font-semibold">Image</button>
             <button onClick={() => setShowVideoCreateModal(true)} className="bg-violet-500 text-white px-4 h-10 rounded ml-2 font-semibold">Video</button>
             <button onClick={() => {setShowCodeCreateModal(true);}} className="bg-violet-500 text-white px-4 h-10 rounded ml-2 font-semibold">Code</button>
