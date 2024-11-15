@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const VideoEditModal = ({ element, setVideoElem, setVideoEditSubmit, setShowVideoEditModal, deleteElem, elemId }) => {
-  const [width, setWidth] = useState(element.width);
-  const [height, setHeight] = useState(element.height);
+  const width = element.width;
+  const height = element.height;
   const [videoUrl, setVideoUrl] = useState(element.src);
   const [autoplay, setAutoplay] = useState(element.autoplay);
   const [error, setError] = useState('');
