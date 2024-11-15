@@ -149,7 +149,7 @@ const TextElement = ({
       lockAspectRatio={false}
       enableResizing={!readOnly}
       disableDragging={readOnly}
-      style={{ pointerEvents: readOnly ? "none" : "auto" }}
+      className={readOnly ? "pointer-events-none" : "pointer-events-auto"}
     >
       <TextElementStyled
         id={id}
