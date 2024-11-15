@@ -19,10 +19,14 @@ const SlideBase = styled.div(({
   background: $bgImg
     ? `url(${$bgImg}) center / cover no-repeat`
     : $gradient
-    ? `linear-gradient(to right, ${$bgColour1}, ${$bgColour2})`
-    : $bgColour1,
+      ? `linear-gradient(to right, ${$bgColour1}, ${$bgColour2})`
+      : $bgColour1,
 }));
 
-export default React.forwardRef((props, ref) => (
-  <SlideBase {...props} ref={ref} />
+const ForwardedSlideBase = React.forwardRef((props, ref) => (
+  <SlideBase {...props} ref={ref} name="" />
 ));
+
+ForwardedSlideBase.displayName = 'ForwardedSlideBase';
+
+export default ForwardedSlideBase;
