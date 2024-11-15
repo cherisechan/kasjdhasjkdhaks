@@ -4,7 +4,7 @@ const DeletePopup = ({ onCancel, onConfirm }) => (
       <p className="text-lg mb-4">Are you sure?</p>
       <div className="flex justify-end">
         <button onClick={onCancel} className="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2">No</button>
-        <button onClick={onConfirm} className="bg-red-500 text-white px-4 py-2 rounded">Yes</button>
+        <button onClick={onConfirm} className="bg-red-500 text-white px-4 py-2 rounded" id="yes-delete">Yes</button>
       </div>
     </div>
   </div>

@@ -154,7 +154,7 @@ const TextElement = ({
       <TextElementStyled
         id={id}
         $textObj={$textObj}
-        className="hover:cursor-pointer"
+        className="hover:cursor-pointer text-div"
         onClick={handleClick}
         readOnly={readOnly}
       >
