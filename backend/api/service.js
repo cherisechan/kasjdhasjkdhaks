@@ -33,18 +33,6 @@ const update = async (admins) =>
           if (!response.ok) {
             reject(new Error("Writing to Vercel KV failed"));
           }
-        } else {
-          // Store to local file system
-          fs.writeFileSync(
-            DATABASE_FILE,
-            JSON.stringify(
-              {
-                admins,
-              },
-              null,
-              2
-            )
-          );
         }
         resolve();
       } catch(error) {
