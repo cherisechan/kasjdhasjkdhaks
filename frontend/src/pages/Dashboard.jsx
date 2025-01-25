@@ -31,10 +31,7 @@ const Dashboard = () => {
         }
       };
       const storage = await axios.get("https://presto-beta.vercel.app/store", headers);
-      // if (Object.keys(storage.data.store).length !== 0) {
-      //     setPresList(storage.data.store);
-      //     setShowList(true);
-      // }
+
       if (storage.data.store && storage.data.store.presentations) {
         const reversedPresentations = storage.data.store.presentations.slice().reverse();
         setPresList(reversedPresentations);
