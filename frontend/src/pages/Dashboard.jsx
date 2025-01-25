@@ -30,7 +30,7 @@ const Dashboard = () => {
           'Content-Type': 'application/json'
         }
       };
-      const storage = await axios.get("http://localhost:5005/store", headers);
+      const storage = await axios.get("https://presto-beta.vercel.app/store", headers);
       // if (Object.keys(storage.data.store).length !== 0) {
       //     setPresList(storage.data.store);
       //     setShowList(true);

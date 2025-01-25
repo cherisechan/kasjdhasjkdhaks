@@ -20,7 +20,7 @@ const Preview = () => {
 
       try {
         const headers = { headers: { Authorization: `Bearer ${token}` } };
-        const response = await axios.get("http://localhost:5005/store", headers);
+        const response = await axios.get("https://presto-beta.vercel.app/store", headers);
         const presentations = response.data.store.presentations;
         const presentation = presentations.find((pres) => pres.id === id);
 

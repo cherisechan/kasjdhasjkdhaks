@@ -26,7 +26,7 @@ const Login = ({ onLogin }) => {
       setError("Password cannot be empty");
       return;
     }
-    axios.post('http://localhost:5005/admin/auth/login', {
+    axios.post('https://presto-beta.vercel.app/admin/auth/login', {
       email: email,
       password: password
     })

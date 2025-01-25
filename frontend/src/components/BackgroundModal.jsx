@@ -11,7 +11,7 @@ const BackgroundModal = ({ setShowBackgroundModal, currSlideIndex, setReload }) 
 
   const upload = async(store, headers) => {
     
-    await axios.put(`http://localhost:5005/store`, {store}, headers);
+    await axios.put(`https://presto-beta.vercel.app/store`, {store}, headers);
     setReload(true);
     setShowBackgroundModal(false);
   }
@@ -22,7 +22,7 @@ const BackgroundModal = ({ setShowBackgroundModal, currSlideIndex, setReload }) 
         'Authorization': `Bearer ${token}`,
       }
     };
-    const response = await axios.get(`http://localhost:5005/store`, headers);
+    const response = await axios.get(`https://presto-beta.vercel.app/store`, headers);
     const store = response.data.store;
     const pid = localStorage.getItem('pId');
     // background colour only

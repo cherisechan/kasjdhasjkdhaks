@@ -67,7 +67,7 @@ describe('CreateModal Component', () => {
     fireEvent.click(screen.getByText('CREATE'));
 
     await waitFor(() => {
-      expect(axios.get).toHaveBeenCalledWith('http://localhost:5005/store', expect.any(Object));
+      expect(axios.get).toHaveBeenCalledWith('https://presto-beta.vercel.app/store', expect.any(Object));
       expect(axios.put).toHaveBeenCalled();
       expect(setShowCreate).toHaveBeenCalledWith(false);
     });

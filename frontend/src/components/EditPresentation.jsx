@@ -72,7 +72,7 @@ const EditPresentation = () => {
         }
       };
 
-      const response = await axios.get(`http://localhost:5005/store`, headers);
+      const response = await axios.get(`https://presto-beta.vercel.app/store`, headers);
       const presentations = response.data.store.presentations;
       const presentation = presentations.find(pres => pres.id === id);
 
@@ -96,7 +96,7 @@ const EditPresentation = () => {
   
     try {
       const headers = { headers: { Authorization: `Bearer ${token}` } };
-      const response = await axios.get(`http://localhost:5005/store`, headers);
+      const response = await axios.get(`https://presto-beta.vercel.app/store`, headers);
       const pres = response.data.store.presentations.find(p => p.id === id);
       if (pres && pres.revisions) {
         const validRevisions = pres.revisions.filter(rev => rev.state && rev.state !== "undefined");
@@ -121,7 +121,7 @@ const EditPresentation = () => {
   
     try {
       const headers = { headers: { Authorization: `Bearer ${token}` } };
-      const response = await axios.get(`http://localhost:5005/store`, headers);
+      const response = await axios.get(`https://presto-beta.vercel.app/store`, headers);
       const store = response.data.store;
       const presIndex = store.presentations.findIndex((p) => p.id === id);
   
@@ -136,7 +136,7 @@ const EditPresentation = () => {
           store.presentations[presIndex].revisions.shift();
         }
   
-        await axios.put("http://localhost:5005/store", { store }, headers);
+        await axios.put("https://presto-beta.vercel.app/store", { store }, headers);
         fetchRevisionHistory();
       }
     } catch (error) {
@@ -151,7 +151,7 @@ const EditPresentation = () => {
     const headers = { headers: { Authorization: `Bearer ${token}` } };
     try {
       // Fetch the current store
-      const response = await axios.get("http://localhost:5005/store", headers);
+      const response = await axios.get("https://presto-beta.vercel.app/store", headers);
       const store = response.data.store;
   
       // Find the current presentation
@@ -170,7 +170,7 @@ const EditPresentation = () => {
       store.presentations[currentPresIndex] = updatedPresentation;
   
       // Save the updated store back to the server
-      await axios.put("http://localhost:5005/store", { store }, headers);
+      await axios.put("https://presto-beta.vercel.app/store", { store }, headers);
   
       // Update local state
       setPresentation(updatedPresentation);
@@ -189,7 +189,7 @@ const EditPresentation = () => {
         'Authorization': `Bearer ${token}`,
       }
     };
-    const response = await axios.get(`http://localhost:5005/store`, headers);
+    const response = await axios.get(`https://presto-beta.vercel.app/store`, headers);
     const presentations = response.data.store.presentations;
     const pres = presentations.find(pres => pres.id === id);
     if (!pres) {
@@ -282,13 +282,13 @@ const EditPresentation = () => {
     try {
       const token = localStorage.getItem("token");
       const headers = { headers: { Authorization: `Bearer ${token}` } };
-      const response = await axios.get("http://localhost:5005/store", headers);
+      const response = await axios.get("https://presto-beta.vercel.app/store", headers);
       const store = response.data.store;
 
       const updatedPresentations = store.presentations.filter(pres => pres.id !== id);
       store.presentations = updatedPresentations;
 
-      await axios.put("http://localhost:5005/store", { store }, headers);
+      await axios.put("https://presto-beta.vercel.app/store", { store }, headers);
       navigate("/dashboard");
     } catch (error) {
       console.error("Error deleting presentation:", error);
@@ -302,7 +302,7 @@ const EditPresentation = () => {
     try {
       const token = localStorage.getItem("token");
       const headers = { headers: { Authorization: `Bearer ${token}` } };
-      const response = await axios.get("http://localhost:5005/store", headers);
+      const response = await axios.get("https://presto-beta.vercel.app/store", headers);
       const store = response.data.store;
 
       const updatedPresentations = store.presentations.map(pres => {
@@ -311,7 +311,7 @@ const EditPresentation = () => {
       });
 
       store.presentations = updatedPresentations;
-      await axios.put("http://localhost:5005/store", { store }, headers);
+      await axios.put("https://presto-beta.vercel.app/store", { store }, headers);
 
       setPresentation(prev => ({ ...prev, name: newTitle }));
       setShowEditTitleModal(false);
@@ -335,7 +335,7 @@ const EditPresentation = () => {
       try {
         const token = localStorage.getItem("token");
         const headers = { headers: { Authorization: `Bearer ${token}` } };
-        const response = await axios.get("http://localhost:5005/store", headers);
+        const response = await axios.get("https://presto-beta.vercel.app/store", headers);
         const store = response.data.store;
 
         const updatedPresentations = store.presentations.map(pres => {
@@ -344,7 +344,7 @@ const EditPresentation = () => {
         });
 
         store.presentations = updatedPresentations;
-        await axios.put("http://localhost:5005/store", { store }, headers);
+        await axios.put("https://presto-beta.vercel.app/store", { store }, headers);
         setPresentation(prev => ({ ...prev, thumbnail: thumbnailData }));
         setShowEditThumbnailModal(false);
         await savePresentation(updatedPresentation);
@@ -361,7 +361,7 @@ const EditPresentation = () => {
     try {
       const token = localStorage.getItem("token");
       const headers = { headers: { Authorization: `Bearer ${token}` } };
-      const response = await axios.get("http://localhost:5005/store", headers);
+      const response = await axios.get("https://presto-beta.vercel.app/store", headers);
       const store = response.data.store;
 
       const updatedPresentations = store.presentations.map(pres => {
@@ -370,7 +370,7 @@ const EditPresentation = () => {
       });
 
       store.presentations = updatedPresentations;
-      await axios.put("http://localhost:5005/store", { store }, headers);
+      await axios.put("https://presto-beta.vercel.app/store", { store }, headers);
       setPresentation(prev => ({ ...prev, thumbnail: null }));
       setShowEditThumbnailModal(false);
 
@@ -410,7 +410,7 @@ const EditPresentation = () => {
   // adds element to slide
   const addElem = async (elemObj) => {
     const headers = { headers: { Authorization: `Bearer ${token}` } };
-    const response = await axios.get("http://localhost:5005/store", headers);
+    const response = await axios.get("https://presto-beta.vercel.app/store", headers);
     const store = response.data.store;
     store.presentations.forEach((p) => {
       if (p.id === id) {
@@ -418,8 +418,8 @@ const EditPresentation = () => {
         p.slides[currentSlideIndex].elements.push(elemObj);
       }
     });
-    await axios.put("http://localhost:5005/store", { store }, headers);
-    const updatedRes = await axios.get("http://localhost:5005/store", headers);
+    await axios.put("https://presto-beta.vercel.app/store", { store }, headers);
+    const updatedRes = await axios.get("https://presto-beta.vercel.app/store", headers);
     const presentation = updatedRes.data.store.presentations.find((pres) => pres.id === id);
     if (presentation) {
       setPresentation(presentation);
@@ -456,7 +456,7 @@ const EditPresentation = () => {
 
   const deleteElem = async (elemId) => {
     const headers = { headers: { Authorization: `Bearer ${token}` } };
-    const response = await axios.get("http://localhost:5005/store", headers);
+    const response = await axios.get("https://presto-beta.vercel.app/store", headers);
     const store = response.data.store;
   
     store.presentations.forEach((p) => {
@@ -466,9 +466,9 @@ const EditPresentation = () => {
       }
     });
   
-    await axios.put("http://localhost:5005/store", { store }, headers);
+    await axios.put("https://presto-beta.vercel.app/store", { store }, headers);
   
-    const updatedRes = await axios.get("http://localhost:5005/store", headers);
+    const updatedRes = await axios.get("https://presto-beta.vercel.app/store", headers);
     const presentation = updatedRes.data.store.presentations.find((pres) => pres.id === id);
     if (presentation) {
       setPresentation(presentation);

@@ -33,7 +33,7 @@ const FontSelector = ({ setReload, defaultFont }) => {
         },
       };
 
-      const response = await axios.get("http://localhost:5005/store", headers);
+      const response = await axios.get("https://presto-beta.vercel.app/store", headers);
       const store = response.data.store;
       const id = localStorage.getItem("pId");
       store.presentations.map((pres) => {
@@ -42,7 +42,7 @@ const FontSelector = ({ setReload, defaultFont }) => {
         }
       });
       console.log({ store });
-      await axios.put("http://localhost:5005/store", { store }, headers);
+      await axios.put("https://presto-beta.vercel.app/store", { store }, headers);
       setReload(true);
     };
 

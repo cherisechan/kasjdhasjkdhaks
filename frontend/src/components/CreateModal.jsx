@@ -31,7 +31,7 @@ const CreateModal = ({ setShowCreate }) => {
         'Content-Type': 'application/json'
       }
     }
-    const store = await axios.get("http://localhost:5005/store", headers);
+    const store = await axios.get("https://presto-beta.vercel.app/store", headers);
 
     const presObj = {
       "id": uniqid(),
@@ -75,7 +75,7 @@ const CreateModal = ({ setShowCreate }) => {
       requestBody = store.data;
       requestBody.store.presentations.push(presObj);
     }
-    await axios.put("http://localhost:5005/store", requestBody, headers);
+    await axios.put("https://presto-beta.vercel.app/store", requestBody, headers);
     setShowCreate(false);
   }
   return (

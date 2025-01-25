@@ -46,7 +46,7 @@ const Register = ({ onRegister }) => {
       return;
     }
 
-    axios.post("http://localhost:5005/admin/auth/register", {
+    axios.post("https://presto-beta.vercel.app/admin/auth/register", {
       email: email,
       password: password,
       name: name
